@@ -18,4 +18,4 @@ file = open('urlList{}.txt'.format(njob))
 urls = file.read().splitlines()
 
 #print "urls : ", urls
-merge(urls, 'NTuple_X2RHNuGm_all_files.root')
+merge(urls, 'NTuple_X2ApGm_all_files.root')

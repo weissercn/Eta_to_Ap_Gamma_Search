@@ -86,7 +86,7 @@ void Add_material(TString option){
   std::cout << "Add_material The option is : " << option << std::endl;
 
   TFile * f = 0;
-  if (option == "DiAll") {f = TFile::Open("NTuple_X2RHNuGm_all_files.root", "update");}
+  if (option == "DiAll") {f = TFile::Open("NTuple_X2ApGm_all_files.root", "update");}
   if (option == "Test") {f = TFile::Open("outfile.root", "update");}
 
 
@@ -334,8 +334,8 @@ void Add_material(TString option){
   //Create a new file + a clone of old tree in new file
 
   TFile *newfile = 0;
-  if (option == "DiAll") {newfile = new TFile("NTuple_X2RHNuGm_all_files_with_materials.root","recreate");}
-  if (option == "Test") {newfile = new TFile("NTuple_X2RHNuGm_all_files_with_materials_test.root","recreate");}
+  if (option == "DiAll") {newfile = new TFile("NTuple_X2ApGm_all_files_with_materials.root","recreate");}
+  if (option == "Test") {newfile = new TFile("NTuple_X2ApGm_all_files_with_materials_test.root","recreate");}
 
   //TFile *newfile = new TFile("NTuple_RHNu_all_files_smooth_with_materials_small.root","recreate"); // ONLY FOR TESTING
   TTree *newtree = t->CloneTree();

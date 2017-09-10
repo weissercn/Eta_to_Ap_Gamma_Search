@@ -7,9 +7,9 @@ sys.path.append('.')
 import SubmissionTools
 
 
-jname       = 'Data.2016.6500.X2RHNuGm'
+jname       = 'Data.2016.6500.X2ApGm'
 tag         = 'mag_down_first_try'
-script      = '/mnt/shared/LbVMWeisser_shared/Analyses/Eta_to_Ap_Gamma_Search/MakeNTuple_X2RHNuGm.py'
+script      = '/mnt/shared/LbVMWeisser_shared/Analyses/Eta_to_Ap_Gamma_Search/MakeNTuple_X2ApGm.py'
 outfiles    = ['*.root']
 infiles     = [LocalFile('./IsoBdt.py'), LocalFile('./IsoBdtLong.xml'), LocalFile('./IsoBdtVelo.xml')]
 MIT_shared_dir = '/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/'
