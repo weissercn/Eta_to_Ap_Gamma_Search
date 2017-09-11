@@ -37,5 +37,5 @@ def getJobURLs(njob, fname, SE='CERN-USER'):
 import sys
 
 njob = sys.argv[1]
-outfile = 'output.root'
+outfile = 'outfile.root'
 getJobURLs(njob,outfile)

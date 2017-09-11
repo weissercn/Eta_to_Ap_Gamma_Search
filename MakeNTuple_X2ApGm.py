@@ -160,8 +160,8 @@ from collections import OrderedDict
 evt   = Event('evt')
 pvrs  = PrimaryVertices('pvr')
 gens  = Gens('gens',recTool)
-#mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, trkTool, l0Tool, hlt1Tool, jb) #enable this to get info about iso
-mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, trkTool, l0Tool, hlt1Tool) #mu
+#mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, trkTool, jb) #enable this to get info about iso
+mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, trkTool) #mu
 es    = Tracks('e',   pvrs, gens, pvrTool, dstTool, mcpTool)
 calos = Calos('calo', pvrs, gens, pvrTool, mcpTool)
 mergedpi0s = Calos('mergedpi0', pvrs, gens, pvrTool, mcpTool)
@@ -172,9 +172,10 @@ cnvs = Combos('cnv', pvrs, cnvDaus, gens,
               pvrTool, dstTool, None, mcpTool)
 
 # eta -> mu mu component
-dimuDaus = [(mus, ['mu1', 'mu2'])]
+dimuDaus = [(mus, ['prt0', 'prt1'])]
+dtf_pid_list = [13,-13]
 dimus = Combos('tag', pvrs, dimuDaus, gens,
-               pvrTool, dstTool, None, mcpTool, False, tes, None, isoTool) #dimus
+               pvrTool, dstTool, dtf_pid_list, mcpTool, False, tes, l0Tool, hlt1Tool, hlt2Tool, isoTool) #dimus
 
 components = OrderedDict([(evt.prefix,   evt),
                           (gens.prefix,  gens),

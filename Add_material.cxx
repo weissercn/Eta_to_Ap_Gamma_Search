@@ -93,7 +93,7 @@ void Add_material(TString option){
   TTree * t = (TTree *) f->Get("data");
 
 
-  vector<double> *tag_x(0), *tag_y(0), *tag_z(0), *tag_dx(0), *tag_dy(0), *tag_dz(0), *tag_dtf_px(0), *tag_dtf_py(0), *tag_dtf_pz(0), *pvr_x(0), *pvr_y(0), *pvr_z(0), *prt_x0(0), *prt_y0(0), *prt_z0(0), *prt_px(0), *prt_py(0), *prt_pz(0);
+  vector<double> *tag_x(0), *tag_y(0), *tag_z(0), *tag_px(0), *tag_py(0), *tag_pz(0), *tag_dx(0), *tag_dy(0), *tag_dz(0), *tag_dtf_px(0), *tag_dtf_py(0), *tag_dtf_pz(0), *pvr_x(0), *pvr_y(0), *pvr_z(0), *prt_x0(0), *prt_y0(0), *prt_z0(0), *prt_px(0), *prt_py(0), *prt_pz(0);
   vector<double> *tag_idx_prt0(0), *tag_idx_prt1(0), *tag_idx_pvr(0);
 
   vector<double> tag_dmat, tag_xxx, tag_dmat_isRescaled;
@@ -117,6 +117,9 @@ void Add_material(TString option){
   t->SetBranchAddress("tag_x",&tag_x);
   t->SetBranchAddress("tag_y",&tag_y);
   t->SetBranchAddress("tag_z",&tag_z);
+  t->SetBranchAddress("tag_px",&tag_px);
+  t->SetBranchAddress("tag_py",&tag_py);
+  t->SetBranchAddress("tag_pz",&tag_pz);
   t->SetBranchAddress("tag_dx",&tag_dx);
   t->SetBranchAddress("tag_dy",&tag_dy);
   t->SetBranchAddress("tag_dz",&tag_dz);
@@ -141,7 +144,7 @@ void Add_material(TString option){
 
   int idx_mu, idx_h, idx_pvr;
 
-  double x, y, z, dx, dy, dz, deltaz_mu, deltaz_h, px, py, pz, pvx, pvy, pvz, px0, py0, pz0, px1, py1, pz1, prt_trk_dist_mu_h, d2;
+  double x, y, z, dx, dy, dz, deltaz, deltaz_mu, deltaz_h, px, py, pz, pvx, pvy, pvz, px0, py0, pz0, px1, py1, pz1, prt_trk_dist_mu_h, d2;
   double xxx;
   //std::cout << "Before VeloMaterial declaration" << std::endl;
 
@@ -199,15 +202,9 @@ void Add_material(TString option){
         x   = tag_x->at(mum);
         y   = tag_y->at(mum);
         z   = tag_z->at(mum);
-        dx  = tag_dx->at(mum);
-        dy  = tag_dy->at(mum);
-        dz  = tag_dz->at(mum);
-        px  = tag_dtf_px->at(mum);
-        py  = tag_dtf_py->at(mum);
-        pz  = tag_dtf_pz->at(mum);
-        pvx = pvr_x->at(idx_pvr);
-        pvy = pvr_y->at(idx_pvr);
-        pvz = pvr_z->at(idx_pvr);
+        px  = tag_px->at(mum);
+        py  = tag_py->at(mum);
+        pz  = tag_pz->at(mum);
         px0 = prt_px->at(idx_mu);
         py0 = prt_py->at(idx_mu);
         pz0 = prt_pz->at(idx_mu);
@@ -215,25 +212,27 @@ void Add_material(TString option){
         py1 = prt_py->at(idx_h);
         pz1 = prt_pz->at(idx_h);
 
-        prt_trk_dist_mu_h = sqrt(pow(prt_x0->at(idx_h) - prt_x0->at(idx_mu), 2.0) +  pow(prt_y0->at(idx_h) - prt_y0->at(idx_mu), 2.0));
 
-        dmat_isRescaled = (abs(prt_z0->at(idx_mu)  - prt_z0->at(idx_h)) < 1);
+        if (false){
+          dx  = tag_dx->at(mum);
+          dy  = tag_dy->at(mum);
+          dz  = tag_dz->at(mum);
+          px  = tag_dtf_px->at(mum);
+          py  = tag_dtf_py->at(mum);
+          pz  = tag_dtf_pz->at(mum);
+          pvx = pvr_x->at(idx_pvr);
+          pvy = pvr_y->at(idx_pvr);
+          pvz = pvr_z->at(idx_pvr);
+        }
+
 
         deltaz_mu = prt_z0->at(idx_mu) - z;
         deltaz_h = prt_z0->at(idx_h) - z;
         d2  = prt_trk_dist_mu_h;  // d2 is the 2-d x-y distance between the 1st hit on each muon
 
-
-        // I set some minimum dx, dy, dz on the SV by hand
-
-        if(dz <= 1) dz = 1;
-        if(z > 300 && dx < 0.5) dx = 0.5;
-        if(z > 300 && dy < 0.5) dy = 0.5;
-
         sv = TVector3(x,y,z);
-        pv = TVector3(pvx,pvy,pvz);
         p3 = TVector3(px,py,pz);
-        double r = (sv-pv).Perp();
+
 
         // these are the 3-momenta of the particles in the 2-body decay
         p0 = TVector3(px0,py0,pz0);
@@ -248,53 +247,59 @@ void Add_material(TString option){
         if(cutFM(sv,p3,fmat,mmat2)) tag_veto_cutFM_j       = 1.; //true;
         //tag_veto_h_modmiss_rhit_j = modMiss_returns_rhit(sv,p0,(z+deltaz),mmat2);
 
-        // this is the material distance
-        vmat = TLorentzVector();
-        double dmat = getDMat(sv,dx,dy,dz,mmat,fmat,vmat);
 
-        if (dmat_isRescaled){
-          deltaz = (deltaz_mu + deltaz_h)/2.;
-          // this is how I rescale it
-          double rhit = r + deltaz*tan(p3.Theta());
-          double rpit = 0.04 + 0.05*(rhit-8)/(35-8);
-          double ppit = 0.0046;
-          if(rhit > 18) ppit = 0.0023;
-          double dr2 = pow(rpit,2);
-          double dp2 = pow(rhit*ppit,2);
-          xxx = d2/sqrt(dr2 + dp2); // d2 is the 2-d x-y distance between the 1st hit on each muon
 
-          double dscale = fcn.Eval(xxx);
-          if(dscale > 0.7) dscale = 0.7;
-          if(dscale < 0.23) dscale = 0.23;
-          dscale /= 0.23;
-          dmat /= dscale;
-        }else{
-          xxx = 0.;
+        if (false){
+
+          prt_trk_dist_mu_h = sqrt(pow(prt_x0->at(idx_h) - prt_x0->at(idx_mu), 2.0) +  pow(prt_y0->at(idx_h) - prt_y0->at(idx_mu), 2.0));
+
+          dmat_isRescaled = (abs(prt_z0->at(idx_mu)  - prt_z0->at(idx_h)) < 1);
+
+          // I set some minimum dx, dy, dz on the SV by hand
+
+          if(dz <= 1) dz = 1;
+          if(z > 300 && dx < 0.5) dx = 0.5;
+          if(z > 300 && dy < 0.5) dy = 0.5;
+
+          pv = TVector3(pvx,pvy,pvz);
+          double r = (sv-pv).Perp();
+
+          // this is the material distance
+          vmat = TLorentzVector();
+          double dmat = getDMat(sv,dx,dy,dz,mmat,fmat,vmat);
+
+          if (dmat_isRescaled){
+            deltaz = (deltaz_mu + deltaz_h)/2.;
+            // this is how I rescale it
+            double rhit = r + deltaz*tan(p3.Theta());
+            double rpit = 0.04 + 0.05*(rhit-8)/(35-8);
+            double ppit = 0.0046;
+            if(rhit > 18) ppit = 0.0023;
+            double dr2 = pow(rpit,2);
+            double dp2 = pow(rhit*ppit,2);
+            xxx = d2/sqrt(dr2 + dp2); // d2 is the 2-d x-y distance between the 1st hit on each muon
+
+            double dscale = fcn.Eval(xxx);
+            if(dscale > 0.7) dscale = 0.7;
+            if(dscale < 0.23) dscale = 0.23;
+            dscale /= 0.23;
+            dmat /= dscale;
+          }else{
+            xxx = 0.;
+          }
+
+          if(r > 0 && r < 8) dmat *= 0.65/0.95;
+          if(r > 8 && r < 11) dmat *= 0.65/0.72;
+          if(r > 13 && r < 15) dmat *= 0.65/0.75;
+          if(r > 16 && r < 18) dmat *= 0.65/1.45;
+          if(r > 20) dmat *= 0.65/0.78;
+
+
+          tag_dmat.push_back(dmat);
+          tag_xxx.push_back(xxx);
+          tag_dmat_isRescaled.push_back(dmat_isRescaled);
         }
 
-        if(r > 0 && r < 8) dmat *= 0.65/0.95;
-        if(r > 8 && r < 11) dmat *= 0.65/0.72;
-        if(r > 13 && r < 15) dmat *= 0.65/0.75;
-        if(r > 16 && r < 18) dmat *= 0.65/1.45;
-        if(r > 20) dmat *= 0.65/0.78;
-
-
-        //h_velo_tip_j  = material_veto_tool->tip(tag_x->at(mum),tag_y->at(mum),tag_z->at(mum),prt_px->at(idx_h),prt_py->at(idx_h),prt_pz->at(idx_h));
-        //h_velo_miss_j = material_veto_tool->miss(tag_x->at(mum),tag_y->at(mum),tag_z->at(mum),prt_px->at(idx_h),prt_py->at(idx_h),prt_pz->at(idx_h),prt_z0->at(idx_h));
-
-        //mu_velo_tip_j  = material_veto_tool->tip(tag_x->at(mum),tag_y->at(mum),tag_z->at(mum),prt_px->at(idx_mu),prt_py->at(idx_mu),prt_pz->at(idx_mu));
-        //mu_velo_miss_j = material_veto_tool->miss(tag_x->at(mum),tag_y->at(mum),tag_z->at(mum),prt_px->at(idx_mu),prt_py->at(idx_mu),prt_pz->at(idx_mu),prt_z0->at(idx_mu));
-
-
-
-
-        //std::cout << "h_velo_miss_j : " << h_velo_miss_j << std::endl;
-
-
-
-        tag_dmat.push_back(dmat);
-        tag_xxx.push_back(xxx);
-        tag_dmat_isRescaled.push_back(dmat_isRescaled);
         tag_veto_h_modmiss.push_back(tag_veto_h_modmiss_j);
         tag_veto_mu_modmiss.push_back(tag_veto_mu_modmiss_j);
         tag_veto_cutFM.push_back(tag_veto_cutFM_j);
