@@ -11,7 +11,20 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TCanvas.h>
+#include <TGraph.h>
 #include <TSelector.h>
+#include <stdlib.h>
+#include <cmath>
+//#include <velo.h>
+//#include "MyClass.h"
+
+#include <iostream>
+#include <fstream>
+
+//gROOT->LoadMacro("velo.C+"); //crashes, because cannot execute code in the header file
 
 // Header file for the classes stored in the TTree if any.
 #include "vector"

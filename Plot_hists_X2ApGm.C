@@ -56,7 +56,7 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    pass_separately =false;
 
    int nmbins(1000);
-   double m_min(200.), m_max(500000.);
+   double m_min(200.), m_max(10000.);
    double diff_ln = (log(m_max) - log(m_min))/float(nmbins);
    //std::cout << diff_ln << std::endl;
    int asjdsk; //This needs to be here for some really bizare reason; any type any name
@@ -68,6 +68,22 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
       //std::cout << placeholder << std::endl;
       mbins[counter] = placeholder;
    }
+
+   int nmbins2(1000);
+   double m_min2(200.), m_max2(1e4);
+   double diff_ln2 = (log(m_max2) - log(m_min2))/float(nmbins2);
+   //std::cout << diff_ln << std::endl;
+   int asjdsk2; //This needs to be here for some really bizare reason; any type any name
+   double mbins2[nmbins2+1];
+   double placeholder2;
+
+   for (int counter2 = 0; counter2 <nmbins2+1 ; counter2++){
+      placeholder2 = m_min2 * exp(counter2 * diff_ln2);
+      //std::cout << placeholder << std::endl;
+      mbins2[counter2] = placeholder2;
+   }
+
+
 
    // H I S T O G R A M S
 
@@ -86,10 +102,10 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
 
    fM_require_calo = new TH1F("M_require_calo", "M_require_calo ;mu mu M [MeV] when calo photon required;TEvts", nmbins, mbins);
-   fM_require_calo_at_m_eta = new TH1F("M_require_cal_at_m_eta", "M_require_calo_at_m_eta ;mu mu M [MeV] when calo photon required and 440 < m(mu mu gamma) < 455 MeV;TEvts", nmbins, mbins);
+   fM_require_calo_at_m_eta = new TH1F("M_require_calo_at_m_eta", "M_require_calo_at_m_eta ;mu mu M [MeV] when calo photon required and 440 < m(mu mu gamma) < 455 MeV;TEvts", nmbins, mbins);
 
 
-   fM_tag_calo = new TH1F("M_tag_calo", "M_tag_calo ;mu mu calo M [MeV];TEvts", nmbins, mbins);
+   fM_tag_calo = new TH1F("M_tag_calo", "M_tag_calo ;mu mu calo M [MeV];TEvts", nmbins2, mbins2);
 
 
 
@@ -120,7 +136,9 @@ Bool_t Plot_hists_X2ApGm::Process(Long64_t entry)
 
 
    if (entry %10000 ==0) {
-     std::cout << "entry : " << entry/1000 << std::endl;
+   //if (entry %1 ==0) {
+     std::cout << "entry : " << entry/1000 << "k" << std::endl;
+     //std::cout << "entry : " << entry << std::endl;
    }
 
 
@@ -128,7 +146,7 @@ Bool_t Plot_hists_X2ApGm::Process(Long64_t entry)
 
 
    for (unsigned mum=0; mum < tag_m->size(); mum++) {
-     if (tag_idx_pvr->at(mum) >=0 ) {
+     if (tag_idx_pvr->at(mum) >=0 && tag_x->at(mum) < 1e20 && tag_x->at(mum) > -1e20) {
        //When only one right handed neutrino is needed
        this->Ap_Anal(mum);
      }
@@ -191,6 +209,8 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tis->at(mum))); //L0MuonDecision or TIS L0HadronDecision
   prt_bool_hlt1       = bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum)); //Tos Hlt1TrackMVA or [Tos Hlt1TwoTrackMVA for mass >1000 MeV]
   prt_bool_hlt2       = bool(tag_hlt2_tos0->at(mum)); //Hlt2ExoticaDisplDiMuonDecision
+  prt_bool_hlt1       = true;
+  prt_bool_hlt2       = true;
   prt_bool_strip      = true;
   //prt_bool_strip       = bool(tag_fd_r > 2) && ( bool(tag_m->at(mum) < 425 )  || bool(tag_m->at(mum) > 525 ) ) && (prt_pnn_mu->at(idx_mu) > 0.95); //stripping is a passthrough
   prt_bool_kin        = (tag_eta->at(mum) > 2) && (tag_eta->at(mum) < 4.5) && (tag_pt->at(mum) > 1000); // kinematics
@@ -362,9 +382,9 @@ void Plot_hists_X2ApGm::Ap_Anal(unsigned mum)
   this->Ap_Plots(mum);
 
   for (unsigned calo=0; calo < calo_px->size(); calo++) {
-    if (calo_idx_pvr->at(calo) == tag_idx_pvr->at(mum)){
+    //if (calo_idx_pvr->at(calo) == tag_idx_pvr->at(mum)){ //YOu never know where a calo photon came from
       this->Calo_Plots(calo, mum);
-    }
+    //}
   }
 
 }
@@ -414,15 +434,16 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
 
 void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 {
-  double tag_calo_m = pow(tag_dtf_e->at(mum) + calo_e->at(calo) , 2.0) - pow(tag_dtf_px->at(mum) + calo_px->at(calo) , 2.0) - pow(tag_dtf_py->at(mum) + calo_py->at(calo) , 2.0) - pow(tag_dtf_pz->at(mum) + calo_pz->at(calo) , 2.0);
+  double tag_calo_m = sqrt(pow(tag_dtf_e->at(mum) + calo_e->at(calo) , 2.0) - pow(tag_dtf_px->at(mum) + calo_px->at(calo) , 2.0) - pow(tag_dtf_py->at(mum) + calo_py->at(calo) , 2.0) - pow(tag_dtf_pz->at(mum) + calo_pz->at(calo) , 2.0));
+  //std::cout << "tag_calo_m : " << tag_calo_m << std::endl;
   if (tag_calo_m < 1200.0){ // Only if the calo A' pair has mass less than 1.2 GeV fill hists.
-    if (prt_bool_necessary_cuts) {
+    //if (prt_bool_necessary_cuts) {
       fM_require_calo->Fill(tag_dtf_m->at(mum));
       fM_tag_calo->Fill(tag_calo_m);
       if ((540 < tag_calo_m ) && (555 > tag_calo_m )){
         fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
       }
-    }
+    //}
   }
 
 }
