@@ -48,8 +48,8 @@ public :
    vector<double>  *pvr_ndof;
    vector<double>  *tag_idx;
    vector<double>  *tag_idx_pvr;
-   vector<double>  *tag_idx_mu1;
-   vector<double>  *tag_idx_mu2;
+   vector<double>  *tag_idx_prt0;
+   vector<double>  *tag_idx_prt1;
    vector<double>  *tag_il;
    vector<double>  *tag_iv;
    vector<double>  *tag_pid;
@@ -61,8 +61,14 @@ public :
    vector<double>  *tag_eta;
    vector<double>  *tag_phi;
    vector<double>  *tag_m;
+   vector<double>  *tag_veto_h_modmiss;
+   vector<double>  *tag_veto_mu_modmiss;
+   vector<double>  *tag_veto_cutFM;
    vector<double>  *tag_dls;
    vector<double>  *tag_ctau;
+   vector<double>  *tag_dtf_chi2;
+   vector<double>  *tag_dtf_px, *tag_dtf_py, *tag_dtf_pz, *tag_dtf_e;
+   vector<double>  *tag_dtf_m;
    vector<double>  *tag_chi2;
    vector<double>  *tag_ndof;
    vector<double>  *tag_dira;
@@ -117,9 +123,10 @@ public :
    vector<double>  *tag_l0_tos1;
    vector<double>  *tag_l0_tos2;
    vector<double>  *tag_l0_tis;
-   vector<double>  *prt_hlt1_tos4;
-   vector<double>  *prt_hlt1_tos5;
-   vector<double>  *prt_hlt1_tis;
+   vector<double>  *tag_hlt1_tos4;
+   vector<double>  *tag_hlt1_tos5;
+   vector<double>  *tag_hlt1_tis;
+   vector<double>  *tag_hlt2_tos0;
    vector<double>  *prt_iso;
    vector<double>  *calo_idx;
    vector<double>  *calo_idx_pvr;
@@ -264,8 +271,8 @@ public :
    TBranch        *b_pvr_ndof;   //!
    TBranch        *b_tag_idx;   //!
    TBranch        *b_tag_idx_pvr;   //!
-   TBranch        *b_tag_idx_mu1;   //!
-   TBranch        *b_tag_idx_mu2;   //!
+   TBranch        *b_tag_idx_prt0;   //!
+   TBranch        *b_tag_idx_prt1;   //!
    TBranch        *b_tag_il;   //!
    TBranch        *b_tag_iv;   //!
    TBranch        *b_tag_pid;   //!
@@ -277,8 +284,14 @@ public :
    TBranch        *b_tag_eta;   //!
    TBranch        *b_tag_phi;   //!
    TBranch        *b_tag_m;   //!
+   TBranch        *b_tag_veto_h_modmiss;   //!
+   TBranch        *b_tag_veto_mu_modmiss;   //!
+   TBranch        *b_tag_veto_cutFM;   //!
    TBranch        *b_tag_dls;   //!
    TBranch        *b_tag_ctau;   //!
+   TBranch        *b_tag_dtf_chi2;   //!
+   TBranch        *b_tag_dtf_px, *b_tag_dtf_py, *b_tag_dtf_pz, *b_tag_dtf_e;   //!
+   TBranch        *b_tag_dtf_m;   //!
    TBranch        *b_tag_chi2;   //!
    TBranch        *b_tag_ndof;   //!
    TBranch        *b_tag_dira;   //!
@@ -333,9 +346,10 @@ public :
    TBranch        *b_tag_l0_tos1;   //!
    TBranch        *b_tag_l0_tos2;   //!
    TBranch        *b_tag_l0_tis;   //!
-   TBranch        *b_prt_hlt1_tos4;   //!
-   TBranch        *b_prt_hlt1_tos5;   //!
-   TBranch        *b_prt_hlt1_tis;   //!
+   TBranch        *b_tag_hlt1_tos4;   //!
+   TBranch        *b_tag_hlt1_tos5;   //!
+   TBranch        *b_tag_hlt1_tis;   //!
+   TBranch        *b_tag_hlt2_tos0;
    TBranch        *b_prt_iso;   //!
    TBranch        *b_calo_idx;   //!
    TBranch        *b_calo_idx_pvr;   //!
@@ -454,12 +468,35 @@ public :
    TBranch        *b_e_ip;   //!
    TBranch        *b_e_ip_chi2;   //!
 
+   TFile *f;
+   TString option;
 
-   TH2F *fM, *fM_l0_p, *fM_l0_f, *fM_hlt1_p, *fM_hlt1_f, *fM_hlt2_p, *fM_hlt2_f, *fM_kin_p, *fM_kin_f, *fM_data_consistency_p, *fM_data_consistency_f, *fM_patho_p, *fM_patho_f, *fM_hf_p, *fM_hf_f, *fM_fd_r_p, *fM_fd_r_f, *fM_material_p, *fM_material_f, *fM_pid_p, *fM_pid_f, *fM_strip_p, *fM_strip_f;
+   TH1F *fM, *fM_l0_p, *fM_l0_f, *fM_hlt1_p, *fM_hlt1_f, *fM_hlt2_p, *fM_hlt2_f, *fM_kin_p, *fM_kin_f, *fM_data_consistency_p, *fM_data_consistency_f, *fM_patho_p, *fM_patho_f, *fM_hf_p, *fM_hf_f, *fM_fd_r_p, *fM_fd_r_f, *fM_material_p, *fM_material_f, *fM_pid_p, *fM_pid_f, *fM_strip_p, *fM_strip_f;
+   TH1F *fM_require_calo, *fM_require_calo_at_m_eta, *fM_tag_calo;
 
+   std::map<std::string, double> first_variables, second_variables;
+
+   double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps;
+   double mu_p, mu_eta, h_p, h_eta;
+   double tag_tau_ps_1, tag_tau_ps_2, tag_d2_1, tag_d2_2, tag_m_1, tag_m_2, tag_dtf_chi2_1, tag_dtf_chi2_2;
+
+
+   int idx_mu, idx_h, idx_pvr;
+
+   bool prt_bool, prt_bool_patho_srd, hf_veto, material_veto, prt_bool_no_matveto_cut;
+   bool prt_bool_l0, prt_bool_hlt1, prt_bool_hlt2, prt_bool_strip, prt_bool_kin, prt_bool_data_consistency, prt_bool_patho, prt_bool_dec_topo, prt_bool_patho_mu, prt_bool_patho_h, prt_bool_material, prt_bool_hf, prt_bool_fd_r, prt_bool_pid;
+   bool prt_bool_material_h_modmiss, prt_bool_material_mu_modmiss, prt_bool_material_cutFM;
+   bool prt_bool_l0_1, prt_bool_hlt1_1, prt_bool_hlt2_1, prt_bool_strip_1, prt_bool_kin_1, prt_bool_data_consistency_1, prt_bool_patho_1, prt_bool_dec_topo_1, prt_bool_patho_mu_1, prt_bool_patho_h_1, prt_bool_material_1, prt_bool_hf_1, prt_bool_fd_r_1, prt_bool_pid_1;
+   bool prt_bool_l0_2, prt_bool_hlt1_2, prt_bool_hlt2_2, prt_bool_strip_2, prt_bool_kin_2, prt_bool_data_consistency_2, prt_bool_patho_2, prt_bool_dec_topo_2, prt_bool_patho_mu_2, prt_bool_patho_h_2, prt_bool_material_2, prt_bool_hf_2, prt_bool_fd_r_2, prt_bool_pid_2;
+   bool prt_bool_full, prt_bool_full_1, prt_bool_full_2;
+   bool prt_bool_necessary_cuts, prt_bool_necessary_cuts_1, prt_bool_necessary_cuts_2;
+   bool prt_bool_trigger_cuts, prt_bool_trigger_cuts_1, prt_bool_trigger_cuts_2;
+   bool pass_separately;
 
    std::map<std::string, double>  Simple_Variables_Calculation(int mum);
+   void Ap_Anal(unsigned mum);
    void Ap_Plots(unsigned mum);
+   void Calo_Plots(unsigned calo, unsigned mum);
 
    Plot_hists_X2ApGm(TTree * /*tree*/ =0) : fChain(0) { }
    virtual ~Plot_hists_X2ApGm() { }
@@ -519,8 +556,8 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    pvr_ndof = 0;
    tag_idx = 0;
    tag_idx_pvr = 0;
-   tag_idx_mu1 = 0;
-   tag_idx_mu2 = 0;
+   tag_idx_prt0 = 0;
+   tag_idx_prt1 = 0;
    tag_il = 0;
    tag_iv = 0;
    tag_pid = 0;
@@ -532,8 +569,14 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    tag_eta = 0;
    tag_phi = 0;
    tag_m = 0;
+   tag_veto_mu_modmiss = 0;
+   tag_veto_h_modmiss = 0;
+   tag_veto_cutFM = 0;
    tag_dls = 0;
    tag_ctau = 0;
+   tag_dtf_chi2 = 0;
+   tag_dtf_px = 0; tag_dtf_py = 0; tag_dtf_pz = 0; tag_dtf_e = 0;
+   tag_dtf_m = 0;
    tag_chi2 = 0;
    tag_ndof = 0;
    tag_dira = 0;
@@ -588,9 +631,10 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    tag_l0_tos1 = 0;
    tag_l0_tos2 = 0;
    tag_l0_tis = 0;
-   prt_hlt1_tos4 = 0;
-   prt_hlt1_tos5 = 0;
-   prt_hlt1_tis = 0;
+   tag_hlt1_tos4 = 0;
+   tag_hlt1_tos5 = 0;
+   tag_hlt1_tis = 0;
+   tag_hlt2_tos0 = 0;
    prt_iso = 0;
    calo_idx = 0;
    calo_idx_pvr = 0;
@@ -738,8 +782,8 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("pvr_ndof", &pvr_ndof, &b_pvr_ndof);
    fChain->SetBranchAddress("tag_idx", &tag_idx, &b_tag_idx);
    fChain->SetBranchAddress("tag_idx_pvr", &tag_idx_pvr, &b_tag_idx_pvr);
-   fChain->SetBranchAddress("tag_idx_mu1", &tag_idx_mu1, &b_tag_idx_mu1);
-   fChain->SetBranchAddress("tag_idx_mu2", &tag_idx_mu2, &b_tag_idx_mu2);
+   fChain->SetBranchAddress("tag_idx_prt0", &tag_idx_prt0, &b_tag_idx_prt0);
+   fChain->SetBranchAddress("tag_idx_prt1", &tag_idx_prt1, &b_tag_idx_prt1);
    fChain->SetBranchAddress("tag_il", &tag_il, &b_tag_il);
    fChain->SetBranchAddress("tag_iv", &tag_iv, &b_tag_iv);
    fChain->SetBranchAddress("tag_pid", &tag_pid, &b_tag_pid);
@@ -751,8 +795,17 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("tag_eta", &tag_eta, &b_tag_eta);
    fChain->SetBranchAddress("tag_phi", &tag_phi, &b_tag_phi);
    fChain->SetBranchAddress("tag_m", &tag_m, &b_tag_m);
+   fChain->SetBranchAddress("tag_veto_mu_modmiss", &tag_veto_mu_modmiss, &b_tag_veto_mu_modmiss);
+   fChain->SetBranchAddress("tag_veto_h_modmiss", &tag_veto_h_modmiss, &b_tag_veto_h_modmiss);
+   fChain->SetBranchAddress("tag_veto_cutFM", &tag_veto_cutFM, &b_tag_veto_cutFM);
    fChain->SetBranchAddress("tag_dls", &tag_dls, &b_tag_dls);
    fChain->SetBranchAddress("tag_ctau", &tag_ctau, &b_tag_ctau);
+   fChain->SetBranchAddress("tag_dtf_chi2", &tag_dtf_chi2, &b_tag_dtf_chi2);
+   fChain->SetBranchAddress("tag_dtf_px", &tag_dtf_px, &b_tag_dtf_px);
+   fChain->SetBranchAddress("tag_dtf_py", &tag_dtf_py, &b_tag_dtf_py);
+   fChain->SetBranchAddress("tag_dtf_pz", &tag_dtf_pz, &b_tag_dtf_pz);
+   fChain->SetBranchAddress("tag_dtf_e", &tag_dtf_e, &b_tag_dtf_e);
+   fChain->SetBranchAddress("tag_dtf_m", &tag_dtf_m, &b_tag_dtf_m);
    fChain->SetBranchAddress("tag_chi2", &tag_chi2, &b_tag_chi2);
    fChain->SetBranchAddress("tag_ndof", &tag_ndof, &b_tag_ndof);
    fChain->SetBranchAddress("tag_dira", &tag_dira, &b_tag_dira);
@@ -807,9 +860,10 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("tag_l0_tos1", &tag_l0_tos1, &b_tag_l0_tos1);
    fChain->SetBranchAddress("tag_l0_tos2", &tag_l0_tos2, &b_tag_l0_tos2);
    fChain->SetBranchAddress("tag_l0_tis", &tag_l0_tis, &b_tag_l0_tis);
-   fChain->SetBranchAddress("prt_hlt1_tos4", &prt_hlt1_tos4, &b_prt_hlt1_tos4);
-   fChain->SetBranchAddress("prt_hlt1_tos5", &prt_hlt1_tos5, &b_prt_hlt1_tos5);
-   fChain->SetBranchAddress("prt_hlt1_tis", &prt_hlt1_tis, &b_prt_hlt1_tis);
+   fChain->SetBranchAddress("tag_hlt1_tos4", &tag_hlt1_tos4, &b_tag_hlt1_tos4);
+   fChain->SetBranchAddress("tag_hlt1_tos5", &tag_hlt1_tos5, &b_tag_hlt1_tos5);
+   fChain->SetBranchAddress("tag_hlt1_tis", &tag_hlt1_tis, &b_tag_hlt1_tis);
+   fChain->SetBranchAddress("tag_hlt2_tos0", &tag_hlt2_tos0, &b_tag_hlt2_tos0);
    fChain->SetBranchAddress("prt_iso", &prt_iso, &b_prt_iso);
    fChain->SetBranchAddress("calo_idx", &calo_idx, &b_calo_idx);
    fChain->SetBranchAddress("calo_idx_pvr", &calo_idx_pvr, &b_calo_idx_pvr);

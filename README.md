@@ -15,14 +15,15 @@ lb-run LHCbDirac $SHELL
 lhcb-proxy-init
 ganga submit_MakeTuple_X2ApGm.py
 
-// job 999??? did what
+// jobs 61 and 62 for magdown and magup
 
-ganga getOutputManual.py 999
-lb-run DaVinci/Latest python merge.py 999
+ganga getOutputManual.py 61
+ganga getOutputManual.py 62
+lb-run DaVinci/Latest python merge.py 61 62   // right now we only look at 61
 
 # add material veto branches to tree
 
-lb-run ROOT root -l -q "Add_material_deploy.cxx(\"DiAll\")"        # This updates NTuple_X2ApGm_all_files_with_materials.root
+lb-run ROOT root -l -q "Add_material_deploy.cxx(\"All\")"        # This updates NTuple_X2ApGm_all_files_with_materials.root
 lb-run ROOT root -l -q "Add_material_deploy.cxx(\"Test\")"        # This updates NTuple_X2ApGm_all_files_with_materials.root
 
 

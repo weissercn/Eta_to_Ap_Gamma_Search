@@ -1,4 +1,4 @@
-void Plot_hists_RHNu_deploy(TString option ){
+void Plot_hists_X2ApGm_deploy(TString option ){
   cout << "Plot_hists_RHNu_deploy The option is : " << option << endl;
   // it sounds like "Cogito, ergo sum" said by HAL9000 ...
   //

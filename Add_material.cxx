@@ -86,7 +86,7 @@ void Add_material(TString option){
   std::cout << "Add_material The option is : " << option << std::endl;
 
   TFile * f = 0;
-  if (option == "DiAll") {f = TFile::Open("NTuple_X2ApGm_all_files.root", "update");}
+  if (option == "All") {f = TFile::Open("NTuple_X2ApGm_all_files.root", "update");}
   if (option == "Test") {f = TFile::Open("outfile.root", "update");}
 
 
@@ -146,6 +146,7 @@ void Add_material(TString option){
 
   double x, y, z, dx, dy, dz, deltaz, deltaz_mu, deltaz_h, px, py, pz, pvx, pvy, pvz, px0, py0, pz0, px1, py1, pz1, prt_trk_dist_mu_h, d2;
   double xxx;
+  int tags_skipped(0);
   //std::cout << "Before VeloMaterial declaration" << std::endl;
 
   // this is how to configure the code
@@ -176,8 +177,9 @@ void Add_material(TString option){
       t->GetEntry(i);
       //std::cout << "After GetEntry" << std::endl;
 
-      if (i %10000 ==0) {
-        std::cout << "entry : " << i/1000 << " k\ttag_x size :" << tag_x->size() << std::endl;
+      if (i %1000 ==0) {
+        //std::cout << "entry : " << i/1000 << " k\ttag_x size :" << tag_x->size() << std::endl;
+        std::cout << "entry : " << i/1000 << " \ttag_x size :" << tag_x->size() << std::endl;
       }
 
       //std::cout << "Before Clearing vector" << std::endl;
@@ -194,6 +196,8 @@ void Add_material(TString option){
 
 
       for (Long64_t mum=0;mum<tag_x->size();mum++){
+
+        //if (i>2154){std::cout << "in loop mum\t" << mum << std::endl;  }
 
         idx_mu  = tag_idx_prt0->at(mum);
         idx_h   = tag_idx_prt1->at(mum);
@@ -212,8 +216,20 @@ void Add_material(TString option){
         py1 = prt_py->at(idx_h);
         pz1 = prt_pz->at(idx_h);
 
+        if (x > 1e20 || x < -1e20) {
+          std::cout << "Nonsense entry!\tx = \t" << x << "\t entry\t" << i << std::endl;
+          tag_dmat.push_back(-1);
+          tag_xxx.push_back(-1);
+          tag_dmat_isRescaled.push_back(-1);
+          tag_veto_h_modmiss.push_back(-1);
+          tag_veto_mu_modmiss.push_back(-1);
+          tag_veto_cutFM.push_back(-1);
+          tags_skipped++;
+          break;
+        } //
 
-        if (false){
+
+        if (idx_pvr >=0){
           dx  = tag_dx->at(mum);
           dy  = tag_dy->at(mum);
           dz  = tag_dz->at(mum);
@@ -247,9 +263,7 @@ void Add_material(TString option){
         if(cutFM(sv,p3,fmat,mmat2)) tag_veto_cutFM_j       = 1.; //true;
         //tag_veto_h_modmiss_rhit_j = modMiss_returns_rhit(sv,p0,(z+deltaz),mmat2);
 
-
-
-        if (false){
+        if (idx_pvr >=0){
 
           prt_trk_dist_mu_h = sqrt(pow(prt_x0->at(idx_h) - prt_x0->at(idx_mu), 2.0) +  pow(prt_y0->at(idx_h) - prt_y0->at(idx_mu), 2.0));
 
@@ -267,6 +281,8 @@ void Add_material(TString option){
           // this is the material distance
           vmat = TLorentzVector();
           double dmat = getDMat(sv,dx,dy,dz,mmat,fmat,vmat);
+
+
 
           if (dmat_isRescaled){
             deltaz = (deltaz_mu + deltaz_h)/2.;
@@ -294,10 +310,13 @@ void Add_material(TString option){
           if(r > 16 && r < 18) dmat *= 0.65/1.45;
           if(r > 20) dmat *= 0.65/0.78;
 
-
           tag_dmat.push_back(dmat);
           tag_xxx.push_back(xxx);
           tag_dmat_isRescaled.push_back(dmat_isRescaled);
+        }else{
+          tag_dmat.push_back(-1);
+          tag_xxx.push_back(-1);
+          tag_dmat_isRescaled.push_back(-1);
         }
 
         tag_veto_h_modmiss.push_back(tag_veto_h_modmiss_j);
@@ -339,7 +358,7 @@ void Add_material(TString option){
   //Create a new file + a clone of old tree in new file
 
   TFile *newfile = 0;
-  if (option == "DiAll") {newfile = new TFile("NTuple_X2ApGm_all_files_with_materials.root","recreate");}
+  if (option == "All") {newfile = new TFile("NTuple_X2ApGm_all_files_with_materials.root","recreate");}
   if (option == "Test") {newfile = new TFile("NTuple_X2ApGm_all_files_with_materials_test.root","recreate");}
 
   //TFile *newfile = new TFile("NTuple_RHNu_all_files_smooth_with_materials_small.root","recreate"); // ONLY FOR TESTING
@@ -350,6 +369,7 @@ void Add_material(TString option){
   delete f;
   delete newfile;
 
+  std::cout << "Tags skipped :\t" << tags_skipped << std::endl;
   std::cout << "Goodbye" << std::endl;
 
 

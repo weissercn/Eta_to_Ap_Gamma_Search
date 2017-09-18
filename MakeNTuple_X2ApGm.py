@@ -1,11 +1,12 @@
 import sys
+sys.path.append(".")
 
 
 from Configurables import DaVinci
 from PhysSelPython.Wrappers import Selection, SelectionSequence
 
-#run_ganga = True
-run_ganga = False
+run_ganga = True
+#run_ganga = False
 
 if not run_ganga:
     from GaudiConf import IOHelper
@@ -195,7 +196,7 @@ evtnum = 0
 gaudi.run(1)
 while bool(tes['/Event']):
 
-    #if evtnum > 5000: break
+    #if evtnum > 10000: break
 
     detTool = gaudi.detSvc()['/dd/Structure/LHCb/BeforeMagnetRegion/Velo'] # This has to be added in the event loop (ask phil why)
     ntuple.Tracks_set_detTool('prt', detTool)
@@ -265,17 +266,18 @@ while bool(tes['/Event']):
                     ntuple(dimus.prefix, dau)
 
 
-    # Fill mcp info
-    if mcpTool:
-        mcps = tes['/Event/MC/Particles']
-        if mcps:
-            for mcp in mcps:
-                if((abs(mcp.particleID().pid()) == 13) or
-                   (abs(mcp.particleID().pid()) == 221)):
-                    if not evtFill:
-                        ntuple(evt.prefix, tes)
-                        evtFill = True
-                    ntuple(gens.prefix, mcp)
+    if False:
+        # Fill mcp info
+        if mcpTool:
+            mcps = tes['/Event/MC/Particles']
+            if mcps:
+                for mcp in mcps:
+                    if((abs(mcp.particleID().pid()) == 13) or
+                       (abs(mcp.particleID().pid()) == 221)):
+                        if not evtFill:
+                            ntuple(evt.prefix, tes)
+                            evtFill = True
+                        ntuple(gens.prefix, mcp)
 
     # Fill, clear, and increment the loop
     #if evtFill:

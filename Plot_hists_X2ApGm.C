@@ -34,7 +34,7 @@ void Plot_hists_X2ApGm::Begin(TTree * /*tree*/)
    // When running with PROOF Begin() is only called on the client.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   TString option = GetOption();
+   option = GetOption();
 
 }
 
@@ -44,7 +44,7 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    // When running with PROOF SlaveBegin() is called on each slave server.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   TString option = GetOption();
+   option = GetOption();
 
    std::cout << "Plot_hists_RHNu The option is : " << option << std::endl;
 
@@ -52,6 +52,8 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    if (option == "All"){f = new TFile("NTuple_X2ApGm_all_files_plots.root","RECREATE");}
    else if (option == "Test"){f = new TFile("NTuple_X2ApGm_all_files_plots_test.root","RECREATE");}
    else{ std::cout << std::endl << std::endl << "NO VALID OPTION" << std::endl << std::endl;}
+
+   pass_separately =false;
 
    int nmbins(1000);
    double m_min(200.), m_max(500000.);
@@ -69,29 +71,25 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    // H I S T O G R A M S
 
-   fM = new TH1F("M", "M;RHNu M [MeV];TEvts", nmbins, mbins);
-   fM_l0_p = new TH1F("M_l0_p", "M_l0_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_l0_f = new TH1F("M_l0_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_hlt1_p = new TH1F("M_hlt1_p", "M_hlt1_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_hlt1_f = new TH1F("M_hlt1_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_hlt2_p = new TH1F("M_hlt2_p", "M_hlt2_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_hlt2_f = new TH1F("M_hlt2_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_strip_p  = new TH1F("M_strip_p", "M_strip_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_strip_f  = new TH1F("M_strip_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_kin_p = new TH1F("M_kin_p", "M_kin_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_kin_f = new TH1F("M_kin_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_data_consistency_p = new TH1F("M_data_consistency_p", "M_data_consistency_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_data_consistency_f = new TH1F("M_data_consistency_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_patho_p = new TH1F("M_patho_p", "M_patho_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_patho_f = new TH1F("M_patho_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_material_p = new TH1F("M_material_p", "M_material_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_material_f = new TH1F("M_material_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_hf_p = new TH1F("M_hf_p", "M_hf_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_hf_f = new TH1F("M_hf_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_fd_r_p = new TH1F("M_fd_r_p", "M_fd_r_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_fd_r_f = new TH1F("M_fd_r_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_pid_p = new TH1F("M_pid_p", "M_pid_p;RHNu M [MeV];Evts", nmbins, mbins);
-   fM_pid_f = new TH1F("M_pid_f", "RHNu -> #mu h;RHNu M [MeV];Evts", nmbins, mbins);
+   fM = new TH1F("M", "M;$/mu /mu$ M [MeV];TEvts", nmbins, mbins);
+   fM_l0_p = new TH1F("M_l0_p", "M_l0_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_hlt1_p = new TH1F("M_hlt1_p", "M_hlt1_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_hlt2_p = new TH1F("M_hlt2_p", "M_hlt2_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_strip_p  = new TH1F("M_strip_p", "M_strip_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_kin_p = new TH1F("M_kin_p", "M_kin_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_data_consistency_p = new TH1F("M_data_consistency_p", "M_data_consistency_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_patho_p = new TH1F("M_patho_p", "M_patho_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_material_p = new TH1F("M_material_p", "M_material_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_hf_p = new TH1F("M_hf_p", "M_hf_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_fd_r_p = new TH1F("M_fd_r_p", "M_fd_r_p;A' M [MeV];Evts", nmbins, mbins);
+   fM_pid_p = new TH1F("M_pid_p", "M_pid_p;A' M [MeV];Evts", nmbins, mbins);
+
+
+   fM_require_calo = new TH1F("M_require_calo", "M_require_calo ;mu mu M [MeV] when calo photon required;TEvts", nmbins, mbins);
+   fM_require_calo_at_m_eta = new TH1F("M_require_cal_at_m_eta", "M_require_calo_at_m_eta ;mu mu M [MeV] when calo photon required and 440 < m(mu mu gamma) < 455 MeV;TEvts", nmbins, mbins);
+
+
+   fM_tag_calo = new TH1F("M_tag_calo", "M_tag_calo ;mu mu calo M [MeV];TEvts", nmbins, mbins);
 
 
 
@@ -130,9 +128,13 @@ Bool_t Plot_hists_X2ApGm::Process(Long64_t entry)
 
 
    for (unsigned mum=0; mum < tag_m->size(); mum++) {
-     //When only one right handed neutrino is needed
-     this->Ap_Plots(mum);
+     if (tag_idx_pvr->at(mum) >=0 ) {
+       //When only one right handed neutrino is needed
+       this->Ap_Anal(mum);
+     }
    }
+
+
 
 
 
@@ -152,17 +154,17 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
 
   idx_mu  = tag_idx_prt0->at(mum); //This is really muon 1
   idx_h   = tag_idx_prt1->at(mum); //This is really muon 2
-  //idx_pvr = tag_idx_pvr->at(mum); // Make sure that things like fd_r aren't calculated with this.
+  idx_pvr = tag_idx_pvr->at(mum);
 
   // ->at(idx_mu)
   // ->at(idx_h)
   // ->at(idx_pvr)
 
   tag_p   = sqrt(pow(tag_px->at(mum), 2.0)+pow(tag_py->at(mum), 2.0)+pow(tag_pz->at(mum), 2.0));
-  tag_pt  = sqrt(pow(tag_px->at(mum), 2.0)+pow(tag_py->at(mum), 2.0));
+  //tag_pt  = sqrt(pow(tag_px->at(mum), 2.0)+pow(tag_py->at(mum), 2.0));
   tag_beta = 1./sqrt(1.+pow(tag_m->at(mum),2.0)/pow(tag_p,2.0));
   tag_gamma = 1./sqrt(1.-pow(tag_beta,2.0));
-  tag_eta = atanh(tag_pz->at(mum)/tag_p);
+  //tag_eta = atanh(tag_pz->at(mum)/tag_p);
 
   mu_p   = sqrt(pow(prt_px->at(idx_mu), 2.0)+pow(prt_py->at(idx_mu), 2.0)+pow(prt_pz->at(idx_mu), 2.0));
   mu_eta = atanh(prt_pz->at(idx_mu)/mu_p);
@@ -175,10 +177,10 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   tag_d2 = prt_trk_dist_mu_h;
 
   // Flight distance is between secondary and tertiary vertex, not primary and tertiary
-  //tag_fd_r  = sqrt( pow(tag_x->at(mum) - pvr_x->at(idx_pvr), 2.0) + pow(tag_y->at(mum) - pvr_y->at(idx_pvr), 2.0));
-  //tag_fd  = sqrt( pow(tag_x->at(mum) - pvr_x->at(idx_pvr), 2.0) + pow(tag_y->at(mum) - pvr_y->at(idx_pvr), 2.0) + pow(tag_z->at(mum) - pvr_z->at(idx_pvr), 2.0));
-  //tag_flighttime = tag_fd/(tag_beta)*10./2.998;
-  //tag_tau_ps = tag_flighttime/tag_gamma;
+  tag_fd_r  = sqrt( pow(tag_x->at(mum) - pvr_x->at(idx_pvr), 2.0) + pow(tag_y->at(mum) - pvr_y->at(idx_pvr), 2.0));
+  tag_fd  = sqrt( pow(tag_x->at(mum) - pvr_x->at(idx_pvr), 2.0) + pow(tag_y->at(mum) - pvr_y->at(idx_pvr), 2.0) + pow(tag_z->at(mum) - pvr_z->at(idx_pvr), 2.0));
+  tag_flighttime = tag_fd/(tag_beta)*10./2.998;
+  tag_tau_ps = tag_flighttime/tag_gamma;
 
 
   ////////////////////////////////////////////////////////////////////////////
@@ -186,16 +188,17 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   ////////////////////////////////////////////////////////////////////////////
 
 
-  prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tis->at(mum))); //L0 cuts
+  prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tis->at(mum))); //L0MuonDecision or TIS L0HadronDecision
   prt_bool_hlt1       = bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum)); //Tos Hlt1TrackMVA or [Tos Hlt1TwoTrackMVA for mass >1000 MeV]
   prt_bool_hlt2       = bool(tag_hlt2_tos0->at(mum)); //Hlt2ExoticaDisplDiMuonDecision
+  prt_bool_strip      = true;
   //prt_bool_strip       = bool(tag_fd_r > 2) && ( bool(tag_m->at(mum) < 425 )  || bool(tag_m->at(mum) > 525 ) ) && (prt_pnn_mu->at(idx_mu) > 0.95); //stripping is a passthrough
-  prt_bool_kin        = (tag_eta > 2) && (tag_eta < 4.5) && (tag_pt > 1000); // kinematics
+  prt_bool_kin        = (tag_eta->at(mum) > 2) && (tag_eta->at(mum) < 4.5) && (tag_pt->at(mum) > 1000); // kinematics
   prt_bool_kin        = prt_bool_kin && (mu_eta > 2) && (mu_eta < 4.5) && (h_eta > 2) && (h_eta < 4.5);
 
-  prt_bool_data_consistency = true;
-  //prt_bool_data_consistency      = tag_dtf_chi2->at(mum) < 8; //DTF is calulated with respect to primary vertex. need tertiary with respect to secondary vertex
-  //prt_bool_data_consistency      = prt_bool_data_consistency && bool(tag_z->at(mum) - pvr_z->at(idx_pvr) > 0); // SV downstream of PV
+  //prt_bool_data_consistency = true;
+  prt_bool_data_consistency      = tag_dtf_chi2->at(mum) < 8; //DTF is calulated with respect to primary vertex. need tertiary with respect to secondary vertex
+  prt_bool_data_consistency      = prt_bool_data_consistency && bool(tag_z->at(mum) - pvr_z->at(idx_pvr) > 0); // SV downstream of PV
 
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////   Material Veto   /////////////////////////////////
@@ -217,7 +220,6 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
 
   prt_bool_patho      = prt_bool_patho_mu && prt_bool_patho_h && prt_bool_patho_srd;
 
-  //material_veto       = bool(h_velo_tip->at(mum)) || bool(h_velo_miss->at(mum)) || bool(mu_velo_tip->at(mum)) || bool(mu_velo_miss->at(mum));
   material_veto        = bool(tag_veto_h_modmiss->at(mum)) || bool(tag_veto_mu_modmiss->at(mum)) || bool(tag_veto_cutFM->at(mum));
   prt_bool_material_h_modmiss = (!bool(tag_veto_h_modmiss->at(mum)));
   prt_bool_material_mu_modmiss = (!bool(tag_veto_mu_modmiss->at(mum)));
@@ -251,8 +253,8 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   ////////////////////////////////////////////////////////////////////////////
 
 
-  prt_bool_pid        = (prt_pnn_mu->at(idx_mu) > 0.7)
-  //prt_bool_pid        = prt_bool_pid && !bool(prt_isMuon->at(idx_h));
+  prt_bool_pid        = (prt_pnn_mu->at(idx_mu) > 0.7) && (prt_pnn_mu->at(idx_h) > 0.7);
+
 
 
   ////////////////////////////////////////////////////////////////////////////
@@ -269,9 +271,9 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
 
   std::map<std::string, double> var_dict;
   var_dict[std::string("prt_bool_full")] = double(prt_bool_full);
-  //var_dict[std::string("tag_tau_ps")] = tag_tau_ps;
+  var_dict[std::string("tag_tau_ps")] = tag_tau_ps;
   var_dict[std::string("tag_d2")] = tag_d2;
-  //var_dict[std::string("tag_fd_r")] = tag_fd_r;
+  var_dict[std::string("tag_fd_r")] = tag_fd_r;
   var_dict[std::string("prt_bool_l0")] = double(prt_bool_l0);
   var_dict[std::string("prt_bool_hlt1")] = double(prt_bool_hlt1);
   var_dict[std::string("prt_bool_hlt2")] = double(prt_bool_hlt2);
@@ -296,7 +298,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
 
 
   assert (prt_bool_full     == bool(var_dict[std::string("prt_bool_full")]));
-  //assert (tag_tau_ps        == var_dict[std::string("tag_tau_ps")]);
+  assert (tag_tau_ps        == var_dict[std::string("tag_tau_ps")]);
   assert (tag_d2            == var_dict[std::string("tag_d2")]);
   assert (prt_bool_l0       == bool(var_dict[std::string("prt_bool_l0")]));
   assert (prt_bool_hlt1     == bool(var_dict[std::string("prt_bool_hlt1")]));
@@ -319,20 +321,20 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   //return std::make_tuple(prt_bool_full, tag_tau_ps, tag_d2, prt_bool_l0, prt_bool_hlt1, prt_bool_hlt2, prt_bool_strip, prt_bool_kin, prt_bool_data_consistency, prt_bool_patho, prt_bool_material, prt_bool_hf, prt_bool_pid);
 }
 
-void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
+void Plot_hists_X2ApGm::Ap_Anal(unsigned mum)
 {
   // Executed for each dark photon candidate
 
   idx_mu  = tag_idx_prt0->at(mum);
   idx_h   = tag_idx_prt1->at(mum);
-  //idx_pvr = tag_idx_pvr->at(mum);
+  idx_pvr = tag_idx_pvr->at(mum);
 
   first_variables = this->Simple_Variables_Calculation(mum);
 
   prt_bool_full     = bool(first_variables[std::string("prt_bool_full")]);
-  //tag_tau_ps        = first_variables[std::string("tag_tau_ps")];
+  tag_tau_ps        = first_variables[std::string("tag_tau_ps")];
   tag_d2            = first_variables[std::string("tag_d2")];
-  //tag_fd_r          = first_variables[std::string("tag_fd_r")];
+  tag_fd_r          = first_variables[std::string("tag_fd_r")];
   prt_bool_l0       = bool(first_variables[std::string("prt_bool_l0")]);
   prt_bool_hlt1     = bool(first_variables[std::string("prt_bool_hlt1")]);
   prt_bool_hlt2     = bool(first_variables[std::string("prt_bool_hlt2")]);
@@ -356,144 +358,72 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
 
   fM->Fill(tag_m->at(mum));
 
-  prt_bool            = true;
 
-  if (prt_bool){
-    if (prt_bool_l0){
-      //fMT_l0_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_l0_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_l0_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_l0_f->Fill(tag_m->at(mum));
+  this->Ap_Plots(mum);
+
+  for (unsigned calo=0; calo < calo_px->size(); calo++) {
+    if (calo_idx_pvr->at(calo) == tag_idx_pvr->at(mum)){
+      this->Calo_Plots(calo, mum);
     }
   }
 
+}
+
+void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
+  {
+
+  prt_bool            = true;
+  if (prt_bool){if (prt_bool_l0){fM_l0_p->Fill(tag_dtf_m->at(mum));} }
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_l0;}
 
-  if (prt_bool){
-    if (prt_bool_hlt1){
-      //fMT_hlt1_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_hlt1_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_hlt1_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_hlt1_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_hlt1){fM_hlt1_p->Fill(tag_dtf_m->at(mum));} }
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_hlt1;}
 
-  if (prt_bool){
-    if (prt_bool_hlt2){
-      //fMT_hlt2_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_hlt2_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_hlt2_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_hlt2_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_hlt2){fM_hlt2_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_hlt2;}
 
-  if (prt_bool){
-    if (prt_bool_strip){
-      //fMT_strip_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_strip_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_strip_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_strip_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_strip){fM_strip_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_strip;}
 
-  if (prt_bool){
-    if (prt_bool_kin){
-      //fMT_kin_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_kin_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_kin_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_kin_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_kin){fM_kin_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_kin;}
 
-  if (prt_bool){
-    if (prt_bool_data_consistency){
-      //fMT_data_consistency_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_data_consistency_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_data_consistency_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_data_consistency_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_data_consistency){fM_data_consistency_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_data_consistency;}
 
-  if (prt_bool){
-    if (prt_bool_patho){
-      //fMT_patho_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_patho_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_patho_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_patho_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_patho){fM_patho_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_patho;}
 
-  if (prt_bool){
-    if (prt_bool_material){
-      //fMT_material_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_material_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_material_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_material_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_material){fM_material_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_material;}
 
-  if (prt_bool){
-    if (prt_bool_hf){
-      //fMT_hf_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_hf_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_hf_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_hf_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_hf){fM_hf_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_hf;}
 
-  if (prt_bool){
-    if (prt_bool_fd_r){
-      //fMT_fd_r_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_fd_r_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_fd_r_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_fd_r_f->Fill(tag_m->at(mum));
-    }
-  }
-
+  if (prt_bool){if (prt_bool_fd_r){fM_fd_r_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_fd_r;}
 
+  if (prt_bool){if (prt_bool_pid){fM_pid_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_pid;}
+  if (not pass_separately) {assert (prt_bool==prt_bool_full);}
 
-  if (prt_bool){
-    if (prt_bool_pid){
-      //fMT_pid_p->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_pid_p->Fill(tag_m->at(mum));
-    } else {
-      //fMT_pid_f->Fill(tag_m->at(mum),tag_tau_ps);
-      fM_pid_f->Fill(tag_m->at(mum));
+
+}
+
+
+
+void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
+{
+  double tag_calo_m = pow(tag_dtf_e->at(mum) + calo_e->at(calo) , 2.0) - pow(tag_dtf_px->at(mum) + calo_px->at(calo) , 2.0) - pow(tag_dtf_py->at(mum) + calo_py->at(calo) , 2.0) - pow(tag_dtf_pz->at(mum) + calo_pz->at(calo) , 2.0);
+  if (tag_calo_m < 1200.0){ // Only if the calo A' pair has mass less than 1.2 GeV fill hists.
+    if (prt_bool_necessary_cuts) {
+      fM_require_calo->Fill(tag_dtf_m->at(mum));
+      fM_tag_calo->Fill(tag_calo_m);
+      if ((540 < tag_calo_m ) && (555 > tag_calo_m )){
+        fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
+      }
     }
   }
-
-
-  if (not pass_separately) {prt_bool = prt_bool && prt_bool_pid;}
-
-  assert (prt_bool==prt_bool_full);
-
 
 }
 
@@ -510,5 +440,15 @@ void Plot_hists_X2ApGm::Terminate()
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
+
+   std::cout << "Writing Hists to File" << std::endl;
+
+   //gDirectory->Add(l_x_scatter);
+   gDirectory->ls();
+
+   f->Write();
+   f->Close();
+
+   std::cout << "Saying goodbye" << std::endl;
 
 }
