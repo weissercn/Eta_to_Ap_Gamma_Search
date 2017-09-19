@@ -15,7 +15,8 @@ lb-run LHCbDirac $SHELL
 lhcb-proxy-init
 ganga submit_MakeTuple_X2ApGm.py
 
-// jobs 61 and 62 for magdown and magup
+// jobs 61 and 62 for magdown and magup, but with hlt always returning default (0).
+// job 64 with magdown hlt_updated.
 
 ganga getOutputManual.py 61
 ganga getOutputManual.py 62

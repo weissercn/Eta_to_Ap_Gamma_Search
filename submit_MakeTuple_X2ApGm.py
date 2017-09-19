@@ -7,10 +7,10 @@ sys.path.append('.')
 import SubmissionTools
 
 
-#jname       = 'Data.2016.6500.X2ApGm.MagDown'
-jname       = 'Data.2016.6500.X2ApGm.MagUp'
-#tag         = 'mag_down_first_try'
-tag         = 'mag_up_first_try'
+jname       = 'Data.2016.6500.X2ApGm.MagDown'
+#jname       = 'Data.2016.6500.X2ApGm.MagUp'
+tag         = 'mag_down_hlt_updated'
+#tag         = 'mag_up_hlt_updated'
 script      = '/mnt/shared/LbVMWeisser_shared/Analyses/Eta_to_Ap_Gamma_Search/MakeNTuple_X2ApGm.py'
 outfiles    = ['*.root']
 MIT_shared_dir = '/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/'
