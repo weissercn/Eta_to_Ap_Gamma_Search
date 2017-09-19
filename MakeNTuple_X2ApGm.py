@@ -61,12 +61,12 @@ DaVinci().UserAlgorithms = [
 
 #================
 # Setup Turbo
-from Configurables import DstConf
+#from Configurables import DstConf
 #from Configurables import TurboConf
 from PhysConf.Filters import LoKi_Filters
 hltFilter = LoKi_Filters(HLT2_Code = "HLT_PASS_RE('.*ExoticaDisplDiMuonDecision.*')")
 #DstConf().Turbo = True
-DstConf().Turbo = False
+#DstConf().Turbo = False
 #TurboConf().PersistReco = True
 
 #from GaudiConf import IOHelper
@@ -77,44 +77,7 @@ DstConf().Turbo = False
 #===================
 # Setup GaudiPython
 
-# Create gaudi and tes
-import GaudiPython
-gaudi = GaudiPython.AppMgr()
-tes   = gaudi.evtsvc()
 
-# Create some tools
-mcpTool = gaudi.toolsvc().create(
-    'DaVinciSmartAssociator',
-    interface = 'IParticle2MCWeightedAssociator'
-    ) if DaVinci().Simulation else None
-recTool = gaudi.toolsvc().create(
-    'MCReconstructible',
-    interface = 'IMCReconstructible'
-    ) if DaVinci().Simulation else None
-dstTool = gaudi.toolsvc().create(
-    'LoKi::TrgDistanceCalculator',
-    interface = 'IDistanceCalculator')
-pvrTool = gaudi.toolsvc().create(
-    'GenericParticle2PVRelator<_p2PVWithIPChi2, '
-    'OfflineDistanceCalculatorName>/P2PVWithIPChi2',
-    interface = 'IRelatedPVFinder')
-
-from IsoBdt import IsoBdt
-isoTool = IsoBdt(dstTool)
-
-l0Tool = gaudi.toolsvc().create(
-    'L0TriggerTisTos',
-    interface = 'ITriggerTisTos')
-hlt1Tool = gaudi.toolsvc().create(
-    'TriggerTisTos/Hlt1TriggerTisTos',
-    interface = 'ITriggerTisTos')
-hlt2Tool = gaudi.toolsvc().create(
-    'TriggerTisTos/Hlt2TriggerTisTos',
-    interface = 'ITriggerTisTos')
-trkTool = gaudi.toolsvc().create(
-    'TrackMasterExtrapolator',
-    interface = 'ITrackExtrapolator') # For x0, x1, ...
-#detTool = gaudi.detSvc()['/dd/Structure/LHCb/BeforeMagnetRegion/Velo'] # This might crash
 
 if False:
     from Configurables import HltParticleFlow, HltJetBuilder
@@ -148,6 +111,56 @@ if False:
     jb.JetPtMin = 0
     DaVinci().appendToMainSequence([pf, jb])
 
+# TisTos configuration.
+from Configurables import ToolSvc, TriggerTisTos
+for stage in ('Hlt1', 'Hlt2', 'Strip/Phys'):
+    ToolSvc().addTool(TriggerTisTos, stage + "TriggerTisTos")
+    tool = getattr(ToolSvc(), stage + "TriggerTisTos")
+    tool.HltDecReportsLocation = '/Event/' + stage + '/DecReports'
+    tool.HltSelReportsLocation = '/Event/' + stage + '/SelReports'
+
+# Create gaudi and tes
+import GaudiPython
+gaudi = GaudiPython.AppMgr()
+tes   = gaudi.evtsvc()
+
+# Create some tools
+mcpTool = gaudi.toolsvc().create(
+    'DaVinciSmartAssociator',
+    interface = 'IParticle2MCWeightedAssociator'
+    ) if DaVinci().Simulation else None
+recTool = gaudi.toolsvc().create(
+    'MCReconstructible',
+    interface = 'IMCReconstructible'
+    ) if DaVinci().Simulation else None
+dstTool = gaudi.toolsvc().create(
+    'LoKi::TrgDistanceCalculator',
+    interface = 'IDistanceCalculator')
+pvrTool = gaudi.toolsvc().create(
+    'GenericParticle2PVRelator<_p2PVWithIPChi2, '
+    'OfflineDistanceCalculatorName>/P2PVWithIPChi2',
+    interface = 'IRelatedPVFinder')
+
+l0Tool = gaudi.toolsvc().create(
+    'L0TriggerTisTos',
+    interface = 'ITriggerTisTos')
+hlt1Tool = gaudi.toolsvc().create(
+    'TriggerTisTos/Hlt1TriggerTisTos',
+    interface = 'ITriggerTisTos')
+hlt2Tool = gaudi.toolsvc().create(
+    'TriggerTisTos/Hlt2TriggerTisTos',
+    interface = 'ITriggerTisTos')
+physTool = gaudi.toolsvc().create(
+    'TriggerTisTos/Strip/PhysTriggerTisTos',
+    interface = 'ITriggerTisTos')
+trkTool = gaudi.toolsvc().create(
+    'TrackMasterExtrapolator',
+    interface = 'ITrackExtrapolator') # For x0, x1, ...
+#detTool = gaudi.detSvc()['/dd/Structure/LHCb/BeforeMagnetRegion/Velo'] # This might crash
+
+from IsoBdt import IsoBdt
+isoTool = IsoBdt(dstTool)
+
 #=================
 # Setup the ttree
 #from TTreeTools.NtupleComponents import *
@@ -176,7 +189,7 @@ cnvs = Combos('cnv', pvrs, cnvDaus, gens,
 dimuDaus = [(mus, ['prt0', 'prt1'])]
 dtf_pid_list = [13,-13]
 dimus = Combos('tag', pvrs, dimuDaus, gens,
-               pvrTool, dstTool, dtf_pid_list, mcpTool, False, tes, l0Tool, hlt1Tool, hlt2Tool, isoTool) #dimus
+               pvrTool, dstTool, dtf_pid_list, mcpTool, False, tes, l0Tool, hlt1Tool, hlt2Tool, physTool, isoTool) #dimus
 
 components = OrderedDict([(evt.prefix,   evt),
                           (gens.prefix,  gens),

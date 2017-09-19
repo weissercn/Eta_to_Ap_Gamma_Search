@@ -87,7 +87,7 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    // H I S T O G R A M S
 
-   fM = new TH1F("M", "M;$/mu /mu$ M [MeV];TEvts", nmbins, mbins);
+   fM = new TH1F("M", "M;A' M [MeV];TEvts", nmbins, mbins);
    fM_l0_p = new TH1F("M_l0_p", "M_l0_p;A' M [MeV];Evts", nmbins, mbins);
    fM_hlt1_p = new TH1F("M_hlt1_p", "M_hlt1_p;A' M [MeV];Evts", nmbins, mbins);
    fM_hlt2_p = new TH1F("M_hlt2_p", "M_hlt2_p;A' M [MeV];Evts", nmbins, mbins);
@@ -102,7 +102,7 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
 
    fM_require_calo = new TH1F("M_require_calo", "M_require_calo ;mu mu M [MeV] when calo photon required;TEvts", nmbins, mbins);
-   fM_require_calo_at_m_eta = new TH1F("M_require_calo_at_m_eta", "M_require_calo_at_m_eta ;mu mu M [MeV] when calo photon required and 440 < m(mu mu gamma) < 455 MeV;TEvts", nmbins, mbins);
+   fM_require_calo_at_m_eta = new TH1F("M_require_calo_at_m_eta", "M_require_calo_at_m_eta ;mu mu M [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV;TEvts", nmbins, mbins);
 
 
    fM_tag_calo = new TH1F("M_tag_calo", "M_tag_calo ;mu mu calo M [MeV];TEvts", nmbins2, mbins2);
@@ -282,7 +282,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   ////////////////////////////////////////////////////////////////////////////
 
   prt_bool_trigger_cuts = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip);
-  prt_bool_necessary_cuts   = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_pid);
+  prt_bool_necessary_cuts   = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_pid);
   prt_bool_full        = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_hf && prt_bool_fd_r && prt_bool_pid);
 
 
@@ -376,7 +376,6 @@ void Plot_hists_X2ApGm::Ap_Anal(unsigned mum)
   prt_bool_material_mu_modmiss      = bool(first_variables[std::string("prt_bool_material_mu_modmiss")]);
   prt_bool_material_cutFM        = bool(first_variables[std::string("prt_bool_material_cutFM")]);
 
-  fM->Fill(tag_m->at(mum));
 
 
   this->Ap_Plots(mum);
@@ -392,6 +391,7 @@ void Plot_hists_X2ApGm::Ap_Anal(unsigned mum)
 void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
   {
 
+  fM->Fill(tag_dtf_m->at(mum));
   prt_bool            = true;
   if (prt_bool){if (prt_bool_l0){fM_l0_p->Fill(tag_dtf_m->at(mum));} }
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_l0;}
@@ -417,15 +417,18 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
   if (prt_bool){if (prt_bool_material){fM_material_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_material;}
 
-  if (prt_bool){if (prt_bool_hf){fM_hf_p->Fill(tag_dtf_m->at(mum));}}
-  if (not pass_separately) {prt_bool = prt_bool && prt_bool_hf;}
-
-  if (prt_bool){if (prt_bool_fd_r){fM_fd_r_p->Fill(tag_dtf_m->at(mum));}}
-  if (not pass_separately) {prt_bool = prt_bool && prt_bool_fd_r;}
+  if (not pass_separately) {assert (prt_bool==prt_bool_necessary_cuts);}
 
   if (prt_bool){if (prt_bool_pid){fM_pid_p->Fill(tag_dtf_m->at(mum));}}
   if (not pass_separately) {prt_bool = prt_bool && prt_bool_pid;}
-  if (not pass_separately) {assert (prt_bool==prt_bool_full);}
+
+  //if (prt_bool){if (prt_bool_hf){fM_hf_p->Fill(tag_dtf_m->at(mum));}}
+  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_hf;}
+
+  //if (prt_bool){if (prt_bool_fd_r){fM_fd_r_p->Fill(tag_dtf_m->at(mum));}}
+  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_fd_r;}
+
+  //if (not pass_separately) {assert (prt_bool==prt_bool_full);}
 
 
 }
@@ -437,13 +440,13 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
   double tag_calo_m = sqrt(pow(tag_dtf_e->at(mum) + calo_e->at(calo) , 2.0) - pow(tag_dtf_px->at(mum) + calo_px->at(calo) , 2.0) - pow(tag_dtf_py->at(mum) + calo_py->at(calo) , 2.0) - pow(tag_dtf_pz->at(mum) + calo_pz->at(calo) , 2.0));
   //std::cout << "tag_calo_m : " << tag_calo_m << std::endl;
   if (tag_calo_m < 1200.0){ // Only if the calo A' pair has mass less than 1.2 GeV fill hists.
-    //if (prt_bool_necessary_cuts) {
+    if (prt_bool_necessary_cuts) {
       fM_require_calo->Fill(tag_dtf_m->at(mum));
       fM_tag_calo->Fill(tag_calo_m);
-      if ((540 < tag_calo_m ) && (555 > tag_calo_m )){
+      if ((500 < tag_calo_m ) && (600 > tag_calo_m )){
         fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
       }
-    //}
+    }
   }
 
 }
