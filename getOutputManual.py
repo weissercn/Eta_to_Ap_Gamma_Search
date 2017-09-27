@@ -24,18 +24,22 @@ def getJobURLs(njob, fname, SE='CERN-USER'):
             if fname in fn.lfn:
                 #df = DiracFile(lfn=fn)
 
-                # I like my output files to be at CERN user
-                if SE not in fn.locations:
-                    try: fn.replicate(SE)
-                    except: continue
+                try:
+                    # I like my output files to be at CERN user
+                    if SE not in fn.locations:
+                        try: fn.replicate(SE)
+                        except: continue
 
-                url = getAccessURL(fn.lfn,[SE])
-                if url:
-                    print(url)
-                    print(url,file=f)
+                    url = getAccessURL(fn.lfn,[SE])
+                    if url:
+                        print(url)
+                        print(url,file=f)
+                except:
+                    print("Could not get Access URL")
 
 import sys
 
 njob = sys.argv[1]
-outfile = 'outfile.root'
+#outfile = 'outfile.root'
+outfile = 'NTuple_X2ApGm_all_files_with_materials_test.root'
 getJobURLs(njob,outfile)

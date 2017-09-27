@@ -157,6 +157,10 @@ trkTool = gaudi.toolsvc().create(
     'TrackMasterExtrapolator',
     interface = 'ITrackExtrapolator') # For x0, x1, ...
 #detTool = gaudi.detSvc()['/dd/Structure/LHCb/BeforeMagnetRegion/Velo'] # This might crash
+bremTool = gaudi.toolsvc().create(
+    'BremAdder',
+    interface = 'IBremAdder')
+
 
 from IsoBdt import IsoBdt
 isoTool = IsoBdt(dstTool)
@@ -175,7 +179,7 @@ evt   = Event('evt')
 pvrs  = PrimaryVertices('pvr')
 gens  = Gens('gens',recTool)
 #mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, trkTool, jb) #enable this to get info about iso
-mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, trkTool) #mu
+mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, l0Tool, hlt1Tool, hlt2Tool, trkTool) #mu
 es    = Tracks('e',   pvrs, gens, pvrTool, dstTool, mcpTool)
 calos = Calos('calo', pvrs, gens, pvrTool, mcpTool)
 mergedpi0s = Calos('mergedpi0', pvrs, gens, pvrTool, mcpTool)
@@ -189,7 +193,7 @@ cnvs = Combos('cnv', pvrs, cnvDaus, gens,
 dimuDaus = [(mus, ['prt0', 'prt1'])]
 dtf_pid_list = [13,-13]
 dimus = Combos('tag', pvrs, dimuDaus, gens,
-               pvrTool, dstTool, dtf_pid_list, mcpTool, False, tes, l0Tool, hlt1Tool, hlt2Tool, physTool, isoTool) #dimus
+               pvrTool, dstTool, dtf_pid_list, mcpTool, False, tes, l0Tool, hlt1Tool, hlt2Tool, physTool, isoTool, bremTool) #dimus
 
 components = OrderedDict([(evt.prefix,   evt),
                           (gens.prefix,  gens),
@@ -209,7 +213,7 @@ evtnum = 0
 gaudi.run(1)
 while bool(tes['/Event']):
 
-    #if evtnum > 10000: break
+    #if evtnum > 2000: break
 
     detTool = gaudi.detSvc()['/dd/Structure/LHCb/BeforeMagnetRegion/Velo'] # This has to be added in the event loop (ask phil why)
     ntuple.Tracks_set_detTool('prt', detTool)
@@ -301,3 +305,22 @@ while bool(tes['/Event']):
 
 # Close the ttree and file
 ntuple.close()
+
+print 2*"\n", 200*"-", "\nNow adding material\n", 200*"-", 2*"\n"
+
+import os, subprocess
+#os.system("export DISPLAY=localhost:0.0")
+
+
+#addmat_out = os.system('root -l -b -q "Add_material_deploy.cxx(\\"Test\\")" |& tee add_material_docu.txt')
+#addmat_out = os.popen('root -l -b -q "Add_material_deploy.cxx(\\"Test\\")"').read()
+addmat_out = subprocess.Popen('root -l -b -q "Add_material_deploy.cxx(\\"Test\\")"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+print "stdout : \n", addmat_out.stdout.read()
+print "stderr : \n", addmat_out.stderr.read()
+#addmat_out = subprocess.call('root -l -b -q "Add_material_deploy.cxx(\\"Test\\")"', shell=True)
+#print addmat_out
+
+print "File NTuple_X2ApGm_all_files_with_materials_test.root has been written : ", os.path.isfile('NTuple_X2ApGm_all_files_with_materials_test.root')
+
+
+print 2*"\n", 200*"-", "\nNow finishing\n", 200*"-", 2*"\n"

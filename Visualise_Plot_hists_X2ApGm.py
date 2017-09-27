@@ -51,7 +51,7 @@ def M1D_plot_lin(cv, plots_key):
 
 
 
-M1D_list = ['M', 'M_l0_p', 'M_kin_p', 'M_data_consistency_p', 'M_patho_p', 'M_material_p' ]
+M1D_list = ['M', 'M_l0_p', 'M_hlt1_p', 'M_hlt2_p', 'M_strip_p', 'M_kin_p', 'M_data_consistency_p', 'M_patho_p', 'M_material_p' ]
 M1D_list += ['M_require_calo', 'M_require_calo_at_m_eta', 'M_tag_calo']
 #M1D_list = []
 

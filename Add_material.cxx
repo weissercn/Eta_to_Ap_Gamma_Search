@@ -178,8 +178,7 @@ void Add_material(TString option){
       //std::cout << "After GetEntry" << std::endl;
 
       if (i %1000 ==0) {
-        //std::cout << "entry : " << i/1000 << " k\ttag_x size :" << tag_x->size() << std::endl;
-        std::cout << "entry : " << i/1000 << " \ttag_x size :" << tag_x->size() << std::endl;
+        std::cout << "entry : " << i/1000 << " k\ttag_x size :" << tag_x->size() << std::endl;
       }
 
       //std::cout << "Before Clearing vector" << std::endl;
