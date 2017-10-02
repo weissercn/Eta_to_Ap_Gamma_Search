@@ -4,6 +4,7 @@ void Add_material_deploy(TString option){
   //
   //gROOT->LoadMacro("velo.C+");
   //gROOT->ProcessLine(".L velo_old.C+");
+  std::cout << "Running Add_material_deploy with option " << option << std::endl; 
   gROOT->ProcessLine(".L velo.C+");
   gROOT->ProcessLine(TString(".x Add_material.cxx(\"")+option+ TString("\")"));
 

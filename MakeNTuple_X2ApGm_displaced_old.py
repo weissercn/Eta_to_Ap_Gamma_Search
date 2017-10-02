@@ -10,14 +10,14 @@ run_ganga = True
 
 if not run_ganga:
     from GaudiConf import IOHelper
-    #IOHelper('ROOT').inputFiles(['00059560_00000002_1.ew.dst'],clear=True) # this is still for the displaced case
+    IOHelper('ROOT').inputFiles(['00059560_00000002_1.ew.dst'],clear=True)
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/MITParticleMakers')
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/TTreeTools')
 
 #===============================
 # Setup the particle algorithms
 #from MITParticleMakers import AllMuMuGms
-import AllMuMuGms as AllMuMuGms
+import AllMuMuGms_displaced as AllMuMuGms
 nameLL   = 'convLL'
 nameDD   = 'convDD'
 nameCalo = 'calo'

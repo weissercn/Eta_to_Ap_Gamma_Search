@@ -103,9 +103,63 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    fM_require_calo = new TH1F("M_require_calo", "M_require_calo ;mu mu M [MeV] when calo photon required;TEvts", nmbins, mbins);
    fM_require_calo_at_m_eta = new TH1F("M_require_calo_at_m_eta", "M_require_calo_at_m_eta ;mu mu M [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV;TEvts", nmbins, mbins);
+   fM_require_calo_at_m_eta_no_brem = new TH1F("M_require_calo_at_m_eta_no_brem", "M_require_calo_at_m_eta_no_brem ;mu mu M [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV no brem photons;TEvts", nmbins, mbins);
 
 
    fM_tag_calo = new TH1F("M_tag_calo", "M_tag_calo ;mu mu calo M [MeV];TEvts", nmbins2, mbins2);
+
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   fM_calo_mu0 = new TH1F("M_calo_mu0", "M_calo_mu0 ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
+   fM_calo_mu1 = new TH1F("M_calo_mu1", "M_calo_mu1 ; calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fangle_calo_mu0 = new TH1F("angle_calo_mu0", "angle_calo_mu0 ; angle between calo and mu0 momenta[rad];TEvts", 100, 0., 0.2);
+   fangle_calo_mu1 = new TH1F("angle_calo_mu1", "angle_calo_mu1 ; angle between calo and mu1 momenta[rad];TEvts", 100, 0., 0.2);
+
+   fDphi_calo_mu0 = new TH1F("Dphi_calo_mu0", "Dphi_calo_mu0 ; Delta phi calo and mu0 momenta[rad];TEvts", 100, -M_PI, M_PI);
+   fDphi_calo_mu1 = new TH1F("Dphi_calo_mu1", "Dphi_calo_mu1 ; Delta phi calo and mu1 momenta[rad];TEvts", 100, -M_PI, M_PI);
+
+   fDeta_calo_mu0 = new TH1F("Deta_calo_mu0", "Deta_calo_mu0 ; Delta eta calo and mu0 momenta;TEvts", 100, -2., 2.);
+   fDeta_calo_mu1 = new TH1F("Deta_calo_mu1", "Deta_calo_mu1 ; Delta eta calo and mu1 momenta;TEvts", 100, -2., 2.);
+
+   fDR_calo_mu0 = new TH1F("DR_calo_mu0", "DR_calo_mu0 ; Delta R calo and mu0 momenta;TEvts", 100, 0., 1.5);
+   fDR_calo_mu1 = new TH1F("DR_calo_mu1", "DR_calo_mu1 ; Delta R calo and mu1 momenta;TEvts", 100, 0., 1.5);
+
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   fM_calo_mu0_m_eta = new TH1F("M_calo_mu0_m_eta", "M_calo_mu0_m_eta ; signal calo mu0 M [MeV];TEvts", nmbins2, mbins2);
+   fM_calo_mu1_m_eta = new TH1F("M_calo_mu1_m_eta", "M_calo_mu1_m_eta ; signal calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fangle_calo_mu0_m_eta = new TH1F("angle_calo_mu0_m_eta", "angle_calo_mu0_m_eta ; signal angle between calo and mu0 momenta[rad];TEvts", 100, 0., 0.2);
+   fangle_calo_mu1_m_eta = new TH1F("angle_calo_mu1_m_eta", "angle_calo_mu1_m_eta ; signal angle between calo and mu1 momenta[rad];TEvts", 100, 0., 0.2);
+
+   fDphi_calo_mu0_m_eta = new TH1F("Dphi_calo_mu0_m_eta", "Dphi_calo_mu0_m_eta ; signal Delta phi calo and mu0 momenta[rad];TEvts", 100, -M_PI, M_PI);
+   fDphi_calo_mu1_m_eta = new TH1F("Dphi_calo_mu1_m_eta", "Dphi_calo_mu1_m_eta ; signal Delta phi calo and mu1 momenta[rad];TEvts", 100, -M_PI, M_PI);
+
+   fDeta_calo_mu0_m_eta = new TH1F("Deta_calo_mu0_m_eta", "Deta_calo_mu0_m_eta ; signal Delta eta calo and mu0 momenta;TEvts", 100, -2., 2.);
+   fDeta_calo_mu1_m_eta = new TH1F("Deta_calo_mu1_m_eta", "Deta_calo_mu1_m_eta ; signal Delta eta calo and mu1 momenta;TEvts", 100, -2., 2.);
+
+   fDR_calo_mu0_m_eta = new TH1F("DR_calo_mu0_m_eta", "DR_calo_mu0_m_eta ; signal Delta R calo and mu0 momenta;TEvts", 100, 0., 1.5);
+   fDR_calo_mu1_m_eta = new TH1F("DR_calo_mu1_m_eta", "DR_calo_mu1_m_eta ; signal Delta R calo and mu1 momenta;TEvts", 100, 0., 1.5);
+
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   fM_calo_mu0_not_m_eta = new TH1F("M_calo_mu0_not_m_eta", "M_calo_mu0_not_m_eta ; sideband calo mu0 M [MeV];TEvts", nmbins2, mbins2);
+   fM_calo_mu1_not_m_eta = new TH1F("M_calo_mu1_not_m_eta", "M_calo_mu1_not_m_eta ; sideband calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fangle_calo_mu0_not_m_eta = new TH1F("angle_calo_mu0_not_m_eta", "angle_calo_mu0_not_m_eta ; sideband angle between calo and mu0 momenta[rad];TEvts", 100, 0., 0.2);
+   fangle_calo_mu1_not_m_eta = new TH1F("angle_calo_mu1_not_m_eta", "angle_calo_mu1_not_m_eta ; sideband angle between calo and mu1 momenta[rad];TEvts", 100, 0., 0.2);
+
+   fDphi_calo_mu0_not_m_eta = new TH1F("Dphi_calo_mu0_not_m_eta", "Dphi_calo_mu0_not_m_eta ; sideband Delta phi calo and mu0 momenta[rad];TEvts", 100, -M_PI, M_PI);
+   fDphi_calo_mu1_not_m_eta = new TH1F("Dphi_calo_mu1_not_m_eta", "Dphi_calo_mu1_not_m_eta ; sideband Delta phi calo and mu1 momenta[rad];TEvts", 100, -M_PI, M_PI);
+
+   fDeta_calo_mu0_not_m_eta = new TH1F("Deta_calo_mu0_not_m_eta", "Deta_calo_mu0_not_m_eta ; sideband Delta eta calo and mu0 momenta;TEvts", 100, -2., 2.);
+   fDeta_calo_mu1_not_m_eta = new TH1F("Deta_calo_mu1_not_m_eta", "Deta_calo_mu1_not_m_eta ; sideband Delta eta calo and mu1 momenta;TEvts", 100, -2., 2.);
+
+   fDR_calo_mu0_not_m_eta = new TH1F("DR_calo_mu0_not_m_eta", "DR_calo_mu0_not_m_eta ; sideband Delta R calo and mu0 momenta;TEvts", 100, 0., 1.5);
+   fDR_calo_mu1_not_m_eta = new TH1F("DR_calo_mu1_not_m_eta", "DR_calo_mu1_not_m_eta ; sideband Delta R calo and mu1 momenta;TEvts", 100, 0., 1.5);
+
+
 
 
 
@@ -146,7 +200,7 @@ Bool_t Plot_hists_X2ApGm::Process(Long64_t entry)
 
 
    for (unsigned mum=0; mum < tag_m->size(); mum++) {
-     if (tag_idx_pvr->at(mum) >=0 && tag_x->at(mum) < 1e20 && tag_x->at(mum) > -1e20) {
+     if ((tag_idx_pvr->at(mum) >=0) && (tag_x->at(mum) < 1e20) && (tag_x->at(mum) > -1e20)) {
        //When only one right handed neutrino is needed
        this->Ap_Anal(mum);
      }
@@ -206,18 +260,19 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   ////////////////////////////////////////////////////////////////////////////
 
 
-  prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tis->at(mum))); //L0MuonDecision or TIS L0HadronDecision
+  prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tos3->at(mum)) || bool(tag_l0_tis->at(mum))); //L0MuonDecision or L0DiMuonDecision or TIS L0HadronDecision
   prt_bool_hlt1       = bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum)); //Tos Hlt1TrackMVA or [Tos Hlt1TwoTrackMVA for mass >1000 MeV]
   prt_bool_hlt2       = bool(tag_hlt2_tos0->at(mum)); //Hlt2ExoticaDisplDiMuonDecision
-  prt_bool_hlt1       = true;
-  prt_bool_hlt2       = true;
-  prt_bool_strip      = true;
+  //prt_bool_hlt1       = true;
+  //prt_bool_hlt2       = true;
+  prt_bool_strip      = bool(tag_strip_dec0->at(mum));
   //prt_bool_strip       = bool(tag_fd_r > 2) && ( bool(tag_m->at(mum) < 425 )  || bool(tag_m->at(mum) > 525 ) ) && (prt_pnn_mu->at(idx_mu) > 0.95); //stripping is a passthrough
   prt_bool_kin        = (tag_eta->at(mum) > 2) && (tag_eta->at(mum) < 4.5) && (tag_pt->at(mum) > 1000); // kinematics
   prt_bool_kin        = prt_bool_kin && (mu_eta > 2) && (mu_eta < 4.5) && (h_eta > 2) && (h_eta < 4.5);
 
   //prt_bool_data_consistency = true;
   prt_bool_data_consistency      = tag_dtf_chi2->at(mum) < 8; //DTF is calulated with respect to primary vertex. need tertiary with respect to secondary vertex
+  prt_bool_data_consistency      = prt_bool_data_consistency && (std::max(prt_pnn_mu->at(idx_mu), prt_pnn_mu->at(idx_h)) > 0.8);
   prt_bool_data_consistency      = prt_bool_data_consistency && bool(tag_z->at(mum) - pvr_z->at(idx_pvr) > 0); // SV downstream of PV
 
   ////////////////////////////////////////////////////////////////////////////
@@ -272,7 +327,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   ///////////////////////////   PID Cuts   ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
 
-
+  prt_bool_pid        = true;
   prt_bool_pid        = (prt_pnn_mu->at(idx_mu) > 0.7) && (prt_pnn_mu->at(idx_h) > 0.7);
 
 
@@ -437,15 +492,106 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
 
 void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 {
-  double tag_calo_m = sqrt(pow(tag_dtf_e->at(mum) + calo_e->at(calo) , 2.0) - pow(tag_dtf_px->at(mum) + calo_px->at(calo) , 2.0) - pow(tag_dtf_py->at(mum) + calo_py->at(calo) , 2.0) - pow(tag_dtf_pz->at(mum) + calo_pz->at(calo) , 2.0));
-  //std::cout << "tag_calo_m : " << tag_calo_m << std::endl;
-  if (tag_calo_m < 1200.0){ // Only if the calo A' pair has mass less than 1.2 GeV fill hists.
+  TLorentzVector Lp_mu0 = TLorentzVector(prt_px->at(tag_idx_prt0->at(mum)), prt_py->at(tag_idx_prt0->at(mum)), prt_pz->at(tag_idx_prt0->at(mum)), prt_e->at(tag_idx_prt0->at(mum)));
+  TLorentzVector Lp_mu1 = TLorentzVector(prt_px->at(tag_idx_prt1->at(mum)), prt_py->at(tag_idx_prt1->at(mum)), prt_pz->at(tag_idx_prt1->at(mum)), prt_e->at(tag_idx_prt1->at(mum)));
+  TLorentzVector Lp_calo = TLorentzVector(calo_px->at(calo), calo_py->at(calo), calo_pz->at(calo),  calo_e->at(calo));
+  TLorentzVector Lp_mu0_mu1 = Lp_mu0 + Lp_mu1;
+  TLorentzVector Lp_calo_mu0 = Lp_calo + Lp_mu0;
+  TLorentzVector Lp_calo_mu1 = Lp_calo + Lp_mu1;
+  TLorentzVector Lp_calo_mu0_mu1 = Lp_calo + Lp_mu0 + Lp_mu1;
+
+
+  //TLorentzVector Lx_mu0 = TLorentzVector(prt_x->at(tag_idx_prt0->at(mum)), prt_y->at(tag_idx_prt0->at(mum)), prt_z->at(tag_idx_prt0->at(mum)));
+  //TLorentzVector Lx_mu1 = TLorentzVector(prt_x->at(tag_idx_prt1->at(mum)), prt_y->at(tag_idx_prt1->at(mum)), prt_z->at(tag_idx_prt1->at(mum)));
+  //TLorentzVector Lx_calo = TLorentzVector(calo_x->at(calo), calo_y->at(calo), calo_z->at(calo));
+
+
+  double tag_calo_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) + calo_pz->at(calo) , 2.0));
+  double tag_calo_mu0_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + calo_pz->at(calo) , 2.0));
+  double tag_calo_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt1->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt1->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt1->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt1->at(mum)) + calo_pz->at(calo) , 2.0));
+  //this should be very similar to tag_m->at(mum)
+  double tag_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) , 2.0));
+
+
+  assert(1.1==1.2);
+  assert(tag_calo_mu0_mu1_m == Lp_calo_mu0_mu1.M());
+  assert(tag_calo_mu0_m == Lp_calo_mu0.M());
+  assert(tag_calo_mu1_m == Lp_calo_mu1.M());
+  assert(tag_mu0_mu1_m == Lp_mu0_mu1.M());
+
+  if(1.1==1.2){std::cout << "Assertions not working\n\n";}
+
+  if (((tag_calo_mu0_mu1_m - Lp_calo_mu0_mu1.M())/ (tag_calo_mu0_mu1_m + Lp_calo_mu0_mu1.M())) > 0.001 ){std::cout << "calo mu0 mu1 assertion error! \n\n" << std::endl;}
+  if (((tag_calo_mu0_m - Lp_calo_mu0.M())/ (tag_calo_mu0_m + Lp_calo_mu0.M())) >0.001){std::cout << "calo mu0 assertion error! \n\n" << std::endl;}
+  if (((tag_calo_mu1_m - Lp_calo_mu1.M())/ (tag_calo_mu1_m + Lp_calo_mu1.M())) >0.001){std::cout << "calo mu1 assertion error! \n\n" << std::endl;}
+  if (((tag_mu0_mu1_m - Lp_mu0_mu1.M())/ (tag_mu0_mu1_m + Lp_mu0_mu1.M())) > 0.001){std::cout << "mu0 mu1 assertion error! \n\n" << std::endl;}
+
+
+  //std::cout << "tag_calo_mu1_mu2_m : " << tag_calo_mu1_mu2_m << std::endl;
+  if (tag_calo_mu0_mu1_m < 1200.0){ // Only if the calo A' pair has mass less than 1.2 GeV fill hists.
     if (prt_bool_necessary_cuts) {
       fM_require_calo->Fill(tag_dtf_m->at(mum));
-      fM_tag_calo->Fill(tag_calo_m);
-      if ((500 < tag_calo_m ) && (600 > tag_calo_m )){
+      fM_tag_calo->Fill(tag_calo_mu0_mu1_m);
+      if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m )){
         fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
+        if ( (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_0->at(mum) == 0) ){fM_require_calo_at_m_eta_no_brem->Fill(tag_dtf_m->at(mum));}
+
+        dalitz_mu0_mu1_m_eta.push_back(tag_mu0_mu1_m);
+        dalitz_calo_mu0_m_eta.push_back(tag_calo_mu0_m);
+        dalitz_calo_mu1_m_eta.push_back(tag_calo_mu1_m);
+
+        fangle_calo_mu0_m_eta->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
+        fangle_calo_mu1_m_eta->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
+
+        fDphi_calo_mu0_m_eta->Fill(Lp_calo.DeltaPhi(Lp_mu0));
+        fDphi_calo_mu1_m_eta->Fill(Lp_calo.DeltaPhi(Lp_mu1));
+
+        fDeta_calo_mu0_m_eta->Fill(Lp_calo.Eta() - Lp_mu0.Eta() );
+        fDeta_calo_mu1_m_eta->Fill(Lp_calo.Eta() - Lp_mu1.Eta() );
+
+        fDR_calo_mu0_m_eta->Fill(Lp_calo.DeltaR(Lp_mu0));
+        fDR_calo_mu1_m_eta->Fill(Lp_calo.DeltaR(Lp_mu1));
+
+        fM_calo_mu0_m_eta->Fill(tag_calo_mu0_m);
+        fM_calo_mu1_m_eta->Fill(tag_calo_mu1_m);
+      } else{
+        dalitz_mu0_mu1_not_m_eta.push_back(tag_mu0_mu1_m);
+        dalitz_calo_mu0_not_m_eta.push_back(tag_calo_mu0_m);
+        dalitz_calo_mu1_not_m_eta.push_back(tag_calo_mu1_m);
+
+        fangle_calo_mu0_not_m_eta->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
+        fangle_calo_mu1_not_m_eta->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
+
+        fDphi_calo_mu0_not_m_eta->Fill(Lp_calo.DeltaPhi(Lp_mu0));
+        fDphi_calo_mu1_not_m_eta->Fill(Lp_calo.DeltaPhi(Lp_mu1));
+
+        fDeta_calo_mu0_not_m_eta->Fill(Lp_calo.Eta() - Lp_mu0.Eta() );
+        fDeta_calo_mu1_not_m_eta->Fill(Lp_calo.Eta() - Lp_mu1.Eta() );
+
+        fDR_calo_mu0_not_m_eta->Fill(Lp_calo.DeltaR(Lp_mu0));
+        fDR_calo_mu1_not_m_eta->Fill(Lp_calo.DeltaR(Lp_mu1));
+
+        fM_calo_mu0_not_m_eta->Fill(tag_calo_mu0_m);
+        fM_calo_mu1_not_m_eta->Fill(tag_calo_mu1_m);
       }
+      dalitz_mu0_mu1.push_back(tag_mu0_mu1_m);
+      dalitz_calo_mu0.push_back(tag_calo_mu0_m);
+      dalitz_calo_mu1.push_back(tag_calo_mu1_m);
+
+      fangle_calo_mu0->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
+      fangle_calo_mu1->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
+
+      fDphi_calo_mu0->Fill(Lp_calo.DeltaPhi(Lp_mu0));
+      fDphi_calo_mu1->Fill(Lp_calo.DeltaPhi(Lp_mu1));
+
+      fDeta_calo_mu0->Fill(Lp_calo.Eta() - Lp_mu0.Eta() );
+      fDeta_calo_mu1->Fill(Lp_calo.Eta() - Lp_mu1.Eta() );
+
+      fDR_calo_mu0->Fill(Lp_calo.DeltaR(Lp_mu0));
+      fDR_calo_mu1->Fill(Lp_calo.DeltaR(Lp_mu1));
+
+      fM_calo_mu0->Fill(tag_calo_mu0_m);
+      fM_calo_mu1->Fill(tag_calo_mu1_m);
     }
   }
 
@@ -459,11 +605,60 @@ void Plot_hists_X2ApGm::SlaveTerminate()
 
 }
 
+void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
+{
+  std::ofstream scatter_file;
+  if (option == "All"){scatter_file.open("plots/All_X2ApGm_dalitz.csv");}
+  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_dalitz.csv");}
+
+  for (unsigned j=0; j < dalitz_mu0_mu1.size(); j++) {
+    scatter_file << dalitz_mu0_mu1.at(j)<<",";
+    scatter_file << dalitz_calo_mu0.at(j)<<",";
+    scatter_file << dalitz_calo_mu1.at(j)<<"\n";
+  }
+
+  scatter_file.close();
+
+  /////////////////////////////////
+
+  std::ofstream scatter_file_m_eta;
+  if (option == "All"){scatter_file_m_eta.open("plots/All_X2ApGm_dalitz_m_eta.csv");}
+  else if (option == "Test"){scatter_file_m_eta.open("plots/Test_X2ApGm_dalitz_m_eta.csv");}
+
+  for (unsigned j=0; j < dalitz_mu0_mu1_m_eta.size(); j++) {
+    scatter_file_m_eta << dalitz_mu0_mu1_m_eta.at(j)<<",";
+    scatter_file_m_eta << dalitz_calo_mu0_m_eta.at(j)<<",";
+    scatter_file_m_eta << dalitz_calo_mu1_m_eta.at(j)<<"\n";
+  }
+
+  scatter_file_m_eta.close();
+
+  /////////////////////////////////
+
+  std::ofstream scatter_file_not_m_eta;
+  if (option == "All"){scatter_file_not_m_eta.open("plots/All_X2ApGm_dalitz_not_m_eta.csv");}
+  else if (option == "Test"){scatter_file_not_m_eta.open("plots/Test_X2ApGm_dalitz_not_m_eta.csv");}
+
+  for (unsigned j=0; j < dalitz_mu0_mu1_not_m_eta.size(); j++) {
+    scatter_file_not_m_eta << dalitz_mu0_mu1_not_m_eta.at(j)<<",";
+    scatter_file_not_m_eta << dalitz_calo_mu0_not_m_eta.at(j)<<",";
+    scatter_file_not_m_eta << dalitz_calo_mu1_not_m_eta.at(j)<<"\n";
+  }
+
+  scatter_file_not_m_eta.close();
+
+  /////////////////////////////////
+
+
+}
+
 void Plot_hists_X2ApGm::Terminate()
 {
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
+
+   this->Plot_Dalitz_Graphs();
 
    std::cout << "Writing Hists to File" << std::endl;
 

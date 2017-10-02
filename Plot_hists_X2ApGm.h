@@ -16,6 +16,7 @@
 #include <TCanvas.h>
 #include <TGraph.h>
 #include <TSelector.h>
+#include <TLorentzVector.h>
 #include <stdlib.h>
 #include <cmath>
 //#include <velo.h>
@@ -77,6 +78,8 @@ public :
    vector<double>  *tag_veto_h_modmiss;
    vector<double>  *tag_veto_mu_modmiss;
    vector<double>  *tag_veto_cutFM;
+   vector<double>  *tag_nu_brem_0;
+   vector<double>  *tag_nu_brem_1;
    vector<double>  *tag_dls;
    vector<double>  *tag_ctau;
    vector<double>  *tag_dtf_chi2;
@@ -135,11 +138,13 @@ public :
    vector<double>  *prt_z1;
    vector<double>  *tag_l0_tos1;
    vector<double>  *tag_l0_tos2;
+   vector<double>  *tag_l0_tos3;
    vector<double>  *tag_l0_tis;
    vector<double>  *tag_hlt1_tos4;
    vector<double>  *tag_hlt1_tos5;
    vector<double>  *tag_hlt1_tis;
    vector<double>  *tag_hlt2_tos0;
+   vector<double>  *tag_strip_dec0;
    vector<double>  *prt_iso;
    vector<double>  *calo_idx;
    vector<double>  *calo_idx_pvr;
@@ -300,6 +305,8 @@ public :
    TBranch        *b_tag_veto_h_modmiss;   //!
    TBranch        *b_tag_veto_mu_modmiss;   //!
    TBranch        *b_tag_veto_cutFM;   //!
+   TBranch        *b_tag_nu_brem_0;   //!
+   TBranch        *b_tag_nu_brem_1;   //!
    TBranch        *b_tag_dls;   //!
    TBranch        *b_tag_ctau;   //!
    TBranch        *b_tag_dtf_chi2;   //!
@@ -358,11 +365,13 @@ public :
    TBranch        *b_prt_z1;   //!
    TBranch        *b_tag_l0_tos1;   //!
    TBranch        *b_tag_l0_tos2;   //!
+   TBranch        *b_tag_l0_tos3;   //!
    TBranch        *b_tag_l0_tis;   //!
    TBranch        *b_tag_hlt1_tos4;   //!
    TBranch        *b_tag_hlt1_tos5;   //!
    TBranch        *b_tag_hlt1_tis;   //!
    TBranch        *b_tag_hlt2_tos0;
+   TBranch        *b_tag_strip_dec0;   //!
    TBranch        *b_prt_iso;   //!
    TBranch        *b_calo_idx;   //!
    TBranch        *b_calo_idx_pvr;   //!
@@ -485,9 +494,14 @@ public :
    TString option;
 
    TH1F *fM, *fM_l0_p, *fM_l0_f, *fM_hlt1_p, *fM_hlt1_f, *fM_hlt2_p, *fM_hlt2_f, *fM_kin_p, *fM_kin_f, *fM_data_consistency_p, *fM_data_consistency_f, *fM_patho_p, *fM_patho_f, *fM_hf_p, *fM_hf_f, *fM_fd_r_p, *fM_fd_r_f, *fM_material_p, *fM_material_f, *fM_pid_p, *fM_pid_f, *fM_strip_p, *fM_strip_f;
-   TH1F *fM_require_calo, *fM_require_calo_at_m_eta, *fM_tag_calo;
+   TH1F *fM_require_calo, *fM_require_calo_at_m_eta, *fM_require_calo_at_m_eta_no_brem, *fM_tag_calo;
+   TH1F *fM_calo_mu0, *fM_calo_mu1, *fangle_calo_mu0, *fangle_calo_mu1, *fDphi_calo_mu0, *fDphi_calo_mu1, *fDeta_calo_mu0, *fDeta_calo_mu1, *fDR_calo_mu0, *fDR_calo_mu1;
+   TH1F *fM_calo_mu0_m_eta, *fM_calo_mu1_m_eta, *fangle_calo_mu0_m_eta, *fangle_calo_mu1_m_eta, *fDphi_calo_mu0_m_eta, *fDphi_calo_mu1_m_eta, *fDeta_calo_mu0_m_eta, *fDeta_calo_mu1_m_eta, *fDR_calo_mu0_m_eta, *fDR_calo_mu1_m_eta;
+   TH1F *fM_calo_mu0_not_m_eta, *fM_calo_mu1_not_m_eta, *fangle_calo_mu0_not_m_eta, *fangle_calo_mu1_not_m_eta, *fDphi_calo_mu0_not_m_eta, *fDphi_calo_mu1_not_m_eta, *fDeta_calo_mu0_not_m_eta, *fDeta_calo_mu1_not_m_eta, *fDR_calo_mu0_not_m_eta, *fDR_calo_mu1_not_m_eta;
 
    std::map<std::string, double> first_variables, second_variables;
+
+   vector<Double_t> dalitz_mu0_mu1, dalitz_calo_mu0, dalitz_calo_mu1, dalitz_mu0_mu1_m_eta, dalitz_calo_mu0_m_eta, dalitz_calo_mu1_m_eta, dalitz_mu0_mu1_not_m_eta, dalitz_calo_mu0_not_m_eta, dalitz_calo_mu1_not_m_eta;
 
    double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps;
    double mu_p, mu_eta, h_p, h_eta;
@@ -510,6 +524,7 @@ public :
    void Ap_Anal(unsigned mum);
    void Ap_Plots(unsigned mum);
    void Calo_Plots(unsigned calo, unsigned mum);
+   void Plot_Dalitz_Graphs();
 
    Plot_hists_X2ApGm(TTree * /*tree*/ =0) : fChain(0) { }
    virtual ~Plot_hists_X2ApGm() { }
@@ -585,6 +600,8 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    tag_veto_mu_modmiss = 0;
    tag_veto_h_modmiss = 0;
    tag_veto_cutFM = 0;
+   tag_nu_brem_0 = 0;
+   tag_nu_brem_1 = 0;
    tag_dls = 0;
    tag_ctau = 0;
    tag_dtf_chi2 = 0;
@@ -643,11 +660,13 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    prt_z1 = 0;
    tag_l0_tos1 = 0;
    tag_l0_tos2 = 0;
+   tag_l0_tos3 = 0;
    tag_l0_tis = 0;
    tag_hlt1_tos4 = 0;
    tag_hlt1_tos5 = 0;
    tag_hlt1_tis = 0;
    tag_hlt2_tos0 = 0;
+   tag_strip_dec0 = 0;
    prt_iso = 0;
    calo_idx = 0;
    calo_idx_pvr = 0;
@@ -811,6 +830,8 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("tag_veto_mu_modmiss", &tag_veto_mu_modmiss, &b_tag_veto_mu_modmiss);
    fChain->SetBranchAddress("tag_veto_h_modmiss", &tag_veto_h_modmiss, &b_tag_veto_h_modmiss);
    fChain->SetBranchAddress("tag_veto_cutFM", &tag_veto_cutFM, &b_tag_veto_cutFM);
+   fChain->SetBranchAddress("tag_nu_brem_0", &tag_nu_brem_0, &b_tag_nu_brem_0);
+   fChain->SetBranchAddress("tag_nu_brem_1", &tag_nu_brem_1, &b_tag_nu_brem_1);
    fChain->SetBranchAddress("tag_dls", &tag_dls, &b_tag_dls);
    fChain->SetBranchAddress("tag_ctau", &tag_ctau, &b_tag_ctau);
    fChain->SetBranchAddress("tag_dtf_chi2", &tag_dtf_chi2, &b_tag_dtf_chi2);
@@ -872,11 +893,13 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("prt_z1", &prt_z1, &b_prt_z1);
    fChain->SetBranchAddress("tag_l0_tos1", &tag_l0_tos1, &b_tag_l0_tos1);
    fChain->SetBranchAddress("tag_l0_tos2", &tag_l0_tos2, &b_tag_l0_tos2);
+   fChain->SetBranchAddress("tag_l0_tos3", &tag_l0_tos3, &b_tag_l0_tos3);
    fChain->SetBranchAddress("tag_l0_tis", &tag_l0_tis, &b_tag_l0_tis);
    fChain->SetBranchAddress("tag_hlt1_tos4", &tag_hlt1_tos4, &b_tag_hlt1_tos4);
    fChain->SetBranchAddress("tag_hlt1_tos5", &tag_hlt1_tos5, &b_tag_hlt1_tos5);
    fChain->SetBranchAddress("tag_hlt1_tis", &tag_hlt1_tis, &b_tag_hlt1_tis);
    fChain->SetBranchAddress("tag_hlt2_tos0", &tag_hlt2_tos0, &b_tag_hlt2_tos0);
+   fChain->SetBranchAddress("tag_strip_dec0", &tag_strip_dec0, &b_tag_strip_dec0);
    fChain->SetBranchAddress("prt_iso", &prt_iso, &b_prt_iso);
    fChain->SetBranchAddress("calo_idx", &calo_idx, &b_calo_idx);
    fChain->SetBranchAddress("calo_idx_pvr", &calo_idx_pvr, &b_calo_idx_pvr);

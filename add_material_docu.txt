@@ -1,0 +1,11 @@
+
+Processing Add_material_deploy.cxx("Test")...
+Running Add_material_deploy with option Test
+adding the material variables to the root file
+Add_material The option is : Test
+Before Event Loop
+entry : 0 k	tag_x size :1
+entry : 1 k	tag_x size :1
+Finished adding the material variables. Now writing to file
+Tags skipped :	0
+Goodbye
