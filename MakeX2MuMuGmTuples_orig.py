@@ -98,7 +98,7 @@ calos = Calos('calo', pvrs, gens, pvrTool, mcpTool)
 
 # Converted photon component
 cnvDaus = [(es, ['e1','e2'])]
-cnvs = Combos('cnv', pvrs, cnvDaus, gens, 
+cnvs = Combos('cnv', pvrs, cnvDaus, gens,
               pvrTool, dstTool, None, mcpTool)
 
 # eta -> mu mu component
@@ -127,7 +127,7 @@ while bool(tes['/Event']):
 
     # Fill event information
     evtFill = False
-    
+
     # Fill X -> mu mu
     prts = tes[dimuAlg.outputLocation()]
     if prts:

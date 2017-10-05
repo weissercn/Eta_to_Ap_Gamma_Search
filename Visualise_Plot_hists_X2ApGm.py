@@ -5,9 +5,13 @@ import numpy as np
 from array import array
 
 
-if sys.argv[1]== 'All':
-    name_extension = "All_X2ApGm"
-    file_name = 'NTuple_X2ApGm_all_files_plots.root'
+if sys.argv[1]== 'prmpt':
+    name_extension = "Prmpt_X2ApGm"
+    file_name = 'NTuple_X2ApGm_all_files_plots_prmpt.root'
+
+if sys.argv[1]== 'displ':
+    name_extension = "Displ_X2ApGm"
+    file_name = 'NTuple_X2ApGm_all_files_plots_displ.root'
 
 elif sys.argv[1]== 'Test':
     name_extension = "Test_X2ApGm"
@@ -17,8 +21,11 @@ print "\n\nRunning over ", file_name, "\n"
 
 tfile = ROOT.TFile(file_name)
 
-#ROOT.gROOT.ProcessLine('.L lhcbStyle.C')
-#ROOT.gROOT.ProcessLine('lhcbStyle()')
+try:tfile2 = ROOT.TFile('mumucal_angles.root')
+except: print "Cannot use mumucal_angles.root"
+
+ROOT.gROOT.ProcessLine('.L lhcbStyle.C')
+ROOT.gROOT.ProcessLine('lhcbStyle()')
 
 c1 = ROOT.TCanvas('c1','c1',650,450)
 
@@ -53,6 +60,7 @@ def Angle_plot(cv, plots_key):
     name = '{}_{}.png'.format(name_extension, plots_key)
     print "Plotting ", name
     M = tfile.Get(plots_key)
+    print M
     M.SetStats(False)
     #M.GetXaxis().SetRangeUser(0,3.2);
     #cv.SetLogx()
@@ -60,6 +68,34 @@ def Angle_plot(cv, plots_key):
     M.Draw('hist')
     cv.SaveAs('plots/'+name)
     cv.Clear()
+
+def Angle_prmpt_displ_plot(cv, plots_key):
+    name = '{}_{}_prmpt_displ.png'.format(name_extension, plots_key)
+    print "Plotting ", name
+    M = tfile.Get(plots_key)
+    print M
+    if plots_key == 'angle_calo_mu0': M2 = tfile2.Get('mumucal_theta1')
+    elif plots_key == 'angle_calo_mu1': M2 = tfile2.Get('mumucal_theta2')
+    else: M2 = tfile2.Get(plots_key)
+    M.SetStats(False)
+    M.Scale(1./M.Integral());
+    M2.Scale(1./M2.Integral());
+    M.SetLineColor(ROOT.kRed)
+    M2.SetLineColor(ROOT.kBlue)
+    M.GetYaxis().SetRangeUser(0,0.04);
+    M.GetYaxis().SetTitle("Fraction / 0.001 rad");
+
+    M.Draw('hist')
+    M2.Draw('histsame')
+
+    leg = ROOT.TLegend(0.7,0.7,0.9,0.9);
+    leg.AddEntry(M,"displ", "l");
+    leg.AddEntry(M2,"prmpt","l");
+    leg.Draw("same");
+
+    cv.SaveAs('plots/'+name)
+    cv.Clear()
+
 
 def Dalitz(cv, data,name_extension, name_type):
     #print "data.shape : ", data.shape
@@ -135,19 +171,26 @@ for plots_key in M1D_list:
 
 
 Angle_list = []
-Angle_list += ['angle_calo_mu0', 'angle_calo_mu1', 'Dphi_calo_mu0', 'Dphi_calo_mu1', 'Deta_calo_mu0', 'Deta_calo_mu1', 'DR_calo_mu0', 'DR_calo_mu1']
-Angle_list += ['angle_calo_mu0_m_eta', 'angle_calo_mu1_m_eta', 'Dphi_calo_mu0_m_eta', 'Dphi_calo_mu1_m_eta', 'Deta_calo_mu0_m_eta', 'Deta_calo_mu1_m_eta', 'DR_calo_mu0_m_eta', 'DR_calo_mu1_m_eta']
-Angle_list += ['angle_calo_mu0_not_m_eta', 'angle_calo_mu1_not_m_eta', 'Dphi_calo_mu0_not_m_eta', 'Dphi_calo_mu1_not_m_eta', 'Deta_calo_mu0_not_m_eta', 'Deta_calo_mu1_not_m_eta', 'DR_calo_mu0_not_m_eta', 'DR_calo_mu1_not_m_eta']
+#Angle_list += ['angle_calo_mu0', 'angle_calo_mu1', 'Dphi_calo_mu0', 'Dphi_calo_mu1', 'Deta_calo_mu0', 'Deta_calo_mu1', 'DR_calo_mu0', 'DR_calo_mu1']
+#Angle_list += ['angle_calo_mu0_m_eta', 'angle_calo_mu1_m_eta', 'Dphi_calo_mu0_m_eta', 'Dphi_calo_mu1_m_eta', 'Deta_calo_mu0_m_eta', 'Deta_calo_mu1_m_eta', 'DR_calo_mu0_m_eta', 'DR_calo_mu1_m_eta']
+#Angle_list += ['angle_calo_mu0_not_m_eta', 'angle_calo_mu1_not_m_eta', 'Dphi_calo_mu0_not_m_eta', 'Dphi_calo_mu1_not_m_eta', 'Deta_calo_mu0_not_m_eta', 'Deta_calo_mu1_not_m_eta', 'DR_calo_mu0_not_m_eta', 'DR_calo_mu1_not_m_eta']
 #Angle_list = []
 
 for plots_key in Angle_list:
     Angle_plot(c1, plots_key)
     time.sleep(2.8)
 
+Angle_prmpt_displ_list = ['angle_calo_mu0', 'angle_calo_mu1']
+
+for plots_key in Angle_prmpt_displ_list:
+    Angle_prmpt_displ_plot(c1, plots_key)
+    time.sleep(2.8)
+
 
 c8 = ROOT.TCanvas('c8','c8',6500,4500)
 c8.Clear()
-dalitz_name_type_list = ['', '_m_eta', '_not_m_eta']
+dalitz_name_type_list = []
+#dalitz_name_type_list += ['', '_m_eta', '_not_m_eta']
 #dalitz_name_type_list = []
 
 for scatter_name_type in dalitz_name_type_list:

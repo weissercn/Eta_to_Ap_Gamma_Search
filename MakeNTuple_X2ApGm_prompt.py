@@ -5,38 +5,36 @@ sys.path.append(".")
 from Configurables import DaVinci
 from PhysSelPython.Wrappers import Selection, SelectionSequence
 
-run_ganga = True
-#run_ganga = False
+#run_ganga = True
+run_ganga = False
 
 if not run_ganga:
     from GaudiConf import IOHelper
     #IOHelper('ROOT').inputFiles(['00059560_00000002_1.ew.dst'],clear=True) # this is still for the displaced case
+    IOHelper('ROOT').inputFiles(['00053752_00007502_1.leptons.mdst'],clear=True)
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/MITParticleMakers')
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/TTreeTools')
 
 #===============================
 # Setup the particle algorithms
 #from MITParticleMakers import AllMuMuGms
-import AllMuMuGms as AllMuMuGms
+import AllMuMuGms
 nameLL   = 'convLL'
 nameDD   = 'convDD'
 nameCalo = 'calo'
-nameMergedPi0 = 'mergedpi0'
-#nameMuMu = 'dimu'
+nameMuMu = 'dimu'
 
 # Create the selection algorithms
 convLLAlg = AllMuMuGms.x2MuMuGmConvAlg(nameLL, 'Long')
 convDDAlg = AllMuMuGms.x2MuMuGmConvAlg(nameDD, 'Downstream')
 caloAlg   = AllMuMuGms.x2MuMuGmCaloAlg(nameCalo)
-mergedpi0Alg   = AllMuMuGms.x2MuMuMergedPi0Alg(nameMergedPi0)
-#dimuAlg   = AllMuMuGms.x2MuMuAlg(nameMuMu)
-dimuAlg   = AllMuMuGms.x2MuMuAlg()
+dimuAlg   = AllMuMuGms.x2MuMuAlg(nameMuMu)
+#dimuAlg   = AllMuMuGms.x2MuMuAlg()
 
 # Create the selection sequences
 convLLSeq = SelectionSequence('RecoLL',   TopSelection=convLLAlg)
 convDDSeq = SelectionSequence('RecoDD',   TopSelection=convDDAlg)
 caloSeq   = SelectionSequence('RecoCalo', TopSelection=caloAlg)
-mergedpi0Seq   = SelectionSequence('RecoMergedPi0', TopSelection=mergedpi0Alg)
 dimuSeq   = SelectionSequence('RecoMuMu', TopSelection=dimuAlg)
 
 #===============
@@ -55,19 +53,24 @@ DaVinci().UserAlgorithms = [
     convLLSeq,
     convDDSeq,
     caloSeq,
-    mergedpi0Seq,
     dimuSeq
     ]
 
 #================
 # Setup Turbo
-#from Configurables import DstConf
-#from Configurables import TurboConf
-from PhysConf.Filters import LoKi_Filters
-hltFilter = LoKi_Filters(HLT2_Code = "HLT_PASS_RE('.*ExoticaDisplDiMuonDecision.*')")
-#DstConf().Turbo = True
-#DstConf().Turbo = False
-#TurboConf().PersistReco = True
+if True:
+    from Configurables import DstConf
+    from Configurables import TurboConf
+    from PhysConf.Filters import LoKi_Filters
+    #hltFilter = LoKi_Filters(HLT2_Code = "HLT_PASS_RE('.*ExoticaDisplDiMuonDecision.*')")
+    hltFilter = LoKi_Filters(HLT2_Code = "HLT_PASS_RE('.*ExoticaPrmptDiMuonTurboDecision.*')")
+    hlt = LoKi_Filters(HLT2_Code =
+                       "HLT_PASS_RE('.*Hlt2Exotica.*TurboDecision.*')")
+    DaVinci().Turbo = True
+    DstConf().Turbo = True
+    #DstConf().Turbo = False
+    TurboConf().PersistReco = True
+    #DaVinci().EventPreFilters = hltFilter.filters('TriggerFilters')
 
 #from GaudiConf import IOHelper
 #IOHelper().inputFiles([
@@ -90,7 +93,7 @@ if False:
             ['Particle', 'daughters', convLLSeq.outputLocation()],
             ['Particle', 'daughters', convDDSeq.outputLocation()],
             ['Particle', 'daughters', caloSeq.outputLocation()],
-            ['Particle', 'daughters', mergedpi0Seq.outputLocation()],
+    #        ['Particle', 'daughters', mergedpi0Seq.outputLocation()],
             ['Particle', 'daughters', dimuSeq.outputLocation()]]
 
 
@@ -113,7 +116,8 @@ if False:
 
 # TisTos configuration.
 from Configurables import ToolSvc, TriggerTisTos
-for stage in ('Hlt1', 'Hlt2', 'Strip/Phys'):
+#for stage in ('Hlt1', 'Hlt2', 'Strip/Phys'):
+for stage in ('Hlt1', 'Hlt2'):
     ToolSvc().addTool(TriggerTisTos, stage + "TriggerTisTos")
     tool = getattr(ToolSvc(), stage + "TriggerTisTos")
     tool.HltDecReportsLocation = '/Event/' + stage + '/DecReports'
@@ -182,7 +186,7 @@ gens  = Gens('gens',recTool)
 mus   = Tracks('prt',  pvrs, gens, pvrTool, dstTool, mcpTool, tes, l0Tool, hlt1Tool, hlt2Tool, trkTool) #mu
 es    = Tracks('e',   pvrs, gens, pvrTool, dstTool, mcpTool)
 calos = Calos('calo', pvrs, gens, pvrTool, mcpTool)
-mergedpi0s = Calos('mergedpi0', pvrs, gens, pvrTool, mcpTool)
+#mergedpi0s = Calos('mergedpi0', pvrs, gens, pvrTool, mcpTool)
 
 # Converted photon component
 cnvDaus = [(es, ['e1','e2'])]
@@ -201,7 +205,7 @@ components = OrderedDict([(evt.prefix,   evt),
                           (dimus.prefix, dimus),
                           (mus.prefix,   mus),
                           (calos.prefix, calos),
-                          (mergedpi0s.prefix, mergedpi0s),
+#                          (mergedpi0s.prefix, mergedpi0s),
                           (cnvs.prefix,  cnvs),
                           (es.prefix,    es)])
 
@@ -268,19 +272,19 @@ while bool(tes['/Event']):
                     ntuple(cnvs.prefix, dau)
                 elif abs(dau.particleID().pid()) == 310:
                     ntuple(dimus.prefix, dau)
-
-    # Fill X -> mu mu mergedpi0
-    prts = tes[mergedpi0Alg.outputLocation()]
-    if prts:
-        #print 'Filling mu mu gm calo...'
-        for prt in prts:
-            if not evtFill: ntuple(evt.prefix, tes)
-            evtFill = True
-            for dau in prt.daughters():
-                if dau.particleID().pid() == 111:
-                    ntuple(mergedpi0s.prefix, dau)
-                elif abs(dau.particleID().pid()) == 310:
-                    ntuple(dimus.prefix, dau)
+    if False:
+        # Fill X -> mu mu mergedpi0
+        prts = tes[mergedpi0Alg.outputLocation()]
+        if prts:
+            #print 'Filling mu mu gm calo...'
+            for prt in prts:
+                if not evtFill: ntuple(evt.prefix, tes)
+                evtFill = True
+                for dau in prt.daughters():
+                    if dau.particleID().pid() == 111:
+                        ntuple(mergedpi0s.prefix, dau)
+                    elif abs(dau.particleID().pid()) == 310:
+                        ntuple(dimus.prefix, dau)
 
 
     if False:
@@ -297,8 +301,8 @@ while bool(tes['/Event']):
                         ntuple(gens.prefix, mcp)
 
     # Fill, clear, and increment the loop
-    #if evtFill:
-    ntuple.fillTree()
+    if evtFill:
+        ntuple.fillTree()
     ntuple.clear()
     evtnum += 1
     gaudi.run(1)

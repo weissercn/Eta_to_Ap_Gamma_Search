@@ -18,10 +18,13 @@ ganga submit_MakeTuple_X2ApGm.py
 
 ganga getOutputManual.py 61
 ganga getOutputManual.py 62
-lb-run DaVinci/Latest python merge.py 61 62   // right now we only look at 61
+lb-run DaVinci/Latest python merge.py prmpt 61 62   // right now we only look at 61
+lb-run DaVinci/Latest python merge.py displ 61 62   // right now we only look at 61
 
 
-lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"All\")"    # This creates a root file containing histograms for file with all X2ApGm.
+
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"prmpt\")"    # This creates a root file containing histograms for file with all X2ApGm. Prompt
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ\")"    # This creates a root file containing histograms for file with all X2ApGm. Displ
 lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"Test\")"    # This creates a root file containing histograms for file with all X2ApGm, but only a fraction of events.
 
 

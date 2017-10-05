@@ -49,7 +49,8 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    std::cout << "Plot_hists_RHNu The option is : " << option << std::endl;
 
    f = 0;
-   if (option == "All"){f = new TFile("NTuple_X2ApGm_all_files_plots.root","RECREATE");}
+   if (option == "displ"){f = new TFile("NTuple_X2ApGm_all_files_plots_displ.root","RECREATE");}
+   else if (option == "prmpt"){f = new TFile("NTuple_X2ApGm_all_files_plots_prmpt.root","RECREATE");}
    else if (option == "Test"){f = new TFile("NTuple_X2ApGm_all_files_plots_test.root","RECREATE");}
    else{ std::cout << std::endl << std::endl << "NO VALID OPTION" << std::endl << std::endl;}
 
@@ -113,8 +114,8 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fM_calo_mu0 = new TH1F("M_calo_mu0", "M_calo_mu0 ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1 = new TH1F("M_calo_mu1", "M_calo_mu1 ; calo mu1 M [MeV];TEvts", nmbins2, mbins2);
 
-   fangle_calo_mu0 = new TH1F("angle_calo_mu0", "angle_calo_mu0 ; angle between calo and mu0 momenta[rad];TEvts", 100, 0., 0.2);
-   fangle_calo_mu1 = new TH1F("angle_calo_mu1", "angle_calo_mu1 ; angle between calo and mu1 momenta[rad];TEvts", 100, 0., 0.2);
+   fangle_calo_mu0 = new TH1F("angle_calo_mu0", "angle_calo_mu0 ; angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
+   fangle_calo_mu1 = new TH1F("angle_calo_mu1", "angle_calo_mu1 ; angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
 
    fDphi_calo_mu0 = new TH1F("Dphi_calo_mu0", "Dphi_calo_mu0 ; Delta phi calo and mu0 momenta[rad];TEvts", 100, -M_PI, M_PI);
    fDphi_calo_mu1 = new TH1F("Dphi_calo_mu1", "Dphi_calo_mu1 ; Delta phi calo and mu1 momenta[rad];TEvts", 100, -M_PI, M_PI);
@@ -130,8 +131,8 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fM_calo_mu0_m_eta = new TH1F("M_calo_mu0_m_eta", "M_calo_mu0_m_eta ; signal calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_m_eta = new TH1F("M_calo_mu1_m_eta", "M_calo_mu1_m_eta ; signal calo mu1 M [MeV];TEvts", nmbins2, mbins2);
 
-   fangle_calo_mu0_m_eta = new TH1F("angle_calo_mu0_m_eta", "angle_calo_mu0_m_eta ; signal angle between calo and mu0 momenta[rad];TEvts", 100, 0., 0.2);
-   fangle_calo_mu1_m_eta = new TH1F("angle_calo_mu1_m_eta", "angle_calo_mu1_m_eta ; signal angle between calo and mu1 momenta[rad];TEvts", 100, 0., 0.2);
+   fangle_calo_mu0_m_eta = new TH1F("angle_calo_mu0_m_eta", "angle_calo_mu0_m_eta ; signal angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
+   fangle_calo_mu1_m_eta = new TH1F("angle_calo_mu1_m_eta", "angle_calo_mu1_m_eta ; signal angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
 
    fDphi_calo_mu0_m_eta = new TH1F("Dphi_calo_mu0_m_eta", "Dphi_calo_mu0_m_eta ; signal Delta phi calo and mu0 momenta[rad];TEvts", 100, -M_PI, M_PI);
    fDphi_calo_mu1_m_eta = new TH1F("Dphi_calo_mu1_m_eta", "Dphi_calo_mu1_m_eta ; signal Delta phi calo and mu1 momenta[rad];TEvts", 100, -M_PI, M_PI);
@@ -147,8 +148,8 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fM_calo_mu0_not_m_eta = new TH1F("M_calo_mu0_not_m_eta", "M_calo_mu0_not_m_eta ; sideband calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_not_m_eta = new TH1F("M_calo_mu1_not_m_eta", "M_calo_mu1_not_m_eta ; sideband calo mu1 M [MeV];TEvts", nmbins2, mbins2);
 
-   fangle_calo_mu0_not_m_eta = new TH1F("angle_calo_mu0_not_m_eta", "angle_calo_mu0_not_m_eta ; sideband angle between calo and mu0 momenta[rad];TEvts", 100, 0., 0.2);
-   fangle_calo_mu1_not_m_eta = new TH1F("angle_calo_mu1_not_m_eta", "angle_calo_mu1_not_m_eta ; sideband angle between calo and mu1 momenta[rad];TEvts", 100, 0., 0.2);
+   fangle_calo_mu0_not_m_eta = new TH1F("angle_calo_mu0_not_m_eta", "angle_calo_mu0_not_m_eta ; sideband angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
+   fangle_calo_mu1_not_m_eta = new TH1F("angle_calo_mu1_not_m_eta", "angle_calo_mu1_not_m_eta ; sideband angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
 
    fDphi_calo_mu0_not_m_eta = new TH1F("Dphi_calo_mu0_not_m_eta", "Dphi_calo_mu0_not_m_eta ; sideband Delta phi calo and mu0 momenta[rad];TEvts", 100, -M_PI, M_PI);
    fDphi_calo_mu1_not_m_eta = new TH1F("Dphi_calo_mu1_not_m_eta", "Dphi_calo_mu1_not_m_eta ; sideband Delta phi calo and mu1 momenta[rad];TEvts", 100, -M_PI, M_PI);
@@ -263,6 +264,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tos3->at(mum)) || bool(tag_l0_tis->at(mum))); //L0MuonDecision or L0DiMuonDecision or TIS L0HadronDecision
   prt_bool_hlt1       = bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum)); //Tos Hlt1TrackMVA or [Tos Hlt1TwoTrackMVA for mass >1000 MeV]
   prt_bool_hlt2       = bool(tag_hlt2_tos0->at(mum)); //Hlt2ExoticaDisplDiMuonDecision
+  //prt_bool_hlt2       = bool(tag_hlt2_tos2->at(mum)); //Hlt2ExoticaPrmptDiMuonTurboDecision
   //prt_bool_hlt1       = true;
   //prt_bool_hlt2       = true;
   prt_bool_strip      = bool(tag_strip_dec0->at(mum));
@@ -608,7 +610,8 @@ void Plot_hists_X2ApGm::SlaveTerminate()
 void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 {
   std::ofstream scatter_file;
-  if (option == "All"){scatter_file.open("plots/All_X2ApGm_dalitz.csv");}
+  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_dalitz.csv");}
+  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_dalitz.csv");}
   else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_dalitz.csv");}
 
   for (unsigned j=0; j < dalitz_mu0_mu1.size(); j++) {
@@ -622,7 +625,8 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
   /////////////////////////////////
 
   std::ofstream scatter_file_m_eta;
-  if (option == "All"){scatter_file_m_eta.open("plots/All_X2ApGm_dalitz_m_eta.csv");}
+  if (option == "prmpt"){scatter_file_m_eta.open("plots/Prmpt_X2ApGm_dalitz_m_eta.csv");}
+  else if (option == "displ"){scatter_file_m_eta.open("plots/Displ_X2ApGm_dalitz_m_eta.csv");}
   else if (option == "Test"){scatter_file_m_eta.open("plots/Test_X2ApGm_dalitz_m_eta.csv");}
 
   for (unsigned j=0; j < dalitz_mu0_mu1_m_eta.size(); j++) {
@@ -636,7 +640,8 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
   /////////////////////////////////
 
   std::ofstream scatter_file_not_m_eta;
-  if (option == "All"){scatter_file_not_m_eta.open("plots/All_X2ApGm_dalitz_not_m_eta.csv");}
+  if (option == "prmpt"){scatter_file_not_m_eta.open("plots/Prmpt_X2ApGm_dalitz_not_m_eta.csv");}
+  else if (option == "displ"){scatter_file_not_m_eta.open("plots/Displ_X2ApGm_dalitz_not_m_eta.csv");}
   else if (option == "Test"){scatter_file_not_m_eta.open("plots/Test_X2ApGm_dalitz_not_m_eta.csv");}
 
   for (unsigned j=0; j < dalitz_mu0_mu1_not_m_eta.size(); j++) {

@@ -37,7 +37,33 @@ def getJobURLs(njob, fname, SE='CERN-USER'):
                 except:
                     print("Could not get Access URL")
 
+
+def getJobURLs_nsubjobs(njob, nsubjob, fname, SE='CERN-USER'):
+
+    f = open('urlList{}.txt'.format(njob),'w')
+
+    for sj in jobs(njob).subjobs.select(id=nsubjob):
+        print("Operating on subjob {0}".format(sj.id))
+        for fn in sj.backend.getOutputDataLFNs():
+            if fname in fn.lfn:
+                #df = DiracFile(lfn=fn)
+
+                try:
+                    # I like my output files to be at CERN user
+                    if SE not in fn.locations:
+                        try: fn.replicate(SE)
+                        except: continue
+
+                    url = getAccessURL(fn.lfn,[SE])
+                    if url:
+                        print(url)
+                        print(url,file=f)
+                except:
+                    print("Could not get Access URL")
+
 import sys
+
+#getJobURLs_nsubjobs(14, 367, 'outfile.root')
 
 njob = sys.argv[1]
 #outfile = 'outfile.root'
