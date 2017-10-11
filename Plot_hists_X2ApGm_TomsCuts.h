@@ -5,8 +5,8 @@
 // found on file: outfile.root
 //////////////////////////////////////////////////////////
 
-#ifndef Plot_hists_X2ApGm_h
-#define Plot_hists_X2ApGm_h
+#ifndef Plot_hists_X2ApGm_TomsCuts_h
+#define Plot_hists_X2ApGm_TomsCuts_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -30,7 +30,7 @@
 // Header file for the classes stored in the TTree if any.
 #include "vector"
 
-class Plot_hists_X2ApGm : public TSelector {
+class Plot_hists_X2ApGm_TomsCuts : public TSelector {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
 
@@ -498,21 +498,10 @@ public :
    TH1F *fM_calo_mu0, *fM_calo_mu1, *fangle_calo_mu0, *fangle_calo_mu1, *fDphi_calo_mu0, *fDphi_calo_mu1, *fDeta_calo_mu0, *fDeta_calo_mu1, *fDR_calo_mu0, *fDR_calo_mu1, *fcalo_cl;
    TH1F *fM_calo_mu0_m_eta, *fM_calo_mu1_m_eta, *fangle_calo_mu0_m_eta, *fangle_calo_mu1_m_eta, *fDphi_calo_mu0_m_eta, *fDphi_calo_mu1_m_eta, *fDeta_calo_mu0_m_eta, *fDeta_calo_mu1_m_eta, *fDR_calo_mu0_m_eta, *fDR_calo_mu1_m_eta, *fcalo_cl_m_eta;
    TH1F *fM_calo_mu0_not_m_eta, *fM_calo_mu1_not_m_eta, *fangle_calo_mu0_not_m_eta, *fangle_calo_mu1_not_m_eta, *fDphi_calo_mu0_not_m_eta, *fDphi_calo_mu1_not_m_eta, *fDeta_calo_mu0_not_m_eta, *fDeta_calo_mu1_not_m_eta, *fDR_calo_mu0_not_m_eta, *fDR_calo_mu1_not_m_eta, *fcalo_cl_not_m_eta;
-   TH1F *fM_calo_mu0_m_eta_backgr_subtr, *fM_calo_mu1_m_eta_backgr_subtr, *fangle_calo_mu0_m_eta_backgr_subtr, *fangle_calo_mu1_m_eta_backgr_subtr, *fDphi_calo_mu0_m_eta_backgr_subtr, *fDphi_calo_mu1_m_eta_backgr_subtr, *fDeta_calo_mu0_m_eta_backgr_subtr, *fDeta_calo_mu1_m_eta_backgr_subtr, *fDR_calo_mu0_m_eta_backgr_subtr, *fDR_calo_mu1_m_eta_backgr_subtr, *fcalo_cl_m_eta_backgr_subtr;
-   TH1F *fM_calo_mu0_m_450_500, *fM_calo_mu1_m_450_500, *fangle_calo_mu0_m_450_500, *fangle_calo_mu1_m_450_500, *fDphi_calo_mu0_m_450_500, *fDphi_calo_mu1_m_450_500, *fDeta_calo_mu0_m_450_500, *fDeta_calo_mu1_m_450_500, *fDR_calo_mu0_m_450_500, *fDR_calo_mu1_m_450_500, *fcalo_cl_m_450_500;
-   TH1F *fM_calo_mu0_m_600_650, *fM_calo_mu1_m_600_650, *fangle_calo_mu0_m_600_650, *fangle_calo_mu1_m_600_650, *fDphi_calo_mu0_m_600_650, *fDphi_calo_mu1_m_600_650, *fDeta_calo_mu0_m_600_650, *fDeta_calo_mu1_m_600_650, *fDR_calo_mu0_m_600_650, *fDR_calo_mu1_m_600_650, *fcalo_cl_m_600_650;
-   TH1F *fM_calo_mu0_sideband, *fM_calo_mu1_sideband, *fangle_calo_mu0_sideband, *fangle_calo_mu1_sideband, *fDphi_calo_mu0_sideband, *fDphi_calo_mu1_sideband, *fDeta_calo_mu0_sideband, *fDeta_calo_mu1_sideband, *fDR_calo_mu0_sideband, *fDR_calo_mu1_sideband, *fcalo_cl_sideband;
-
 
    std::map<std::string, double> first_variables, second_variables;
 
    vector<Double_t> dalitz_mu0_mu1, dalitz_calo_mu0, dalitz_calo_mu1, dalitz_mu0_mu1_m_eta, dalitz_calo_mu0_m_eta, dalitz_calo_mu1_m_eta, dalitz_mu0_mu1_not_m_eta, dalitz_calo_mu0_not_m_eta, dalitz_calo_mu1_not_m_eta;
-   //vector<Double_t> dalitz_mu0_mu1_m_eta_m_mu0_mu1_0_200, dalitz_mu0_mu1_m_eta_m_mu0_mu1_200_400, dalitz_mu0_mu1_m_eta_m_mu0_mu1_400_500, dalitz_mu0_mu1_m_eta_m_mu0_mu1_500_inf;
-   //vector<Double_t> dalitz_calo_mu0_m_eta_m_mu0_mu1_0_200, dalitz_calo_mu0_m_eta_m_mu0_mu1_200_400, dalitz_calo_mu0_m_eta_m_mu0_mu1_400_500, dalitz_calo_mu0_m_eta_m_mu0_mu1_500_inf;
-   //vector<Double_t> dalitz_calo_mu1_m_eta_m_mu0_mu1_0_200, dalitz_calo_mu1_m_eta_m_mu0_mu1_200_400, dalitz_calo_mu1_m_eta_m_mu0_mu1_400_500, dalitz_calo_mu1_m_eta_m_mu0_mu1_500_inf;
-   vector<int> dalitz_m_mu0_mu1_separation;
-   vector<vector<Double_t>> dalitz_mu0_mu1_m_eta_m_mu0_mu1_separated, dalitz_calo_mu0_m_eta_m_mu0_mu1_separated, dalitz_calo_mu1_m_eta_m_mu0_mu1_separated;
-
 
    double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps;
    double mu_p, mu_eta, h_p, h_eta;
@@ -537,8 +526,8 @@ public :
    void Calo_Plots(unsigned calo, unsigned mum);
    void Plot_Dalitz_Graphs();
 
-   Plot_hists_X2ApGm(TTree * /*tree*/ =0) : fChain(0) { }
-   virtual ~Plot_hists_X2ApGm() { }
+   Plot_hists_X2ApGm_TomsCuts(TTree * /*tree*/ =0) : fChain(0) { }
+   virtual ~Plot_hists_X2ApGm_TomsCuts() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -553,13 +542,13 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(Plot_hists_X2ApGm,0);
+   ClassDef(Plot_hists_X2ApGm_TomsCuts,0);
 };
 
 #endif
 
-#ifdef Plot_hists_X2ApGm_cxx
-void Plot_hists_X2ApGm::Init(TTree *tree)
+#ifdef Plot_hists_X2ApGm_TomsCuts_cxx
+void Plot_hists_X2ApGm_TomsCuts::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -1030,7 +1019,7 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("e_ip_chi2", &e_ip_chi2, &b_e_ip_chi2);
 }
 
-Bool_t Plot_hists_X2ApGm::Notify()
+Bool_t Plot_hists_X2ApGm_TomsCuts::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -1041,4 +1030,4 @@ Bool_t Plot_hists_X2ApGm::Notify()
    return kTRUE;
 }
 
-#endif // #ifdef Plot_hists_X2ApGm_cxx
+#endif // #ifdef Plot_hists_X2ApGm_TomsCuts_cxx

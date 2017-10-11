@@ -15,9 +15,11 @@ jname       = 'Data.2016.6500.X2ApGm'
 tag         = 'first_prmpt'
 
 if DISPLACED:
+    jname  += '_displ'
     script      = '/mnt/shared/LbVMWeisser_shared/Analyses/Eta_to_Ap_Gamma_Search/MakeNTuple_X2ApGm_displaced.py'
     tag += '_displ'
 else:
+    jname  += '_prmpt'
     script      = '/mnt/shared/LbVMWeisser_shared/Analyses/Eta_to_Ap_Gamma_Search/MakeNTuple_X2ApGm_prompt.py'
     tag += '_prmpt'
 if MAGDOWN:

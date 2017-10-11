@@ -5,8 +5,9 @@ sys.path.append(".")
 from Configurables import DaVinci
 from PhysSelPython.Wrappers import Selection, SelectionSequence
 
-#run_ganga = True
-run_ganga = False
+
+run_ganga = True
+#run_ganga = False
 
 if not run_ganga:
     from GaudiConf import IOHelper

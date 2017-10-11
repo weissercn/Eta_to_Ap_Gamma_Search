@@ -42,6 +42,9 @@ def getJobURLs_nsubjobs(njob, nsubjob, fname, SE='CERN-USER'):
 
     f = open('urlList{}.txt'.format(njob),'w')
 
+
+    n_written = 0
+
     for sj in jobs(njob).subjobs.select(id=nsubjob):
         print("Operating on subjob {0}".format(sj.id))
         for fn in sj.backend.getOutputDataLFNs():
@@ -58,6 +61,10 @@ def getJobURLs_nsubjobs(njob, nsubjob, fname, SE='CERN-USER'):
                     if url:
                         print(url)
                         print(url,file=f)
+                        n_written +=1
+                        with open('urlList{}_temp.txt'.format(njob),'a') as f_temp:
+                            print(n_written, '\t'+url,file=f_temp)
+
                 except:
                     print("Could not get Access URL")
 

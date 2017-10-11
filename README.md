@@ -7,6 +7,10 @@ Add all neutrals and photons that when added to the dimuons give a mass of < 1.2
 
 We are running over the same 2016 EW stripping28 as for the RHNu
 
+For testing
+lb-run DaVinci/Latest MakeNTuple_X2ApGm_prompt.py Input_to_Make_prmpt.py
+lb-run DaVinci/Latest MakeNTuple_X2ApGm_displaced.py Input_to_Make_displ.py
+
 
 MAYBE ONLY LOOKED AT MAGDOWN
 
@@ -28,7 +32,9 @@ lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ\")"    # This creat
 lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"Test\")"    # This creates a root file containing histograms for file with all X2ApGm, but only a fraction of events.
 
 
-lb-run ROOT python Visualise_Plot_hists_X2ApGm.py All      # Take ROOT file with histograms and plot them
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt_and_displ
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt      # Take ROOT file with histograms and plot them
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py displ      # Take ROOT file with histograms and plot them
 lb-run ROOT python Visualise_Plot_hists_X2ApGm.py Test      # Take ROOT file with histograms and plot them
 
 
@@ -54,7 +60,11 @@ lb-run ROOT python Visualise_Plot_hists_X2ApGm.py Test      # Take ROOT file wit
 // job 12 test run, os.popen, root -b DISPLAY=localhost, 2k events ??? maybe code was taken from job 13 (sadly this happened)
 // job 13 test run, subprocess popen, root -b, 2k events, also redirecting stderr
 
-// job 14 full run, subprocess popen, root -b
+// job 14 full run, subprocess popen, root -b, good. THIS WAS USED FOR THE DISPLACED CASE
+
+
+// job 20 prompt run, but forgot to set run_ganga = True
+// job 21 prompt run, good. THIS WAS USED FOR THE PROMPT CASE
 
 
 
