@@ -5,7 +5,7 @@ import numpy as np
 from array import array
 import datetime
 
-SLEEP = True
+SLEEP = False
 
 PRECISE_TIME = False
 date_today = datetime.date.today().isoformat()
@@ -43,7 +43,7 @@ else:
 #ROOT.gROOT.ProcessLine('.L lhcbStyle.C')
 #ROOT.gROOT.ProcessLine('lhcbStyle()')
 
-M1D_list, Angle_list, Angle_prmpt_displ_list, dalitz_name_type_list, simple_plot_list = [], [], [], [], []
+M1D_list, Angle_list, Angle_prmpt_displ_list, dalitz_name_type_list, simple_plot_list, scatter_name_type_list = [], [], [], [], [], []
 
 if sys.argv[1]== 'prmpt_and_displ':
     Angle_list += ['angle_calo_mu0', 'angle_calo_mu1', 'Dphi_calo_mu0', 'Dphi_calo_mu1', 'Deta_calo_mu0', 'Deta_calo_mu1', 'DR_calo_mu0', 'DR_calo_mu1', 'calo_cl']
@@ -52,7 +52,10 @@ elif sys.argv[1]== 'prmpt':
     pass
 
 elif sys.argv[1]== 'displ':
-    pass
+    scatter_name_type_list += ['_ecal_calo_dist', '_ecal_calo_dist_m_eta']
+    #pass
+elif sys.argv[1]== 'Test':
+    scatter_name_type_list += ['_ecal_calo_dist', '_ecal_calo_dist_m_eta']
 
 
 
@@ -68,7 +71,7 @@ if (sys.argv[1]== 'displ') or (sys.argv[1]== 'prmpt'):
 
     dalitz_name_type_list += ['', '_m_eta']
     #dalitz_name_type_list += ['_not_m_eta']
-    dalitz_name_type_list += ['_m_eta_m_mu0_mu1_0_200', '_m_eta_m_mu0_mu1_200_300', '_m_eta_m_mu0_mu1_300_400', '_m_eta_m_mu0_mu1_400_500', '_m_eta_m_mu0_mu1_500_600']
+    #dalitz_name_type_list += ['_m_eta_m_mu0_mu1_0_200', '_m_eta_m_mu0_mu1_200_300', '_m_eta_m_mu0_mu1_300_400', '_m_eta_m_mu0_mu1_400_500', '_m_eta_m_mu0_mu1_500_600']
 
     #simple_plot_list += ['calo_cl']
 
@@ -79,6 +82,7 @@ if (sys.argv[1]== 'displ') or (sys.argv[1]== 'prmpt'):
 #Angle_prmpt_displ_list = []
 #dalitz_name_type_list = []
 #simple_plot_list = []
+#scatter_name_type_list = []
 
 
 
@@ -151,33 +155,39 @@ def Angle_plot(cv, plots_key):
 def Angle_prmpt_and_displ_plot(cv, plots_key):
     name = '{}_{}_{}.png'.format(name_extension, plots_key, date_today)
     print "Plotting ", name
-    M1 = tfile1.Get(plots_key+'_m_eta')
-    M2 = tfile2.Get(plots_key+'_m_eta_backgr_subtr')
-    M3 = tfile2.Get(plots_key+'_sideband')
+    M1 = tfile1.Get(plots_key+'_m_eta') #displ
+    M2 = tfile2.Get(plots_key+'_m_eta_backgr_subtr') #prompt
+    M3 = tfile2.Get(plots_key+'_sideband') #prompt
+    M4 = tfile2.Get(plots_key+'_m_eta') #prompt
     print M1
     M1.SetStats(False)
     M1.Scale(1./M1.Integral());
     M2.Scale(1./M2.Integral());
     M3.Scale(1./M3.Integral());
+    M4.Scale(1./M4.Integral());
     M1.SetLineColor(ROOT.kRed)
-    M2.SetLineColor(ROOT.kBlue)
-    M3.SetLineColor(ROOT.kGreen)
+    M2.SetLineColor(ROOT.kCyan)
+    M3.SetLineColor(ROOT.kBlack)
+    M4.SetLineColor(ROOT.kBlue)
     M1.GetYaxis().SetTitle("Fraction / bin width");
 
     #M.GetXaxis().SetRangeUser(0,3.2);
     #cv.SetLogx()
     #cv.SetLogy()
-    maximum = 1.1*max(M1.GetMaximum(), M2.GetMaximum(), M3.GetMaximum())
+    maximum = 1.1*max(M1.GetMaximum(), M2.GetMaximum(), M3.GetMaximum(), M4.GetMaximum())
     print 'maximum : ', maximum
     M1.SetMaximum(maximum)
 
     M1.Draw('hist')
     M2.Draw('histsame')
     M3.Draw('histsame')
+    M4.Draw('histsame')
 
-    leg = ROOT.TLegend(0.7,0.7,0.9,0.9);
+    if plots_key == "calo_cl":  leg = ROOT.TLegend(0.1,0.55,0.3,0.9);
+    else:    leg = ROOT.TLegend(0.7,0.55,0.9,0.9);
     leg.AddEntry(M1,"displ eta mass", "l");
-    leg.AddEntry(M2,"prmpt eta mass bckgnd sbtrctd","l");
+    leg.AddEntry(M4,"prmpt eta mass","l");
+    leg.AddEntry(M2,"#splitline{prmpt eta mass}{bckgnd sbtrctd}","l");
     leg.AddEntry(M3,"prmpt sideband","l");
     leg.Draw("same");
     cv.SaveAs('plots/'+name)
@@ -212,23 +222,61 @@ def Angle_prmpt_and_displ_plot_Tom(cv, plots_key):
     cv.Clear()
     if SLEEP: time.sleep(2.8)
 
+def Scatter(cv, data,name_extension, name_type):
+    #print "data.shape : ", data.shape
+    data = np.atleast_2d(data)
+    #print "data.shape : ", data.shape
+
+    x_scatter, y_scatter = array ( 'd' ), array ( 'd' )
+    length = data.shape[0]
+
+
+    for j in range(length):
+        x_scatter.append(data[j,0]) # dist
+        y_scatter.append(data[j,1]) # pull
+
+    #dummy = ROOT.TH2F("dummy","dummy",30,0,800,30,0,1500);
+    #dummy = ROOT.TH2F("dummy","dummy",30,min(x_scatter),max(x_scatter),30,min(y_scatter),max(y_scatter));
+    dummy = ROOT.TH2F("dummy","dummy",30,0, 1800,30, 0,60);
+    dummy.SetStats(False)
+    dummy.SetTitle("Distance calo mu {} {}".format(name_extension, name_type));
+    #dummy.GetXaxis().SetRangeUser(-30,30);
+    dummy.GetXaxis().SetTitle("min distance calo mu [mm]");
+    #dummy.GetYaxis().SetRangeUser(-30,30);
+    dummy.GetYaxis().SetTitle("pull calo mu");
+    dummy.Draw();
+
+
+    gyx = ROOT.TGraph(length,x_scatter,y_scatter);
+    #gyx.SetMarkerColor(1);
+    gyx.SetMarkerStyle(19);
+    gyx.SetMarkerStyle(8);
+    #gyx.SetMarkerSize(0.000001);
+    gyx.SetMarkerSize(0.4);
+    #gyx.SetTitle("Dalitz Plot");
+    gyx.Draw("PSame");
+    cv.SaveAs("plots/{}_ecalo_calo_dist{}_{}.png".format(name_extension, name_type, date_today));
+    del dummy
+
 
 def Dalitz(cv, data,name_extension, name_type):
     #print "data.shape : ", data.shape
     data = np.atleast_2d(data)
     #print "data.shape : ", data.shape
 
+    scatter_bool = True
+    colz_bool = True
+
     x_scatter, y_scatter, z_scatter = array ( 'd' ), array ( 'd' ), array ( 'd' )
     length = data.shape[0]
 
-    if length!=0:
 
+    for j in range(length):
+        x_scatter.append(data[j,0]) # mu0 mu1
+        y_scatter.append(data[j,1]) # calo mu0
+        z_scatter.append(data[j,2]) # calo mu1
 
-        for j in range(length):
-            x_scatter.append(data[j,0]) # mu0 mu1
-            y_scatter.append(data[j,1]) # calo mu0
-            z_scatter.append(data[j,2]) # calo mu1
-
+    if scatter_bool:
         #dummy = ROOT.TH2F("dummy","dummy",30,0,800,30,0,1500);
         dummy = ROOT.TH2F("dummy","dummy",30,0,1500,30,0,1100);
         dummy.SetStats(False)
@@ -249,9 +297,23 @@ def Dalitz(cv, data,name_extension, name_type):
         #gyx.SetTitle("Dalitz Plot");
         gyx.Draw("PSame");
         cv.SaveAs("plots/{}_dalitz_mu0{}_{}.png".format(name_extension, name_type, date_today));
+        del dummy
 
-        #cv.Clear()
+    if colz_bool:
+        hist  = ROOT.TH2F("Dalitz_mu0_colz","dummy",30,0,1500,30,0,1100);
+        hist.SetStats(False)
+        hist.SetTitle("Dalitz plot {} region{}".format(name_extension, name_type));
+        #hist.GetXaxis().SetRangeUser(-30,30);
+        hist.GetXaxis().SetTitle("m (mu0 mu1) [MeV]");
+        #hist.GetYaxis().SetRangeUser(-30,30);
+        hist.GetYaxis().SetTitle("m (gamma mu0) [MeV]");
+        for j in range(length):   hist.Fill(x_scatter[j], y_scatter_j)
+        hist.Draw("colz");
 
+    #cv.Clear()
+
+
+    if scatter_bool:
         #dummy = ROOT.TH2F("dummy","dummy",30,0,800,30,0,1500);
         dummy = ROOT.TH2F("dummy","dummy",30,0,1500,30,0,1100);
         dummy.SetStats(False)
@@ -271,9 +333,23 @@ def Dalitz(cv, data,name_extension, name_type):
         #gyx.SetTitle("Dalitz Plot");
         gyx.Draw("PSame");
         #cv.SaveAs("plots/{}_dalitz_mu1{}_{}.png".format(name_extension, name_type, date_today));
+        del dummy
 
-        #cv.Clear()
+    if colz_bool:
+        hist  = ROOT.TH2F("Dalitz_mu1_colz","dummy",30,0,1500,30,0,1100);
+        hist.SetStats(False)
+        hist.SetTitle("Dalitz plot {} region{}".format(name_extension, name_type));
+        #hist.GetXaxis().SetRangeUser(-30,30);
+        hist.GetXaxis().SetTitle("m (mu0 mu1) [MeV]");
+        #hist.GetYaxis().SetRangeUser(-30,30);
+        hist.GetYaxis().SetTitle("m (gamma mu1) [MeV]");
+        for j in range(length):   hist.Fill(x_scatter[j], z_scatter_j)
+        #hist.Draw("colz");
 
+    #cv.Clear()
+
+
+    if scatter_bool:
         #dummy = ROOT.TH2F("dummy","dummy",30,0,800,30,0,1500);
         dummy = ROOT.TH2F("dummy","dummy",30,0,1500,30,0,1100);
         dummy.SetStats(False)
@@ -293,10 +369,24 @@ def Dalitz(cv, data,name_extension, name_type):
         #gyx.SetTitle("Dalitz Plot");
         gyx.Draw("PSame");
         cv.SaveAs("plots/{}_dalitz_gamma{}_{}.png".format(name_extension, name_type, date_today));
-        if SLEEP: time.sleep(2.8)
+        del dummy
 
-    else:
-        print "{}_dalitz_{} has no events".format(name_extension, name_type)
+    if colz_bool:
+        hist  = ROOT.TH2F("Dalitz_gamma_colz","dummy",30,0,1500,30,0,1100);
+        hist.SetStats(False)
+        hist.SetTitle("Dalitz plot {} region{}".format(name_extension, name_type));
+        #hist.GetXaxis().SetRangeUser(-30,30);
+        hist.GetXaxis().SetTitle("m (gamma mu0) [MeV]");
+        #hist.GetYaxis().SetRangeUser(-30,30);
+        hist.GetYaxis().SetTitle("m (gamma mu1) [MeV]");
+        for j in range(length):   hist.Fill(y_scatter[j], z_scatter_j)
+        hist.Draw("colz");
+
+
+
+    if SLEEP: time.sleep(2.8)
+
+
 
 
 
@@ -318,8 +408,21 @@ c8 = ROOT.TCanvas('c8','c8',6500,4500)
 c8.Clear()
 
 for scatter_name_type in dalitz_name_type_list:
-    data = np.loadtxt("plots/{}_dalitz{}.csv".format(name_extension,scatter_name_type), delimiter=",")
-    Dalitz(c8, data, name_extension, scatter_name_type)
+    name = "plots/{}_dalitz{}.csv".format(name_extension,scatter_name_type)
+    print "Plotting ", name
+    data = np.loadtxt(name, delimiter=",")
+    print "data.shape", data.shape
+    if data.shape[0]!=0: Dalitz(c8, data, name_extension, scatter_name_type)
+    else: print "No events for ", name
+
+
+for scatter_name_type in scatter_name_type_list:
+    name = "plots/{}_scatter{}.csv".format(name_extension,scatter_name_type)
+    print "Plotting ", name
+    data = np.loadtxt(name, delimiter=",")
+    print "data.shape", data.shape
+    if data.shape[0]!=0: Scatter(c8, data, name_extension, scatter_name_type)
+    else: print "No events for ", name
 
 for plots_key in simple_plot_list:
     simple_plot(c1, plots_key)

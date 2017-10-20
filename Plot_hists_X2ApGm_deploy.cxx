@@ -10,7 +10,7 @@ void Plot_hists_X2ApGm_deploy(TString option ){
 
   if (option == "prmpt"){ _file0 = TFile::Open("NTuple_X2ApGm_all_files_prmpt.root");}
   if (option == "displ"){ _file0 = TFile::Open("NTuple_X2ApGm_all_files_displ.root");}
-  if (option == "Test"){ _file0 = TFile::Open("NTuple_X2ApGm_all_files_test.root");}
+  if (option == "Test"){ _file0 = TFile::Open("NTuple_X2ApGm_all_files_with_materials_test.root");}
 
   TTree * t = (TTree *) _file0->Get("data");
 

@@ -136,8 +136,6 @@ public :
    vector<double>  *prt_y1;
    vector<double>  *prt_z0;
    vector<double>  *prt_z1;
-   vector<double>  *prt_ecal_face_x;
-   vector<double>  *prt_ecal_face_y;
    vector<double>  *tag_l0_tos1;
    vector<double>  *tag_l0_tos2;
    vector<double>  *tag_l0_tos3;
@@ -176,14 +174,6 @@ public :
    vector<double>  *calo_photon_id;
    vector<double>  *calo_shower_shape;
    vector<double>  *calo_hcal_ecal;
-   vector<double>  *calo_n_photon_hypos;
-   vector<double>  *calo_x;
-   vector<double>  *calo_y;
-   vector<double>  *calo_calohypo_z;
-   vector<double>  *calo_spread_0;
-   vector<double>  *calo_spread_1;
-   vector<double>  *calo_spread_2;
-   vector<double>  *calo_spread_3;
    vector<double>  *mergedpi0_idx;
    vector<double>  *mergedpi0_idx_pvr;
    vector<double>  *mergedpi0_pid;
@@ -373,8 +363,6 @@ public :
    TBranch        *b_prt_y1;   //!
    TBranch        *b_prt_z0;   //!
    TBranch        *b_prt_z1;   //!
-   TBranch        *b_prt_ecal_face_x;   //!
-   TBranch        *b_prt_ecal_face_y;   //!
    TBranch        *b_tag_l0_tos1;   //!
    TBranch        *b_tag_l0_tos2;   //!
    TBranch        *b_tag_l0_tos3;   //!
@@ -413,14 +401,6 @@ public :
    TBranch        *b_calo_photon_id;   //!
    TBranch        *b_calo_shower_shape;   //!
    TBranch        *b_calo_hcal_ecal;   //!
-   TBranch        *b_calo_n_photon_hypos;   //!
-   TBranch        *b_calo_x;   //!
-   TBranch        *b_calo_y;   //!
-   TBranch        *b_calo_calohypo_z;   //!
-   TBranch        *b_calo_spread_0;   //!
-   TBranch        *b_calo_spread_1;   //!
-   TBranch        *b_calo_spread_2;   //!
-   TBranch        *b_calo_spread_3;   //!
    TBranch        *b_mergedpi0_idx;   //!
    TBranch        *b_mergedpi0_idx_pvr;   //!
    TBranch        *b_mergedpi0_pid;   //!
@@ -526,8 +506,6 @@ public :
 
    std::map<std::string, double> first_variables, second_variables;
 
-   vector<Double_t> scatter_ecal_calo_dist, scatter_ecal_calo_dist_m_eta, scatter_ecal_calo_dist_not_m_eta;
-   vector<Double_t> scatter_ecal_calo_pull, scatter_ecal_calo_pull_m_eta, scatter_ecal_calo_pull_not_m_eta;
    vector<Double_t> dalitz_mu0_mu1, dalitz_calo_mu0, dalitz_calo_mu1, dalitz_mu0_mu1_m_eta, dalitz_calo_mu0_m_eta, dalitz_calo_mu1_m_eta, dalitz_mu0_mu1_not_m_eta, dalitz_calo_mu0_not_m_eta, dalitz_calo_mu1_not_m_eta;
    //vector<Double_t> dalitz_mu0_mu1_m_eta_m_mu0_mu1_0_200, dalitz_mu0_mu1_m_eta_m_mu0_mu1_200_400, dalitz_mu0_mu1_m_eta_m_mu0_mu1_400_500, dalitz_mu0_mu1_m_eta_m_mu0_mu1_500_inf;
    //vector<Double_t> dalitz_calo_mu0_m_eta_m_mu0_mu1_0_200, dalitz_calo_mu0_m_eta_m_mu0_mu1_200_400, dalitz_calo_mu0_m_eta_m_mu0_mu1_400_500, dalitz_calo_mu0_m_eta_m_mu0_mu1_500_inf;
@@ -691,8 +669,6 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    prt_y1 = 0;
    prt_z0 = 0;
    prt_z1 = 0;
-   prt_ecal_face_x = 0;
-   prt_ecal_face_y = 0;
    tag_l0_tos1 = 0;
    tag_l0_tos2 = 0;
    tag_l0_tos3 = 0;
@@ -731,14 +707,6 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    calo_photon_id = 0;
    calo_shower_shape = 0;
    calo_hcal_ecal = 0;
-   calo_n_photon_hypos = 0;
-   calo_x = 0;
-   calo_y = 0;
-   calo_calohypo_z = 0;
-   calo_spread_0 = 0;
-   calo_spread_1 = 0;
-   calo_spread_2 = 0;
-   calo_spread_3 = 0;
    mergedpi0_idx = 0;
    mergedpi0_idx_pvr = 0;
    mergedpi0_pid = 0;
@@ -934,8 +902,6 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("prt_y1", &prt_y1, &b_prt_y1);
    fChain->SetBranchAddress("prt_z0", &prt_z0, &b_prt_z0);
    fChain->SetBranchAddress("prt_z1", &prt_z1, &b_prt_z1);
-   fChain->SetBranchAddress("prt_ecal_face_x", &prt_ecal_face_x, &b_prt_ecal_face_x);
-   fChain->SetBranchAddress("prt_ecal_face_y", &prt_ecal_face_y, &b_prt_ecal_face_y);
    fChain->SetBranchAddress("tag_l0_tos1", &tag_l0_tos1, &b_tag_l0_tos1);
    fChain->SetBranchAddress("tag_l0_tos2", &tag_l0_tos2, &b_tag_l0_tos2);
    fChain->SetBranchAddress("tag_l0_tos3", &tag_l0_tos3, &b_tag_l0_tos3);
@@ -974,14 +940,6 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("calo_photon_id", &calo_photon_id, &b_calo_photon_id);
    fChain->SetBranchAddress("calo_shower_shape", &calo_shower_shape, &b_calo_shower_shape);
    fChain->SetBranchAddress("calo_hcal_ecal", &calo_hcal_ecal, &b_calo_hcal_ecal);
-   fChain->SetBranchAddress("calo_n_photon_hypos", &calo_n_photon_hypos, &b_calo_n_photon_hypos);
-   fChain->SetBranchAddress("calo_x", &calo_x, &b_calo_x);
-   fChain->SetBranchAddress("calo_y", &calo_y, &b_calo_y);
-   fChain->SetBranchAddress("calo_calohypo_z", &calo_calohypo_z, &b_calo_calohypo_z);
-   fChain->SetBranchAddress("calo_spread_0", &calo_spread_0, &b_calo_spread_0);
-   fChain->SetBranchAddress("calo_spread_1", &calo_spread_1, &b_calo_spread_1);
-   fChain->SetBranchAddress("calo_spread_2", &calo_spread_2, &b_calo_spread_2);
-   fChain->SetBranchAddress("calo_spread_3", &calo_spread_3, &b_calo_spread_3);
    //fChain->SetBranchAddress("mergedpi0_idx", &mergedpi0_idx, &b_mergedpi0_idx);
    //fChain->SetBranchAddress("mergedpi0_idx_pvr", &mergedpi0_idx_pvr, &b_mergedpi0_idx_pvr);
    //fChain->SetBranchAddress("mergedpi0_pid", &mergedpi0_pid, &b_mergedpi0_pid);

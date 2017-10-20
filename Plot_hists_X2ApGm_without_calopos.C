@@ -609,11 +609,11 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
   double tag_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) , 2.0));
 
 
-  //assert(1.1==1.2);
-  //assert(tag_calo_mu0_mu1_m == Lp_calo_mu0_mu1.M());
-  //assert(tag_calo_mu0_m == Lp_calo_mu0.M());
-  //assert(tag_calo_mu1_m == Lp_calo_mu1.M());
-  //assert(tag_mu0_mu1_m == Lp_mu0_mu1.M());
+  assert(1.1==1.2);
+  assert(tag_calo_mu0_mu1_m == Lp_calo_mu0_mu1.M());
+  assert(tag_calo_mu0_m == Lp_calo_mu0.M());
+  assert(tag_calo_mu1_m == Lp_calo_mu1.M());
+  assert(tag_mu0_mu1_m == Lp_mu0_mu1.M());
 
   if(1.1==1.2){std::cout << "Assertions not working\n\n";}
 
@@ -622,34 +622,9 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
   if (((tag_calo_mu1_m - Lp_calo_mu1.M())/ (tag_calo_mu1_m + Lp_calo_mu1.M())) >0.001){std::cout << "calo mu1 assertion error! \n\n" << std::endl;}
   if (((tag_mu0_mu1_m - Lp_mu0_mu1.M())/ (tag_mu0_mu1_m + Lp_mu0_mu1.M())) > 0.001){std::cout << "mu0 mu1 assertion error! \n\n" << std::endl;}
 
-  // Distance between calo and muons
-  double ux_prt0 = prt_ecal_face_x->at(tag_idx_prt0->at(mum)) - calo_x->at(calo);
-  double uy_prt0 = prt_ecal_face_y->at(tag_idx_prt0->at(mum)) - calo_y->at(calo);
-  double ux_prt1 = prt_ecal_face_x->at(tag_idx_prt1->at(mum)) - calo_x->at(calo);
-  double uy_prt1 = prt_ecal_face_y->at(tag_idx_prt1->at(mum)) - calo_y->at(calo);
-
-  double ecal_calo_dist_prt0 = sqrt( pow( ux_prt0 , 2.0) +  pow( uy_prt0 , 2.0) );
-  double ecal_calo_dist_prt1 = sqrt( pow( ux_prt1 , 2.0) +  pow( uy_prt1 , 2.0) );
-
-  double ecal_calo_dist_min = min(ecal_calo_dist_prt0, ecal_calo_dist_prt1);
-
-  //Now uncertainty weighted distance
-  // pull = u^T u / sqrt (u^T Sigma u )
-  double ulen2_prt0 = pow(ux_prt0, 2.0) + pow(uy_prt0, 2.0);
-  double ulen2_prt1 = pow(ux_prt1, 2.0) + pow(uy_prt1, 2.0);
-  double uSu_prt0 = ux_prt0 * ux_prt0 * calo_spread_0->at(calo) +  ux_prt0 * uy_prt0 * calo_spread_1->at(calo) + ux_prt0 * uy_prt0 * calo_spread_2->at(calo) + uy_prt0 * uy_prt0 * calo_spread_3->at(calo);
-  double uSu_prt1 = ux_prt1 * ux_prt1 * calo_spread_0->at(calo) +  ux_prt1 * uy_prt1 * calo_spread_1->at(calo) + ux_prt1 * uy_prt1 * calo_spread_2->at(calo) + uy_prt1 * uy_prt1 * calo_spread_3->at(calo);
-
-  double ecal_calo_pull_prt0 = ulen2_prt0 / sqrt (uSu_prt0);
-  double ecal_calo_pull_prt1 = ulen2_prt1 / sqrt (uSu_prt1);
-
-  double ecal_calo_pull_min = min(ecal_calo_pull_prt0, ecal_calo_pull_prt1);
-
-
-
 
   //std::cout << "tag_calo_mu1_mu2_m : " << tag_calo_mu1_mu2_m << std::endl;
-  if ((tag_calo_mu0_mu1_m < 1100.0) && (calo_eta->at(calo) > 2.) && (calo_eta->at(calo) <4.5) && (calo_n_photon_hypos->at(calo) ==1)){ // Only if the calo A' pair has mass less than 1.1 GeV fill hists.
+  if ((tag_calo_mu0_mu1_m < 1100.0) && (calo_eta->at(calo) > 2.) && (calo_eta->at(calo) <4.5)){ // Only if the calo A' pair has mass less than 1.1 GeV fill hists.
     if (prt_bool_necessary_cuts) {
       fM_require_calo->Fill(tag_dtf_m->at(mum));
       fM_tag_calo->Fill(tag_calo_mu0_mu1_m);
@@ -660,9 +635,6 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
       if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m )){
         fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
         if ( (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_0->at(mum) == 0) ){fM_require_calo_at_m_eta_no_brem->Fill(tag_dtf_m->at(mum));}
-
-        scatter_ecal_calo_dist_m_eta.push_back(ecal_calo_dist_min);
-        scatter_ecal_calo_pull_m_eta.push_back(ecal_calo_pull_min);
 
         dalitz_mu0_mu1_m_eta.push_back(tag_mu0_mu1_m);
         dalitz_calo_mu0_m_eta.push_back(tag_calo_mu0_m);
@@ -709,10 +681,6 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 
         fcalo_cl_m_eta->Fill(calo_cl->at(calo));
       } else{
-
-        scatter_ecal_calo_dist_not_m_eta.push_back(ecal_calo_dist_min);
-        scatter_ecal_calo_pull_not_m_eta.push_back(ecal_calo_pull_min);
-
         dalitz_mu0_mu1_not_m_eta.push_back(tag_mu0_mu1_m);
         dalitz_calo_mu0_not_m_eta.push_back(tag_calo_mu0_m);
         dalitz_calo_mu1_not_m_eta.push_back(tag_calo_mu1_m);
@@ -809,9 +777,6 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
       fcalo_cl_m_eta_backgr_subtr->Add(fcalo_cl_m_eta, fcalo_cl_sideband, 1., -1.);
 
       // Fill for any mass range
-
-      scatter_ecal_calo_dist.push_back(ecal_calo_dist_min);
-      scatter_ecal_calo_pull.push_back(ecal_calo_pull_min);
 
       dalitz_mu0_mu1.push_back(tag_mu0_mu1_m);
       dalitz_calo_mu0.push_back(tag_calo_mu0_m);
@@ -917,44 +882,11 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_scatter_ecal_calo_dist.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_scatter_ecal_calo_dist.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_scatter_ecal_calo_dist.csv");}
 
-  for (unsigned j=0; j < scatter_ecal_calo_pull.size(); j++) {
-    scatter_file << scatter_ecal_calo_dist.at(j)<<",";
-    scatter_file << scatter_ecal_calo_pull.at(j)<<"\n";
-  }
 
-  scatter_file.close();
 
-  /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
 
-  for (unsigned j=0; j < scatter_ecal_calo_pull_m_eta.size(); j++) {
-    scatter_file << scatter_ecal_calo_dist_m_eta.at(j)<<",";
-    scatter_file << scatter_ecal_calo_pull_m_eta.at(j)<<"\n";
-  }
-
-  scatter_file.close();
-
-  /////////////////////////////////
-
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
-
-  for (unsigned j=0; j < scatter_ecal_calo_pull_not_m_eta.size(); j++) {
-    scatter_file << scatter_ecal_calo_dist_not_m_eta.at(j)<<",";
-    scatter_file << scatter_ecal_calo_pull_not_m_eta.at(j)<<"\n";
-  }
-
-  scatter_file.close();
-
-  /////////////////////////////////
 
 
 }
@@ -966,7 +898,6 @@ void Plot_hists_X2ApGm::Terminate()
    // the results graphically or save the results to file.
 
    this->Plot_Dalitz_Graphs();
-
 
    std::cout << "Writing Hists to File" << std::endl;
 

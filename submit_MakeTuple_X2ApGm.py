@@ -12,7 +12,7 @@ MAGDOWN  = True
 TEST      = False
 
 jname       = 'Data.2016.6500.X2ApGm'
-tag         = 'first_prmpt'
+tag         = 'calo_pos_added'
 
 if DISPLACED:
     jname  += '_displ'
@@ -42,5 +42,5 @@ print "infiles : ", infiles
 #maybe switch back to DaVinci v42r2 to avoid DDDBTag issues.
 SubmissionTools.submitDV(jname, tag, script, outfiles,
              appName='DaVinci', appPath='/home/weisser/', appVer='v42r5p1',
-             backend=None, infiles=infiles, gaudirun=False, test=TEST, maxFiles=-1)
+             backend=None, infiles=infiles, gaudirun=False, test=TEST, maxFiles=-1, do_auto_resubmit=False)
 # appVer='v42r3'

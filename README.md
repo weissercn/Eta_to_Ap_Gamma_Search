@@ -20,9 +20,9 @@ ganga submit_MakeTuple_X2ApGm.py
 
 
 
-ganga getOutputManual.py 61
+ganga getOutputManual.py 21
 ganga getOutputManual.py 62
-lb-run DaVinci/Latest python merge.py prmpt 61 62   // right now we only look at 61
+lb-run DaVinci/Latest python merge.py prmpt 21 22   // right now we only look at 21
 lb-run DaVinci/Latest python merge.py displ 61 62   // right now we only look at 61
 
 
@@ -66,7 +66,18 @@ lb-run ROOT python Visualise_Plot_hists_X2ApGm.py Test      # Take ROOT file wit
 // job 20 prompt run, but forgot to set run_ganga = True
 // job 21 prompt run, good. THIS WAS USED FOR THE PROMPT CASE
 
+// job 22 displ calo_pos_added, but run_ganga False
+// job 23 displ calo_pos_added, but job resubmitted completed jobs
+// job 24 displ calo_pos_added, but job not fully submitted
+// job 25 displ calo_pos_added, but job not fully submitted
+// job 26 displ calo_pos_added, but job not fully submitted
+// job 27 displ calo_pos_added, but job resubmitted completed jobs
+// job 28 displ calo_pos_added with autoresubmit turned off, but job not fully submitted
+// job 29 displ calo_pos_added with autoresubmit turned off
 
+// job 30 empty
+
+// job 31 prompt run calo_pos_added with autoresubmit turned off
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -31,7 +31,7 @@ def getInputList():
 
 def submitDV(jname, tag, script, outfiles,
              appName='DaVinci', appPath='.', appVer='v42r3', appArgs=[],
-             backend=None, infiles=None, gaudirun=False, test=False, maxFiles=-1):
+             backend=None, infiles=None, gaudirun=False, test=False, maxFiles=-1, do_auto_resubmit = True):
 
     '''
     Function for submitting a generic GaudiExec job to the grid with Ganga.
@@ -86,7 +86,7 @@ def submitDV(jname, tag, script, outfiles,
         inputdata        = BKQuery(path=dpath).getDataset(),
         inputfiles       = infiles,
         outputfiles      = [DiracFile(outfile) for outfile in outfiles],
-        do_auto_resubmit = True,
+        do_auto_resubmit = do_auto_resubmit,
         backend          = backend
         )
 
