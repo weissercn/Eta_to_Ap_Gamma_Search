@@ -511,17 +511,17 @@ public :
    TBranch        *b_e_ip_chi2;   //!
 
    TFile *f;
-   TString option;
+   TString option, option2;
 
    TH1F *fM, *fM_l0_p, *fM_l0_f, *fM_hlt1_p, *fM_hlt1_f, *fM_hlt2_p, *fM_hlt2_f, *fM_kin_p, *fM_kin_f, *fM_data_consistency_p, *fM_data_consistency_f, *fM_patho_p, *fM_patho_f, *fM_hf_p, *fM_hf_f, *fM_fd_r_p, *fM_fd_r_f, *fM_material_p, *fM_material_f, *fM_pid_p, *fM_pid_f, *fM_strip_p, *fM_strip_f;
    TH1F *fM_require_calo, *fM_require_calo_at_m_eta, *fM_require_calo_at_m_eta_no_brem, *fM_tag_calo;
-   TH1F *fM_calo_mu0, *fM_calo_mu1, *fangle_calo_mu0, *fangle_calo_mu1, *fDphi_calo_mu0, *fDphi_calo_mu1, *fDeta_calo_mu0, *fDeta_calo_mu1, *fDR_calo_mu0, *fDR_calo_mu1, *fcalo_cl;
-   TH1F *fM_calo_mu0_m_eta, *fM_calo_mu1_m_eta, *fangle_calo_mu0_m_eta, *fangle_calo_mu1_m_eta, *fDphi_calo_mu0_m_eta, *fDphi_calo_mu1_m_eta, *fDeta_calo_mu0_m_eta, *fDeta_calo_mu1_m_eta, *fDR_calo_mu0_m_eta, *fDR_calo_mu1_m_eta, *fcalo_cl_m_eta;
-   TH1F *fM_calo_mu0_not_m_eta, *fM_calo_mu1_not_m_eta, *fangle_calo_mu0_not_m_eta, *fangle_calo_mu1_not_m_eta, *fDphi_calo_mu0_not_m_eta, *fDphi_calo_mu1_not_m_eta, *fDeta_calo_mu0_not_m_eta, *fDeta_calo_mu1_not_m_eta, *fDR_calo_mu0_not_m_eta, *fDR_calo_mu1_not_m_eta, *fcalo_cl_not_m_eta;
-   TH1F *fM_calo_mu0_m_eta_backgr_subtr, *fM_calo_mu1_m_eta_backgr_subtr, *fangle_calo_mu0_m_eta_backgr_subtr, *fangle_calo_mu1_m_eta_backgr_subtr, *fDphi_calo_mu0_m_eta_backgr_subtr, *fDphi_calo_mu1_m_eta_backgr_subtr, *fDeta_calo_mu0_m_eta_backgr_subtr, *fDeta_calo_mu1_m_eta_backgr_subtr, *fDR_calo_mu0_m_eta_backgr_subtr, *fDR_calo_mu1_m_eta_backgr_subtr, *fcalo_cl_m_eta_backgr_subtr;
-   TH1F *fM_calo_mu0_m_450_500, *fM_calo_mu1_m_450_500, *fangle_calo_mu0_m_450_500, *fangle_calo_mu1_m_450_500, *fDphi_calo_mu0_m_450_500, *fDphi_calo_mu1_m_450_500, *fDeta_calo_mu0_m_450_500, *fDeta_calo_mu1_m_450_500, *fDR_calo_mu0_m_450_500, *fDR_calo_mu1_m_450_500, *fcalo_cl_m_450_500;
-   TH1F *fM_calo_mu0_m_600_650, *fM_calo_mu1_m_600_650, *fangle_calo_mu0_m_600_650, *fangle_calo_mu1_m_600_650, *fDphi_calo_mu0_m_600_650, *fDphi_calo_mu1_m_600_650, *fDeta_calo_mu0_m_600_650, *fDeta_calo_mu1_m_600_650, *fDR_calo_mu0_m_600_650, *fDR_calo_mu1_m_600_650, *fcalo_cl_m_600_650;
-   TH1F *fM_calo_mu0_sideband, *fM_calo_mu1_sideband, *fangle_calo_mu0_sideband, *fangle_calo_mu1_sideband, *fDphi_calo_mu0_sideband, *fDphi_calo_mu1_sideband, *fDeta_calo_mu0_sideband, *fDeta_calo_mu1_sideband, *fDR_calo_mu0_sideband, *fDR_calo_mu1_sideband, *fcalo_cl_sideband;
+   TH1F *fM_calo_mu0, *fM_calo_mu1, *fangle_calo_mu0, *fangle_calo_mu1, *fDphi_calo_mu0, *fDphi_calo_mu1, *fDeta_calo_mu0, *fDeta_calo_mu1, *fDR_calo_mu0, *fDR_calo_mu1, *fcalo_cl, *fecal_calo_pull, *fecal_calo_dist;
+   TH1F *fM_calo_mu0_m_eta, *fM_calo_mu1_m_eta, *fangle_calo_mu0_m_eta, *fangle_calo_mu1_m_eta, *fDphi_calo_mu0_m_eta, *fDphi_calo_mu1_m_eta, *fDeta_calo_mu0_m_eta, *fDeta_calo_mu1_m_eta, *fDR_calo_mu0_m_eta, *fDR_calo_mu1_m_eta, *fcalo_cl_m_eta, *fecal_calo_pull_m_eta, *fecal_calo_dist_m_eta;
+   TH1F *fM_calo_mu0_not_m_eta, *fM_calo_mu1_not_m_eta, *fangle_calo_mu0_not_m_eta, *fangle_calo_mu1_not_m_eta, *fDphi_calo_mu0_not_m_eta, *fDphi_calo_mu1_not_m_eta, *fDeta_calo_mu0_not_m_eta, *fDeta_calo_mu1_not_m_eta, *fDR_calo_mu0_not_m_eta, *fDR_calo_mu1_not_m_eta, *fcalo_cl_not_m_eta, *fecal_calo_pull_not_m_eta, *fecal_calo_dist_not_m_eta;
+   TH1F *fM_calo_mu0_m_eta_backgr_subtr, *fM_calo_mu1_m_eta_backgr_subtr, *fangle_calo_mu0_m_eta_backgr_subtr, *fangle_calo_mu1_m_eta_backgr_subtr, *fDphi_calo_mu0_m_eta_backgr_subtr, *fDphi_calo_mu1_m_eta_backgr_subtr, *fDeta_calo_mu0_m_eta_backgr_subtr, *fDeta_calo_mu1_m_eta_backgr_subtr, *fDR_calo_mu0_m_eta_backgr_subtr, *fDR_calo_mu1_m_eta_backgr_subtr, *fcalo_cl_m_eta_backgr_subtr, *fecal_calo_pull_m_eta_backgr_subtr, *fecal_calo_dist_m_eta_backgr_subtr;
+   TH1F *fM_calo_mu0_m_450_500, *fM_calo_mu1_m_450_500, *fangle_calo_mu0_m_450_500, *fangle_calo_mu1_m_450_500, *fDphi_calo_mu0_m_450_500, *fDphi_calo_mu1_m_450_500, *fDeta_calo_mu0_m_450_500, *fDeta_calo_mu1_m_450_500, *fDR_calo_mu0_m_450_500, *fDR_calo_mu1_m_450_500, *fcalo_cl_m_450_500, *fecal_calo_pull_m_450_500, *fecal_calo_dist_m_450_500;
+   TH1F *fM_calo_mu0_m_600_650, *fM_calo_mu1_m_600_650, *fangle_calo_mu0_m_600_650, *fangle_calo_mu1_m_600_650, *fDphi_calo_mu0_m_600_650, *fDphi_calo_mu1_m_600_650, *fDeta_calo_mu0_m_600_650, *fDeta_calo_mu1_m_600_650, *fDR_calo_mu0_m_600_650, *fDR_calo_mu1_m_600_650, *fcalo_cl_m_600_650, *fecal_calo_pull_m_600_650, *fecal_calo_dist_m_600_650;
+   TH1F *fM_calo_mu0_sideband, *fM_calo_mu1_sideband, *fangle_calo_mu0_sideband, *fangle_calo_mu1_sideband, *fDphi_calo_mu0_sideband, *fDphi_calo_mu1_sideband, *fDeta_calo_mu0_sideband, *fDeta_calo_mu1_sideband, *fDR_calo_mu0_sideband, *fDR_calo_mu1_sideband, *fcalo_cl_sideband , *fecal_calo_pull_sideband, *fecal_calo_dist_sideband;
 
 
    std::map<std::string, double> first_variables, second_variables;
@@ -537,14 +537,14 @@ public :
 
 
    double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps;
-   double mu_p, mu_eta, h_p, h_eta;
+   double mu_p, mu_pt, mu_eta, h_p, h_pt, h_eta;
    double tag_tau_ps_1, tag_tau_ps_2, tag_d2_1, tag_d2_2, tag_m_1, tag_m_2, tag_dtf_chi2_1, tag_dtf_chi2_2;
 
 
    int idx_mu, idx_h, idx_pvr;
 
    bool prt_bool, prt_bool_patho_srd, hf_veto, material_veto, prt_bool_no_matveto_cut;
-   bool prt_bool_l0, prt_bool_hlt1, prt_bool_hlt2, prt_bool_strip, prt_bool_kin, prt_bool_data_consistency, prt_bool_patho, prt_bool_dec_topo, prt_bool_patho_mu, prt_bool_patho_h, prt_bool_material, prt_bool_hf, prt_bool_fd_r, prt_bool_pid;
+   bool prt_bool_l0, prt_bool_hlt1, prt_bool_hlt2, prt_bool_strip, prt_bool_kin, prt_bool_data_consistency, prt_bool_patho, prt_bool_dec_topo, prt_bool_patho_mu, prt_bool_patho_h, prt_bool_material, prt_bool_hf, prt_bool_fd_r, prt_bool_pid, prt_bool_prmpt_displ_consistency;
    bool prt_bool_material_h_modmiss, prt_bool_material_mu_modmiss, prt_bool_material_cutFM;
    bool prt_bool_l0_1, prt_bool_hlt1_1, prt_bool_hlt2_1, prt_bool_strip_1, prt_bool_kin_1, prt_bool_data_consistency_1, prt_bool_patho_1, prt_bool_dec_topo_1, prt_bool_patho_mu_1, prt_bool_patho_h_1, prt_bool_material_1, prt_bool_hf_1, prt_bool_fd_r_1, prt_bool_pid_1;
    bool prt_bool_l0_2, prt_bool_hlt1_2, prt_bool_hlt2_2, prt_bool_strip_2, prt_bool_kin_2, prt_bool_data_consistency_2, prt_bool_patho_2, prt_bool_dec_topo_2, prt_bool_patho_mu_2, prt_bool_patho_h_2, prt_bool_material_2, prt_bool_hf_2, prt_bool_fd_r_2, prt_bool_pid_2;

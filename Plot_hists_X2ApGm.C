@@ -49,10 +49,32 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    std::cout << "Plot_hists_RHNu The option is : " << option << std::endl;
 
    f = 0;
-   if (option == "displ"){f = new TFile("NTuple_X2ApGm_all_files_plots_displ.root","RECREATE");}
-   else if (option == "prmpt"){f = new TFile("NTuple_X2ApGm_all_files_plots_prmpt.root","RECREATE");}
-   else if (option == "Test"){f = new TFile("NTuple_X2ApGm_all_files_plots_test.root","RECREATE");}
+   TString file_name;
+   if (option == "displ"){file_name = "NTuple_X2ApGm_all_files_plots_displ.root";}
+   else if (option == "prmpt"){file_name = "NTuple_X2ApGm_all_files_plots_prmpt.root";}
+   else if (option == "Test"){file_name = "NTuple_X2ApGm_all_files_plots_test.root";}
    else{ std::cout << std::endl << std::endl << "NO VALID OPTION" << std::endl << std::endl;}
+
+
+   //TString temp_option = GetOption();
+   //TObjArray *t_temp_option = temp_option.Tokenize(" ");
+
+   //option = ((TObjString *)(t_temp_option->At(0)))->String();
+   //option2 = ((TObjString *)(t_temp_option->At(1)))->String();
+
+   //std::cout << "Plot_hists_RHNu The option is : " << option << std::endl;
+
+   //f = 0;
+   //TString file_name;
+   //if (option == "displ"){file_name = sprintf("NTuple_X2ApGm_all_files_plots_displ_%d.root", option2.Atoi());}
+   //else if (option == "prmpt"){file_name = sprintf("NTuple_X2ApGm_all_files_plots_prmpt_%d.root", option2.Atoi());}
+   //else if (option == "Test"){file_name = "NTuple_X2ApGm_all_files_plots_test.root";}
+   //else{ std::cout << std::endl << std::endl << "NO VALID OPTION" << std::endl << std::endl;}
+
+
+
+   cout << "Opening file : " << file_name << endl;
+   f = new TFile(file_name ,"RECREATE");
 
    pass_separately =false;
 
@@ -128,6 +150,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    fcalo_cl = new TH1F("calo_cl", "calo_cl ; Calo Confidence Level;TEvts", 100, 0., 1.);
 
+   fecal_calo_pull = new TH1F("ecal_calo_pull", "ecal_calo_pull ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist = new TH1F("ecal_calo_dist", "ecal_calo_dist ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_eta = new TH1F("M_calo_mu0_m_eta", "M_calo_mu0_m_eta ; signal calo mu0 M [MeV];TEvts", nmbins2, mbins2);
@@ -146,6 +171,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fDR_calo_mu1_m_eta = new TH1F("DR_calo_mu1_m_eta", "DR_calo_mu1_m_eta ; signal Delta R calo and mu1 momenta;TEvts", 100, 0., 1.5);
 
    fcalo_cl_m_eta = new TH1F("calo_cl_m_eta", "calo_cl_m_eta ; Calo Confidence Level;TEvts", 100, 0., 1.);
+
+   fecal_calo_pull_m_eta = new TH1F("ecal_calo_pull_m_eta", "ecal_calo_pull_m_eta ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist_m_eta = new TH1F("ecal_calo_dist_m_eta", "ecal_calo_dist_m_eta ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -166,6 +194,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    fcalo_cl_not_m_eta = new TH1F("calo_cl_not_m_eta", "calo_cl_not_m_eta ; Calo Confidence Level;TEvts", 100, 0., 1.);
 
+   fecal_calo_pull_not_m_eta = new TH1F("ecal_calo_pull_not_m_eta", "ecal_calo_pull_not_m_eta ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist_not_m_eta = new TH1F("ecal_calo_dist_not_m_eta", "ecal_calo_dist_not_m_eta ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_eta_backgr_subtr = new TH1F("M_calo_mu0_m_eta_backgr_subtr", "M_calo_mu0_m_eta_backgr_subtr ; signal calo mu0 M [MeV];TEvts", nmbins2, mbins2);
@@ -184,6 +215,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fDR_calo_mu1_m_eta_backgr_subtr = new TH1F("DR_calo_mu1_m_eta_backgr_subtr", "DR_calo_mu1_m_eta_backgr_subtr ; signal Delta R calo and mu1 momenta;TEvts", 100, 0., 1.5);
 
    fcalo_cl_m_eta_backgr_subtr = new TH1F("calo_cl_m_eta_backgr_subtr", "calo_cl_m_eta_backgr_subtr ; Calo Confidence Level;TEvts", 100, 0., 1.);
+
+   fecal_calo_pull_m_eta_backgr_subtr = new TH1F("ecal_calo_pull_m_eta_backgr_subtr", "ecal_calo_pull_m_eta_backgr_subtr ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist_m_eta_backgr_subtr = new TH1F("ecal_calo_dist_m_eta_backgr_subtr", "ecal_calo_dist_m_eta_backgr_subtr ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -204,6 +238,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    fcalo_cl_m_450_500 = new TH1F("calo_cl_m_450_500", "calo_cl_m_450_500 ; Calo Confidence Level;TEvts", 100, 0., 1.);
 
+   fecal_calo_pull_m_450_500 = new TH1F("ecal_calo_pull_m_450_500", "ecal_calo_pull_m_450_500 ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist_m_450_500 = new TH1F("ecal_calo_dist_m_450_500", "ecal_calo_dist_m_450_500 ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_600_650 = new TH1F("M_calo_mu0_m_600_650", "M_calo_mu0_m_600_650 ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
@@ -223,6 +260,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
 
    fcalo_cl_m_600_650 = new TH1F("calo_cl_m_600_650", "calo_cl_m_600_650 ; Calo Confidence Level;TEvts", 100, 0., 1.);
 
+   fecal_calo_pull_m_600_650 = new TH1F("ecal_calo_pull_m_600_650", "ecal_calo_pull_m_600_650 ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist_m_600_650 = new TH1F("ecal_calo_dist_m_600_650", "ecal_calo_dist_m_600_650 ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_sideband = new TH1F("M_calo_mu0_sideband", "M_calo_mu0_sideband ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
@@ -241,6 +281,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fDR_calo_mu1_sideband = new TH1F("DR_calo_mu1_sideband", "DR_calo_mu1_sideband ; Delta R calo and mu1 momenta;TEvts", 100, 0., 1.5);
 
    fcalo_cl_sideband = new TH1F("calo_cl_sideband", "calo_cl_sideband ; Calo Confidence Level;TEvts", 100, 0., 1.);
+
+   fecal_calo_pull_sideband = new TH1F("ecal_calo_pull_sideband", "ecal_calo_pull_sideband ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
+   fecal_calo_dist_sideband = new TH1F("ecal_calo_dist_sideband", "ecal_calo_dist_sideband ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
 
    dalitz_m_mu0_mu1_separation = {200, 300, 400, 500, 600, 700, 800, 900, 1000};
@@ -331,9 +374,11 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   //tag_eta = atanh(tag_pz->at(mum)/tag_p);
 
   mu_p   = sqrt(pow(prt_px->at(idx_mu), 2.0)+pow(prt_py->at(idx_mu), 2.0)+pow(prt_pz->at(idx_mu), 2.0));
+  mu_pt   = sqrt(pow(prt_px->at(idx_mu), 2.0)+pow(prt_py->at(idx_mu), 2.0));
   mu_eta = atanh(prt_pz->at(idx_mu)/mu_p);
 
   h_p   = sqrt(pow(prt_px->at(idx_h), 2.0)+pow(prt_py->at(idx_h), 2.0)+pow(prt_pz->at(idx_h), 2.0));
+  h_pt   = sqrt(pow(prt_px->at(idx_h), 2.0)+pow(prt_py->at(idx_h), 2.0));
   h_eta = atanh(prt_pz->at(idx_h)/h_p);
 
 
@@ -369,7 +414,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   prt_bool_data_consistency = true;
   if (option == "displ") {prt_bool_data_consistency      = prt_bool_data_consistency && tag_dtf_chi2->at(mum) < 8;}
   //prt_bool_data_consistency      = prt_bool_data_consistency && (std::max(prt_pnn_mu->at(idx_mu), prt_pnn_mu->at(idx_h)) > 0.8);
-  prt_bool_data_consistency      = prt_bool_data_consistency && bool(tag_z->at(mum) - pvr_z->at(idx_pvr) > 0); // SV downstream of PV
+  if (option == "displ") {prt_bool_data_consistency      = prt_bool_data_consistency && bool(tag_z->at(mum) - pvr_z->at(idx_pvr) > 0);} // SV downstream of PV //New earlier used for prmpt also
 
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////   Material Veto   /////////////////////////////////
@@ -398,10 +443,15 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   prt_bool_material        = !material_veto;
   assert((prt_bool_material == (prt_bool_material_h_modmiss && prt_bool_material_mu_modmiss && prt_bool_material_cutFM)));
 
-
+  //if (option == "prmpt") {prt_bool_material = true;} //New earlier used for prmpt also
 
   //prt_bool_material        = prt_bool_material && bool(tag_dmat->at(mum)> ? )
 
+  ////////////////////////////////////////////////////////////////////////////
+  //////////////////////   Heavy Flavor Veto   ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
+
+  prt_bool_prmpt_displ_consistency = bool(mu_pt >1000) && bool(h_pt >1000) && bool(mu_p >20000) && bool(h_p >20000); //New
 
 
 
@@ -433,7 +483,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   ////////////////////////////////////////////////////////////////////////////
 
   prt_bool_trigger_cuts = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip);
-  prt_bool_necessary_cuts   = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_pid);
+  prt_bool_necessary_cuts   = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_pid && prt_bool_prmpt_displ_consistency);
   prt_bool_full        = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_hf && prt_bool_fd_r && prt_bool_pid);
 
 
@@ -650,16 +700,17 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 
   //std::cout << "tag_calo_mu1_mu2_m : " << tag_calo_mu1_mu2_m << std::endl;
   if ((tag_calo_mu0_mu1_m < 1100.0) && (calo_eta->at(calo) > 2.) && (calo_eta->at(calo) <4.5) && (calo_n_photon_hypos->at(calo) ==1)){ // Only if the calo A' pair has mass less than 1.1 GeV fill hists.
-    if (prt_bool_necessary_cuts) {
+    if (prt_bool_necessary_cuts && Lp_mu0_mu1.Pt() > 1000) {  //mu mu pt cut new
       fM_require_calo->Fill(tag_dtf_m->at(mum));
       fM_tag_calo->Fill(tag_calo_mu0_mu1_m);
 
 
 
       // Fill Histograms in strict calo mu mu bins.
-      if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m )){
+      //if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m )){
+      if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m ) && (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0)){
         fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
-        if ( (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_0->at(mum) == 0) ){fM_require_calo_at_m_eta_no_brem->Fill(tag_dtf_m->at(mum));}
+        if ( (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0) ){fM_require_calo_at_m_eta_no_brem->Fill(tag_dtf_m->at(mum));}
 
         scatter_ecal_calo_dist_m_eta.push_back(ecal_calo_dist_min);
         scatter_ecal_calo_pull_m_eta.push_back(ecal_calo_pull_min);
@@ -708,6 +759,9 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         fM_calo_mu1_m_eta->Fill(tag_calo_mu1_m);
 
         fcalo_cl_m_eta->Fill(calo_cl->at(calo));
+
+        fecal_calo_pull_m_eta->Fill(ecal_calo_pull_min);
+        fecal_calo_dist_m_eta->Fill(ecal_calo_dist_min);
       } else{
 
         scatter_ecal_calo_dist_not_m_eta.push_back(ecal_calo_dist_min);
@@ -733,6 +787,10 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         fM_calo_mu1_not_m_eta->Fill(tag_calo_mu1_m);
 
         fcalo_cl_not_m_eta->Fill(calo_cl->at(calo));
+
+        fecal_calo_pull_not_m_eta->Fill(ecal_calo_pull_min);
+        fecal_calo_dist_not_m_eta->Fill(ecal_calo_dist_min);
+
       }
 
 
@@ -759,6 +817,9 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         fM_calo_mu1_m_450_500->Fill(tag_calo_mu1_m);
 
         fcalo_cl_m_450_500->Fill(calo_cl->at(calo));
+
+        fecal_calo_pull_m_450_500->Fill(ecal_calo_pull_min);
+        fecal_calo_dist_m_450_500->Fill(ecal_calo_dist_min);
       } else if ((600 < tag_calo_mu0_mu1_m ) && (650 > tag_calo_mu0_mu1_m )){
         fangle_calo_mu0_m_600_650->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
         fangle_calo_mu1_m_600_650->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
@@ -776,6 +837,9 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         fM_calo_mu1_m_600_650->Fill(tag_calo_mu1_m);
 
         fcalo_cl_m_600_650->Fill(calo_cl->at(calo));
+
+        fecal_calo_pull_m_600_650->Fill(ecal_calo_pull_min);
+        fecal_calo_dist_m_600_650->Fill(ecal_calo_dist_min);
 
       }
 
@@ -808,6 +872,12 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
       fcalo_cl_sideband->Add(fcalo_cl_m_450_500, fcalo_cl_m_600_650, 1., 1.);
       fcalo_cl_m_eta_backgr_subtr->Add(fcalo_cl_m_eta, fcalo_cl_sideband, 1., -1.);
 
+      fecal_calo_pull_sideband->Add(fecal_calo_pull_m_450_500, fecal_calo_pull_m_600_650, 1., 1.);
+      fecal_calo_dist_sideband->Add(fecal_calo_dist_m_450_500, fecal_calo_dist_m_600_650, 1., 1.);
+      fecal_calo_pull_m_eta_backgr_subtr->Add(fecal_calo_pull_m_eta, fecal_calo_pull_sideband, 1., -1.);
+      fecal_calo_dist_m_eta_backgr_subtr->Add(fecal_calo_dist_m_eta, fecal_calo_dist_sideband, 1., -1.);
+
+
       // Fill for any mass range
 
       scatter_ecal_calo_dist.push_back(ecal_calo_dist_min);
@@ -833,6 +903,10 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
       fM_calo_mu1->Fill(tag_calo_mu1_m);
 
       fcalo_cl->Fill(calo_cl->at(calo));
+
+      fecal_calo_pull->Fill(ecal_calo_pull_min);
+      fecal_calo_dist->Fill(ecal_calo_dist_min);
+
     }
   }
 
@@ -852,9 +926,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_dalitz.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_dalitz.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_dalitz.csv");}
+  if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_dalitz.csv");}
+  else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_dalitz.csv");}
+  else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_dalitz.csv");}
 
   for (unsigned j=0; j < dalitz_mu0_mu1.size(); j++) {
     scatter_file << dalitz_mu0_mu1.at(j)<<",";
@@ -866,9 +940,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_dalitz_m_eta.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_dalitz_m_eta.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_dalitz_m_eta.csv");}
+  if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_dalitz_m_eta.csv");}
+  else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_dalitz_m_eta.csv");}
+  else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_dalitz_m_eta.csv");}
 
   for (unsigned j=0; j < dalitz_mu0_mu1_m_eta.size(); j++) {
     scatter_file << dalitz_mu0_mu1_m_eta.at(j)<<",";
@@ -880,9 +954,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_dalitz_not_m_eta.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_dalitz_not_m_eta.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_dalitz_not_m_eta.csv");}
+  if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_dalitz_not_m_eta.csv");}
+  else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_dalitz_not_m_eta.csv");}
+  else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_dalitz_not_m_eta.csv");}
 
   for (unsigned j=0; j < dalitz_mu0_mu1_not_m_eta.size(); j++) {
     scatter_file << dalitz_mu0_mu1_not_m_eta.at(j)<<",";
@@ -902,9 +976,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
     else if (i==dalitz_m_mu0_mu1_separation.size()){ lower_boundary_name =std::to_string(dalitz_m_mu0_mu1_separation[i-1]); upper_boundary_name= std::to_string(std::numeric_limits<double>::infinity());}
     else {lower_boundary_name=std::to_string(dalitz_m_mu0_mu1_separation[i-1]); upper_boundary_name=std::to_string(dalitz_m_mu0_mu1_separation[i]);}
 
-    if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_dalitz_m_eta_m_mu0_mu1_" + lower_boundary_name+ "_" + upper_boundary_name + ".csv");}
-    else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_dalitz_m_eta_m_mu0_mu1_" + lower_boundary_name+ "_" + upper_boundary_name + ".csv");}
-    else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_dalitz_m_eta_m_mu0_mu1_" + lower_boundary_name+ "_" + upper_boundary_name + ".csv");}
+    if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_dalitz_m_eta_m_mu0_mu1_" + lower_boundary_name+ "_" + upper_boundary_name + ".csv");}
+    else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_dalitz_m_eta_m_mu0_mu1_" + lower_boundary_name+ "_" + upper_boundary_name + ".csv");}
+    else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_dalitz_m_eta_m_mu0_mu1_" + lower_boundary_name+ "_" + upper_boundary_name + ".csv");}
 
     for (unsigned j=0; j < dalitz_mu0_mu1_m_eta_m_mu0_mu1_separated[i].size(); j++) {
       scatter_file << dalitz_mu0_mu1_m_eta_m_mu0_mu1_separated[i].at(j)<<",";
@@ -917,9 +991,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_scatter_ecal_calo_dist.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_scatter_ecal_calo_dist.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_scatter_ecal_calo_dist.csv");}
+  if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_scatter_ecal_calo_dist.csv");}
+  else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_scatter_ecal_calo_dist.csv");}
+  else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_scatter_ecal_calo_dist.csv");}
 
   for (unsigned j=0; j < scatter_ecal_calo_pull.size(); j++) {
     scatter_file << scatter_ecal_calo_dist.at(j)<<",";
@@ -930,9 +1004,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
+  if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
+  else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
+  else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_scatter_ecal_calo_dist_m_eta.csv");}
 
   for (unsigned j=0; j < scatter_ecal_calo_pull_m_eta.size(); j++) {
     scatter_file << scatter_ecal_calo_dist_m_eta.at(j)<<",";
@@ -943,9 +1017,9 @@ void Plot_hists_X2ApGm::Plot_Dalitz_Graphs()
 
   /////////////////////////////////
 
-  if (option == "prmpt"){scatter_file.open("plots/Prmpt_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
-  else if (option == "displ"){scatter_file.open("plots/Displ_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
-  else if (option == "Test"){scatter_file.open("plots/Test_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
+  if (option == "prmpt"){scatter_file.open("csvs/Prmpt_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
+  else if (option == "displ"){scatter_file.open("csvs/Displ_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
+  else if (option == "Test"){scatter_file.open("csvs/Test_X2ApGm_scatter_ecal_calo_dist_not_m_eta.csv");}
 
   for (unsigned j=0; j < scatter_ecal_calo_pull_not_m_eta.size(); j++) {
     scatter_file << scatter_ecal_calo_dist_not_m_eta.at(j)<<",";

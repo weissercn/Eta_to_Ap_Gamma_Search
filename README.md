@@ -8,8 +8,8 @@ Add all neutrals and photons that when added to the dimuons give a mass of < 1.2
 We are running over the same 2016 EW stripping28 as for the RHNu
 
 For testing
-lb-run DaVinci/Latest MakeNTuple_X2ApGm_prompt.py Input_to_Make_prmpt.py
-lb-run DaVinci/Latest MakeNTuple_X2ApGm_displaced.py Input_to_Make_displ.py
+lb-run DaVinci/Latest python MakeNTuple_X2ApGm_prompt.py
+lb-run DaVinci/Latest python MakeNTuple_X2ApGm_displaced.py
 
 
 MAYBE ONLY LOOKED AT MAGDOWN
@@ -27,8 +27,8 @@ lb-run DaVinci/Latest python merge.py displ 61 62   // right now we only look at
 
 
 
-lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"prmpt\")"    # This creates a root file containing histograms for file with all X2ApGm. Prompt
-lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ\")"    # This creates a root file containing histograms for file with all X2ApGm. Displ
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"prmpt 31\")"    # This creates a root file containing histograms for file with all X2ApGm. Prompt
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ 29\")"    # This creates a root file containing histograms for file with all X2ApGm. Displ
 lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"Test\")"    # This creates a root file containing histograms for file with all X2ApGm, but only a fraction of events.
 
 
@@ -78,6 +78,8 @@ lb-run ROOT python Visualise_Plot_hists_X2ApGm.py Test      # Take ROOT file wit
 // job 30 empty
 
 // job 31 prompt run calo_pos_added with autoresubmit turned off
+// job 32 prompt isolation exception no longer stops code, but exception condition handled wrongly
+// job 33 prompt isolation exception no longer stops code
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
