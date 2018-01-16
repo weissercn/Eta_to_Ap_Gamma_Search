@@ -106,9 +106,32 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
       mbins2[counter2] = placeholder2;
    }
 
+   int nmbins9(1000);
+   double m_min9(50.), m_max9(10000.);
+   double diff_ln9 = (log(m_max9) - log(m_min9))/float(nmbins9);
+   //std::cout << diff_ln << std::endl;
+   int asjdsk9; //This needs to be here for some really bizare reason; any type any name
+   double mbins9[nmbins9+1];
+   double placeholder9;
+
+   for (int counter9 = 0; counter9 <nmbins9+1 ; counter9++){
+      placeholder9 = m_min9 * exp(counter9 * diff_ln9);
+      //std::cout << placeholder << std::endl;
+      mbins9[counter9] = placeholder9;
+   }
+
 
 
    // H I S T O G R A M S
+
+
+   fn_calos = new TH1I("n_calos", "n_calos;number of calo photons for dimuons passing cuts;TEvts", 10,0,10);
+
+   fM_dicalo = new TH1F("M_dicalo", "M_dicalo;M_calocalo;TEvts", nmbins9, mbins9);
+   fM_calomumu_calocalo = new TH2F("M_calomumu_calocalo", "M_calomumu_calocalo;M_calomumu; M_calocalo;TEvts",100, 0, 1200, 100, 0, 1500 );
+   fM_calomumu_calocalo_d = new TH2F("M_calomumu_calocalo_d", "M_calomumu_calocalo_d;M_calomumu; M_calocalo;TEvts",100, 0, 1200, 100, 0, 1500);
+   fM_calomumu_calocalo_closepi0 = new TH2F("M_calomumu_calocalo_closepi0", "M_calomumu_calocalo_closepi0;M_calomumu; M_calocalo closest to m_pi0;TEvts",100, 0, 1200, 100, 0, 1500);
+   fM_mumu_calocalo_m_eta = new TH2F("M_mumu_calocalo_m_eta", "M_mumu_calocalo_m_eta;M_mumu; M_calocalo;TEvts",100, 0, 1200, 100, 0, 1500);
 
    fM = new TH1F("M", "M;A' M [MeV];TEvts", nmbins, mbins);
    fM_l0_p = new TH1F("M_l0_p", "M_l0_p;A' M [MeV];Evts", nmbins, mbins);
@@ -136,6 +159,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fM_calo_mu0 = new TH1F("M_calo_mu0", "M_calo_mu0 ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1 = new TH1F("M_calo_mu1", "M_calo_mu1 ; calo mu1 M [MeV];TEvts", nmbins2, mbins2);
 
+   fDphiDeta_calo_mu0 = new TH2F("DphiDeta_calo_mu0", "DphiDeta_calo_mu0 ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1 = new TH2F("DphiDeta_calo_mu1", "DphiDeta_calo_mu1 ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
    fangle_calo_mu0 = new TH1F("angle_calo_mu0", "angle_calo_mu0 ; angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1 = new TH1F("angle_calo_mu1", "angle_calo_mu1 ; angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
 
@@ -153,10 +179,20 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull = new TH1F("ecal_calo_pull", "ecal_calo_pull ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist = new TH1F("ecal_calo_dist", "ecal_calo_dist ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_eta = new TH1F("M_calo_mu0_m_eta", "M_calo_mu0_m_eta ; signal calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_m_eta = new TH1F("M_calo_mu1_m_eta", "M_calo_mu1_m_eta ; signal calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fDphiDeta_calo_mu0_m_eta = new TH2F("DphiDeta_calo_mu0_m_eta", "DphiDeta_calo_mu0_m_eta ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1_m_eta = new TH2F("DphiDeta_calo_mu1_m_eta", "DphiDeta_calo_mu1_m_eta ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
+   fDphiDeta_calo_m_eta = new TH2F("DphiDeta_calo_m_eta", "DphiDeta_calo_m_eta ; Phi calo[rad]; Eta;TEvts", 100, -3.2, 3.2, 100, 1.5, 5.5);
+   fET_calo_m_eta = new TH1F("ET_calo_m_eta", "ET_calo_m_eta ; ET calo;TEvts", nmbins2, mbins2);
+
+   fphi_calo_m_eta = new TH1F("phi_calo_m_eta", "phi_calo_m_eta ; Phi calo[rad]; TEvts", 100, -3.2, 3.2);
+   feta_calo_m_eta = new TH1F("eta_calo_m_eta", "eta_calo_m_eta ; Eta;TEvts", 100, 1.5, 5.5);
 
    fangle_calo_mu0_m_eta = new TH1F("angle_calo_mu0_m_eta", "angle_calo_mu0_m_eta ; signal angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1_m_eta = new TH1F("angle_calo_mu1_m_eta", "angle_calo_mu1_m_eta ; signal angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
@@ -175,10 +211,29 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull_m_eta = new TH1F("ecal_calo_pull_m_eta", "ecal_calo_pull_m_eta ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist_m_eta = new TH1F("ecal_calo_dist_m_eta", "ecal_calo_dist_m_eta ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+   fbrem_test_AP_m_eta = new TH1F("brem_test_AP_m_eta", "brem_test_AP_m_eta ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_PC_m_eta = new TH1F("brem_test_PC_m_eta", "brem_test_PC_m_eta ; PC;TEvts", 100, -1000., 1000.);
+   fbrem_test_AC_m_eta = new TH1F("brem_test_AC_m_eta", "brem_test_AC_m_eta ; AC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BC_m_eta = new TH1F("brem_test_BC_m_eta", "brem_test_BC_m_eta ; BC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BP_m_eta = new TH1F("brem_test_BP_m_eta", "brem_test_BP_m_eta ; BP;TEvts", 100, -1000., 1000.);
+   fbrem_test_AB_m_eta = new TH1F("brem_test_AB_m_eta", "brem_test_AB_m_eta ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_2D_m_eta = new TH2F("brem_test_2D_m_eta", "brem_test_2D_m_eta ; AP/AB; PC/AB ;TEvts", 100, -5., 5., 100, -5., 5.);
+
+
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_not_m_eta = new TH1F("M_calo_mu0_not_m_eta", "M_calo_mu0_not_m_eta ; sideband calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_not_m_eta = new TH1F("M_calo_mu1_not_m_eta", "M_calo_mu1_not_m_eta ; sideband calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fDphiDeta_calo_mu0_not_m_eta = new TH2F("DphiDeta_calo_mu0_not_m_eta", "DphiDeta_calo_mu0_not_m_eta ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1_not_m_eta = new TH2F("DphiDeta_calo_mu1_not_m_eta", "DphiDeta_calo_mu1_not_m_eta ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
+   fDphiDeta_calo_not_m_eta = new TH2F("DphiDeta_calo_not_m_eta", "DphiDeta_calo_not_m_eta ; Phi calo[rad]; Eta;TEvts", 100, -3.2, 3.2, 100, 1.5, 5.5);
+   fET_calo_not_m_eta = new TH1F("ET_calo_not_m_eta", "ET_calo_not_m_eta ; ET calo;TEvts", nmbins2, mbins2);
+
+   fphi_calo_not_m_eta = new TH1F("phi_calo_not_m_eta", "phi_calo_not_m_eta ; Phi calo[rad]; TEvts", 100, -3.2, 3.2);
+   feta_calo_not_m_eta = new TH1F("eta_calo_not_m_eta", "eta_calo_not_m_eta ; Eta;TEvts", 100, 1.5, 5.5);
 
    fangle_calo_mu0_not_m_eta = new TH1F("angle_calo_mu0_not_m_eta", "angle_calo_mu0_not_m_eta ; sideband angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1_not_m_eta = new TH1F("angle_calo_mu1_not_m_eta", "angle_calo_mu1_not_m_eta ; sideband angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
@@ -197,10 +252,27 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull_not_m_eta = new TH1F("ecal_calo_pull_not_m_eta", "ecal_calo_pull_not_m_eta ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist_not_m_eta = new TH1F("ecal_calo_dist_not_m_eta", "ecal_calo_dist_not_m_eta ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+   fbrem_test_AP_not_m_eta = new TH1F("brem_test_AP_not_m_eta", "brem_test_AP_not_m_eta ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_PC_not_m_eta = new TH1F("brem_test_PC_not_m_eta", "brem_test_PC_not_m_eta ; PC;TEvts", 100, -1000., 1000.);
+   fbrem_test_AC_not_m_eta = new TH1F("brem_test_AC_not_m_eta", "brem_test_AC_not_m_eta ; AC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BC_not_m_eta = new TH1F("brem_test_BC_not_m_eta", "brem_test_BC_not_m_eta ; BC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BP_not_m_eta = new TH1F("brem_test_BP_not_m_eta", "brem_test_BP_not_m_eta ; BP;TEvts", 100, -1000., 1000.);
+   fbrem_test_AB_not_m_eta = new TH1F("brem_test_AB_not_m_eta", "brem_test_AB_not_m_eta ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_2D_not_m_eta = new TH2F("brem_test_2D_not_m_eta", "brem_test_2D_not_m_eta ; AP/AB; PC/AB ;TEvts", 100, -5., 5., 100, -5., 5.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_eta_backgr_subtr = new TH1F("M_calo_mu0_m_eta_backgr_subtr", "M_calo_mu0_m_eta_backgr_subtr ; signal calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_m_eta_backgr_subtr = new TH1F("M_calo_mu1_m_eta_backgr_subtr", "M_calo_mu1_m_eta_backgr_subtr ; signal calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fDphiDeta_calo_mu0_m_eta_backgr_subtr = new TH2F("DphiDeta_calo_mu0_m_eta_backgr_subtr", "DphiDeta_calo_mu0_m_eta_backgr_subtr ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1_m_eta_backgr_subtr = new TH2F("DphiDeta_calo_mu1_m_eta_backgr_subtr", "DphiDeta_calo_mu1_m_eta_backgr_subtr ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
+   fDphiDeta_calo_m_eta_backgr_subtr = new TH2F("DphiDeta_calo_m_eta_backgr_subtr", "DphiDeta_calo_m_eta_backgr_subtr ; Phi calo[rad]; Eta;TEvts", 100, -3.2, 3.2, 100, 1.5, 5.5);
+   fET_calo_m_eta_backgr_subtr = new TH1F("ET_calo_m_eta_backgr_subtr", "ET_calo_m_eta_backgr_subtr ; ET calo;TEvts", nmbins2, mbins2);
+
+   fphi_calo_m_eta_backgr_subtr = new TH1F("phi_calo_m_eta_backgr_subtr", "phi_calo_m_eta_backgr_subtr ; Phi calo[rad]; TEvts", 100, -3.2, 3.2);
+   feta_calo_m_eta_backgr_subtr = new TH1F("eta_calo_m_eta_backgr_subtr", "eta_calo_m_eta_backgr_subtr ; Eta;TEvts", 100, 1.5, 5.5);
 
    fangle_calo_mu0_m_eta_backgr_subtr = new TH1F("angle_calo_mu0_m_eta_backgr_subtr", "angle_calo_mu0_m_eta_backgr_subtr ; signal angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1_m_eta_backgr_subtr = new TH1F("angle_calo_mu1_m_eta_backgr_subtr", "angle_calo_mu1_m_eta_backgr_subtr ; signal angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
@@ -219,10 +291,27 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull_m_eta_backgr_subtr = new TH1F("ecal_calo_pull_m_eta_backgr_subtr", "ecal_calo_pull_m_eta_backgr_subtr ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist_m_eta_backgr_subtr = new TH1F("ecal_calo_dist_m_eta_backgr_subtr", "ecal_calo_dist_m_eta_backgr_subtr ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+   fbrem_test_AP_m_eta_backgr_subtr = new TH1F("brem_test_AP_m_eta_backgr_subtr", "brem_test_AP_m_eta_backgr_subtr ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_PC_m_eta_backgr_subtr = new TH1F("brem_test_PC_m_eta_backgr_subtr", "brem_test_PC_m_eta_backgr_subtr ; PC;TEvts", 100, -1000., 1000.);
+   fbrem_test_AC_m_eta_backgr_subtr = new TH1F("brem_test_AC_m_eta_backgr_subtr", "brem_test_AC_m_eta_backgr_subtr ; AC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BC_m_eta_backgr_subtr = new TH1F("brem_test_BC_m_eta_backgr_subtr", "brem_test_BC_m_eta_backgr_subtr ; BC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BP_m_eta_backgr_subtr = new TH1F("brem_test_BP_m_eta_backgr_subtr", "brem_test_BP_m_eta_backgr_subtr ; BP;TEvts", 100, -1000., 1000.);
+   fbrem_test_AB_m_eta_backgr_subtr = new TH1F("brem_test_AB_m_eta_backgr_subtr", "brem_test_AB_m_eta_backgr_subtr ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_2D_m_eta_backgr_subtr = new TH2F("brem_test_2D_m_eta_backgr_subtr", "brem_test_2D_m_eta_backgr_subtr ; AP/AB; PC/AB ;TEvts", 100, -5., 5., 100, -5., 5.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_450_500 = new TH1F("M_calo_mu0_m_450_500", "M_calo_mu0_m_450_500 ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_m_450_500 = new TH1F("M_calo_mu1_m_450_500", "M_calo_mu1_m_450_500 ; calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fDphiDeta_calo_mu0_m_450_500 = new TH2F("DphiDeta_calo_mu0_m_450_500", "DphiDeta_calo_mu0_m_450_500 ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1_m_450_500 = new TH2F("DphiDeta_calo_mu1_m_450_500", "DphiDeta_calo_mu1_m_450_500 ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
+   fDphiDeta_calo_m_450_500 = new TH2F("DphiDeta_calo_m_450_500", "DphiDeta_calo_m_450_500 ; Phi calo[rad]; Eta;TEvts", 100, -3.2, 3.2, 100, 1.5, 5.5);
+   fET_calo_m_450_500 = new TH1F("ET_calo_m_450_500", "ET_calo_m_450_500 ; ET calo;TEvts", nmbins2, mbins2);
+
+   fphi_calo_m_450_500 = new TH1F("phi_calo_m_450_500", "phi_calo_m_450_500 ; Phi calo[rad]; TEvts", 100, -3.2, 3.2);
+   feta_calo_m_450_500 = new TH1F("eta_calo_m_450_500", "eta_calo_m_450_500 ; Eta;TEvts", 100, 1.5, 5.5);
 
    fangle_calo_mu0_m_450_500 = new TH1F("angle_calo_mu0_m_450_500", "angle_calo_mu0_m_450_500 ; angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1_m_450_500 = new TH1F("angle_calo_mu1_m_450_500", "angle_calo_mu1_m_450_500 ; angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
@@ -241,10 +330,27 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull_m_450_500 = new TH1F("ecal_calo_pull_m_450_500", "ecal_calo_pull_m_450_500 ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist_m_450_500 = new TH1F("ecal_calo_dist_m_450_500", "ecal_calo_dist_m_450_500 ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+   fbrem_test_AP_m_450_500 = new TH1F("brem_test_AP_m_450_500", "brem_test_AP_m_450_500 ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_PC_m_450_500 = new TH1F("brem_test_PC_m_450_500", "brem_test_PC_m_450_500 ; PC;TEvts", 100, -1000., 1000.);
+   fbrem_test_AC_m_450_500 = new TH1F("brem_test_AC_m_450_500", "brem_test_AC_m_450_500 ; AC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BC_m_450_500 = new TH1F("brem_test_BC_m_450_500", "brem_test_BC_m_450_500 ; BC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BP_m_450_500 = new TH1F("brem_test_BP_m_450_500", "brem_test_BP_m_450_500 ; BP;TEvts", 100, -1000., 1000.);
+   fbrem_test_AB_m_450_500 = new TH1F("brem_test_AB_m_450_500", "brem_test_AB_m_450_500 ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_2D_m_450_500 = new TH2F("brem_test_2D_m_450_500", "brem_test_2D_m_450_500 ; AP/AB; PC/AB ;TEvts", 100, -5., 5., 100, -5., 5.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_m_600_650 = new TH1F("M_calo_mu0_m_600_650", "M_calo_mu0_m_600_650 ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_m_600_650 = new TH1F("M_calo_mu1_m_600_650", "M_calo_mu1_m_600_650 ; calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fDphiDeta_calo_mu0_m_600_650 = new TH2F("DphiDeta_calo_mu0_m_600_650", "DphiDeta_calo_mu0_m_600_650 ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1_m_600_650 = new TH2F("DphiDeta_calo_mu1_m_600_650", "DphiDeta_calo_mu1_m_600_650 ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
+   fDphiDeta_calo_m_600_650 = new TH2F("DphiDeta_calo_m_600_650", "DphiDeta_calo_m_600_650 ; Phi calo[rad]; Eta;TEvts", 100, -3.2, 3.2, 100, 1.5, 5.5);
+   fET_calo_m_600_650 = new TH1F("ET_calo_m_600_650", "ET_calo_m_600_650 ; ET calo;TEvts", nmbins2, mbins2);
+
+   fphi_calo_m_600_650 = new TH1F("phi_calo_m_600_650", "phi_calo_m_600_650 ; Phi calo[rad]; TEvts", 100, -3.2, 3.2);
+   feta_calo_m_600_650 = new TH1F("eta_calo_m_600_650", "eta_calo_m_600_650 ; Eta;TEvts", 100, 1.5, 5.5);
 
    fangle_calo_mu0_m_600_650 = new TH1F("angle_calo_mu0_m_600_650", "angle_calo_mu0_m_600_650 ; angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1_m_600_650 = new TH1F("angle_calo_mu1_m_600_650", "angle_calo_mu1_m_600_650 ; angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
@@ -263,10 +369,27 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull_m_600_650 = new TH1F("ecal_calo_pull_m_600_650", "ecal_calo_pull_m_600_650 ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist_m_600_650 = new TH1F("ecal_calo_dist_m_600_650", "ecal_calo_dist_m_600_650 ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+   fbrem_test_AP_m_600_650 = new TH1F("brem_test_AP_m_600_650", "brem_test_AP_m_600_650 ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_PC_m_600_650 = new TH1F("brem_test_PC_m_600_650", "brem_test_PC_m_600_650 ; PC;TEvts", 100, -1000., 1000.);
+   fbrem_test_AC_m_600_650 = new TH1F("brem_test_AC_m_600_650", "brem_test_AC_m_600_650 ; AC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BC_m_600_650 = new TH1F("brem_test_BC_m_600_650", "brem_test_BC_m_600_650 ; BC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BP_m_600_650 = new TH1F("brem_test_BP_m_600_650", "brem_test_BP_m_600_650 ; BP;TEvts", 100, -1000., 1000.);
+   fbrem_test_AB_m_600_650 = new TH1F("brem_test_AB_m_600_650", "brem_test_AB_m_600_650 ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_2D_m_600_650 = new TH2F("brem_test_2D_m_600_650", "brem_test_2D_m_600_650 ; AP/AB; PC/AB ;TEvts", 100, -5., 5., 100, -5., 5.);
+
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    fM_calo_mu0_sideband = new TH1F("M_calo_mu0_sideband", "M_calo_mu0_sideband ; calo mu0 M [MeV];TEvts", nmbins2, mbins2);
    fM_calo_mu1_sideband = new TH1F("M_calo_mu1_sideband", "M_calo_mu1_sideband ; calo mu1 M [MeV];TEvts", nmbins2, mbins2);
+
+   fDphiDeta_calo_mu0_sideband = new TH2F("DphiDeta_calo_mu0_sideband", "DphiDeta_calo_mu0_sideband ; signal Delta phi calo and mu0 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+   fDphiDeta_calo_mu1_sideband = new TH2F("DphiDeta_calo_mu1_sideband", "DphiDeta_calo_mu1_sideband ; signal Delta phi calo and mu1 momenta[rad];Delta eta;TEvts", 100, -1., 1., 100, -0.8, 0.8);
+
+   fDphiDeta_calo_sideband= new TH2F("DphiDeta_calo_sideband", "DphiDeta_calo_m_sideband ; Phi calo[rad]; Eta;TEvts", 100, -3.2, 3.2, 100, 1.5, 5.5);
+   fET_calo_sideband = new TH1F("ET_calo_sideband", "ET_calo_sideband ; ET calo;TEvts", nmbins2, mbins2);
+
+   fphi_calo_sideband = new TH1F("phi_calo_sideband", "phi_calo_sideband ; Phi calo[rad]; TEvts", 100, -3.2, 3.2);
+   feta_calo_sideband = new TH1F("eta_calo_sideband", "eta_calo_sideband ; Eta;TEvts", 100, 1.5, 5.5);
 
    fangle_calo_mu0_sideband = new TH1F("angle_calo_mu0_sideband", "angle_calo_mu0_sideband ; angle between calo and mu0 momenta[rad];TEvts", 160, 0., 0.16);
    fangle_calo_mu1_sideband = new TH1F("angle_calo_mu1_sideband", "angle_calo_mu1_sideband ; angle between calo and mu1 momenta[rad];TEvts", 160, 0., 0.16);
@@ -285,6 +408,13 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fecal_calo_pull_sideband = new TH1F("ecal_calo_pull_sideband", "ecal_calo_pull_sideband ; Pull calo mu at ECAL;TEvts", 100, 0., 70.);
    fecal_calo_dist_sideband = new TH1F("ecal_calo_dist_sideband", "ecal_calo_dist_sideband ; Distance calo mu at ECAL;TEvts", 100, 0., 2000.);
 
+   fbrem_test_AP_sideband = new TH1F("brem_test_AP_sideband", "brem_test_AP_sideband ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_PC_sideband = new TH1F("brem_test_PC_sideband", "brem_test_PC_sideband ; PC;TEvts", 100, -1000., 1000.);
+   fbrem_test_AC_sideband = new TH1F("brem_test_AC_sideband", "brem_test_AC_sideband ; AC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BC_sideband = new TH1F("brem_test_BC_sideband", "brem_test_BC_sideband ; BC;TEvts", 100, -1000., 1000.);
+   fbrem_test_BP_sideband = new TH1F("brem_test_BP_sideband", "brem_test_BP_sideband ; BP;TEvts", 100, -1000., 1000.);
+   fbrem_test_AB_sideband = new TH1F("brem_test_AB_sideband", "brem_test_AB_sideband ; AP;TEvts", 100, -1000., 1000.);
+   fbrem_test_2D_sideband = new TH2F("brem_test_2D_sideband", "brem_test_2D_sideband ; AP/AB; PC/AB ;TEvts", 100, -5., 5., 100, -5., 5.);
 
    dalitz_m_mu0_mu1_separation = {200, 300, 400, 500, 600, 700, 800, 900, 1000};
 
@@ -320,6 +450,7 @@ Bool_t Plot_hists_X2ApGm::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
+   //if (entry %20 ==0){
    GetEntry(entry);  // load event
    //if (entry <100000) {GetEntry(entry); } // load event
 
@@ -340,6 +471,8 @@ Bool_t Plot_hists_X2ApGm::Process(Long64_t entry)
        this->Ap_Anal(mum);
      }
    }
+
+   //}
 
 
 
@@ -399,7 +532,8 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
 
   prt_bool_l0         = (bool(tag_l0_tos1->at(mum)) || bool(tag_l0_tos3->at(mum)) || bool(tag_l0_tis->at(mum))); //L0MuonDecision or L0DiMuonDecision or TIS L0HadronDecision
   if (option == "prmpt") {prt_bool_hlt1       = true;}
-  if (option == "displ") {prt_bool_hlt1       = bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum));} //Tos Hlt1TrackMVA or [Tos Hlt1TwoTrackMVA for mass >1000 MeV]
+  //if (option == "displ") {prt_bool_hlt1       = bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum));} //Tos Hlt1TrackMVA or Tos Hlt1TwoTrackMVA
+  if (option == "displ") {prt_bool_hlt1       = not bool(tag_hlt1_tos4->at(mum)) || bool(tag_hlt1_tos5->at(mum));} //Tos Hlt1TrackMVA or Tos Hlt1TwoTrackMVA
   if (option == "prmpt") {prt_bool_hlt2       = true;}
   if (option == "displ") {prt_bool_hlt2       = bool(tag_hlt2_tos0->at(mum));} //Hlt2ExoticaDisplDiMuonDecision
   //prt_bool_hlt2       = bool(tag_hlt2_tos2->at(mum)); //Hlt2ExoticaPrmptDiMuonTurboDecision
@@ -475,16 +609,18 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
 
   prt_bool_pid        = true;
   //prt_bool_pid        = (prt_pnn_mu->at(idx_mu) > 0.7) && (prt_pnn_mu->at(idx_h) > 0.7);
+  //prt_bool_pid        = (prt_pnn_mu->at(idx_mu) > 0.95) && (prt_pnn_mu->at(idx_h) > 0.95);
 
-
+  prt_bool_brem        = true;
+  prt_bool_brem       = (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0);
 
   ////////////////////////////////////////////////////////////////////////////
   ///////////////////////////   Summary   ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
 
   prt_bool_trigger_cuts = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip);
-  prt_bool_necessary_cuts   = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_pid && prt_bool_prmpt_displ_consistency);
-  prt_bool_full        = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_hf && prt_bool_fd_r && prt_bool_pid);
+  prt_bool_necessary_cuts   = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_pid && prt_bool_brem);
+  prt_bool_full        = (prt_bool_l0 && prt_bool_hlt1 && prt_bool_hlt2 && prt_bool_strip && prt_bool_kin && prt_bool_data_consistency && prt_bool_patho && prt_bool_material && prt_bool_hf && prt_bool_fd_r && prt_bool_pid && prt_bool_prmpt_displ_consistency&& prt_bool_brem);
 
 
 
@@ -506,6 +642,8 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   var_dict[std::string("prt_bool_hf")] = double(prt_bool_hf);
   var_dict[std::string("prt_bool_fd_r")] = double(prt_bool_fd_r);
   var_dict[std::string("prt_bool_pid")] = double(prt_bool_pid);
+
+  var_dict[std::string("prt_bool_prmpt_displ_consistency")] = double(prt_bool_prmpt_displ_consistency);
 
 
   var_dict[std::string("prt_bool_trigger_cuts")] = double(prt_bool_trigger_cuts);
@@ -569,6 +707,7 @@ void Plot_hists_X2ApGm::Ap_Anal(unsigned mum)
   prt_bool_pid      = bool(first_variables[std::string("prt_bool_pid")]);
 
   prt_bool_necessary_cuts = bool(first_variables[std::string("prt_bool_necessary_cuts")]);
+  prt_bool_prmpt_displ_consistency = bool(first_variables[std::string("prt_bool_prmpt_displ_consistency")]);
 
   prt_bool_trigger_cuts = bool(first_variables[std::string("prt_bool_trigger_cuts")]);
 
@@ -581,10 +720,25 @@ void Plot_hists_X2ApGm::Ap_Anal(unsigned mum)
 
   this->Ap_Plots(mum);
 
-  for (unsigned calo=0; calo < calo_px->size(); calo++) {
-    //if (calo_idx_pvr->at(calo) == tag_idx_pvr->at(mum)){ //YOu never know where a calo photon came from
-      this->Calo_Plots(calo, mum);
-    //}
+  if (prt_bool_necessary_cuts){
+    fn_calos->Fill(calo_px->size());
+    for (unsigned calo=0; calo < calo_px->size(); calo++) {
+
+      vector<double> dicalo_masses;
+      dicalo_masses.clear();
+
+      for (unsigned calo2=calo+1; calo2 < calo_px->size(); calo2++) {
+        TLorentzVector Lp_calo1 = TLorentzVector(calo_px->at(calo), calo_py->at(calo), calo_pz->at(calo),  calo_e->at(calo));
+        TLorentzVector Lp_calo2 = TLorentzVector(calo_px->at(calo2), calo_py->at(calo2), calo_pz->at(calo2),  calo_e->at(calo2));
+        TLorentzVector Lp_calo1_calo2 = Lp_calo1 + Lp_calo2;
+        dicalo_masses.push_back(Lp_calo1_calo2.M());
+
+      }
+
+      //if (calo_idx_pvr->at(calo) == tag_idx_pvr->at(mum)){ //YOu never know where a calo photon came from
+        this->Calo_Plots(calo, mum, dicalo_masses);
+      //}
+    }
   }
 
 }
@@ -636,8 +790,10 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
 
 
 
-void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
+void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum, vector<double> dicalo_masses)
 {
+
+
   TLorentzVector Lp_mu0 = TLorentzVector(prt_px->at(tag_idx_prt0->at(mum)), prt_py->at(tag_idx_prt0->at(mum)), prt_pz->at(tag_idx_prt0->at(mum)), prt_e->at(tag_idx_prt0->at(mum)));
   TLorentzVector Lp_mu1 = TLorentzVector(prt_px->at(tag_idx_prt1->at(mum)), prt_py->at(tag_idx_prt1->at(mum)), prt_pz->at(tag_idx_prt1->at(mum)), prt_e->at(tag_idx_prt1->at(mum)));
   TLorentzVector Lp_calo = TLorentzVector(calo_px->at(calo), calo_py->at(calo), calo_pz->at(calo),  calo_e->at(calo));
@@ -695,22 +851,112 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 
   double ecal_calo_pull_min = min(ecal_calo_pull_prt0, ecal_calo_pull_prt1);
 
+  // To determine whether the additional photons were brems photons we have to check the following:
+  // 1. The brem photon could have been emitted upstream of the magnet. This can be checked by looking at fDphiDeta_calo_mu0 for example.
+  //    The prt_bool_brem       = (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0); cut should veto brem from here.
+  // 2. The photon could have been emitted downstream of the magnet and should then hit the Ecal very
+  //    close to the corresponding muon. In this case ecal_calo_pull_min and ecal_calo_dist_min would be small.
+  // 3. The photon could have been emitted during the magnet. Then, the calo cluster should lie on the line between prt_ecal_face_x and prt_ecal_face_x_orig_dir.
+  //    Let us calculate the projection onto this line and the distance from it
+
+  idx_mu  = tag_idx_prt0->at(mum); //This is really muon 1
+  idx_h   = tag_idx_prt1->at(mum); //This is really muon 2
+  idx_pvr = tag_idx_pvr->at(mum);
+
+  double z_ecal = 12655.;
+
+  double prt_ecal_face_x_orig_dir0= prt_x->at(idx_mu) + prt_px->at(idx_mu) / prt_pz->at(idx_mu) * (z_ecal - prt_z->at(idx_mu));
+  double prt_ecal_face_y_orig_dir0= prt_y->at(idx_mu) + prt_py->at(idx_mu) / prt_pz->at(idx_mu) * (z_ecal - prt_z->at(idx_mu));
+
+  double prt_ecal_face_x_orig_dir1= prt_x->at(idx_h) + prt_px->at(idx_h) / prt_pz->at(idx_h) * (z_ecal - prt_z->at(idx_h));
+  double prt_ecal_face_y_orig_dir1= prt_y->at(idx_h) + prt_py->at(idx_h) / prt_pz->at(idx_h) * (z_ecal - prt_z->at(idx_h));
+
+
+  // A line in linear algebra is described by x = h + t * n,  where t is a scalar and n a unit vector.
+  // h = a; n = (b - a) normalised;
+  // Let us calculate the projection of a point p onto this line and the distance from it
+  TVector2 c = TVector2(calo_x->at(calo), calo_y->at(calo));
+
+  TVector2 a0 = TVector2(prt_ecal_face_x_orig_dir0, prt_ecal_face_y_orig_dir0); //
+  TVector2 b0 = TVector2(prt_ecal_face_x->at(idx_mu), prt_ecal_face_y->at(idx_mu));
+  TVector2 ab0 = b0 - a0;
+  double ab_mag0 = ab0.Mod();
+  TVector2 ab_unit0 = ab0.Unit();
+  TVector2 ab_anti_unit0 = TVector2(-ab_unit0.Y(), ab_unit0.X());
+  TVector2 p0 = a0 + (ab_unit0*(c-a0))*ab_unit0;
+
+
+  TVector2 a1 = TVector2(prt_ecal_face_x_orig_dir1, prt_ecal_face_y_orig_dir1); //
+  TVector2 b1 = TVector2(prt_ecal_face_x->at(idx_h), prt_ecal_face_y->at(idx_h));
+  TVector2 ab1 = b1 - a1;
+  double ab_mag1 = ab1.Mod();
+  TVector2 ab_unit1 = ab1.Unit();
+  TVector2 ab_anti_unit1 = TVector2(-ab_unit1.Y(), ab_unit1.X());
+  TVector2 p1 = a1 + (ab_unit1*(c-a1))*ab_unit1;
+
+
+  TVector2 p, a, b, ab_unit, ab_anti_unit;
+  double ab_mag;
+
+  if ( (c - p0).Mod() < (c - p1).Mod() ){ // Right now selecting the worse one
+    p=p0; a=a0; b=b0; ab_unit=ab_unit0; ab_anti_unit=ab_anti_unit0; ab_mag=ab_mag0;
+  }else{
+    p=p1; a=a1; b=b1; ab_unit=ab_unit1; ab_anti_unit=ab_anti_unit1; ab_mag=ab_mag1;
+  }
+
+  //assert false;
+  //assert ((c == p0 +  ab_anti_unit0* (c - p0).Mod() ) && (c == p0 -  ab_anti_unit0* (c - p0).Mod() ));
+  // Following the vector formulation on https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+
+  double brem_test_AP = (p - a).Mod();
+  double brem_test_PC = (c - p).Mod();
+  double brem_test_AC = (c - a).Mod();
+  double brem_test_BC = (c - b).Mod();
+  double brem_test_BP = (p - b).Mod();
+  double brem_test_AB = (b - a).Mod();
+  double brem_test_2D_x = ((p - a)*ab_unit) / ab_mag;
+  double brem_test_2D_y = ((c - p)*ab_anti_unit) / ab_mag;
+
+
 
 
 
   //std::cout << "tag_calo_mu1_mu2_m : " << tag_calo_mu1_mu2_m << std::endl;
   if ((tag_calo_mu0_mu1_m < 1100.0) && (calo_eta->at(calo) > 2.) && (calo_eta->at(calo) <4.5) && (calo_n_photon_hypos->at(calo) ==1)){ // Only if the calo A' pair has mass less than 1.1 GeV fill hists.
-    if (prt_bool_necessary_cuts && Lp_mu0_mu1.Pt() > 1000) {  //mu mu pt cut new
+    //if (prt_bool_prmpt_displ_consistency && true) {
+    if (true) {  //mu mu pt cut new
       fM_require_calo->Fill(tag_dtf_m->at(mum));
       fM_tag_calo->Fill(tag_calo_mu0_mu1_m);
+
+      double dicalo_mass_close_pi0 = -100000.;
+      for(unsigned di_i = 0; di_i < dicalo_masses.size(); di_i++){
+        fM_dicalo->Fill(dicalo_masses.at(di_i));
+        fM_calomumu_calocalo -> Fill(tag_calo_mu0_mu1_m, dicalo_masses.at(di_i));
+        fM_calomumu_calocalo_d -> Fill(tag_calo_mu0_mu1_m, dicalo_masses.at(di_i));
+
+        if ( abs(dicalo_masses.at(di_i) - 134.98) < abs(dicalo_mass_close_pi0 - 134.98)   ) dicalo_mass_close_pi0 = dicalo_masses.at(di_i);
+        //std::cout << "dicalo_mass_close_pi0 : " << dicalo_mass_close_pi0 << "\t dicalo_masses.at(di_i) " << dicalo_masses.at(di_i) << std::endl;
+      }
+      //std::cout << "dicalo_mass_close_pi0 : " << dicalo_mass_close_pi0 << std::endl;
+
+      if (dicalo_mass_close_pi0 != -100000.) fM_calomumu_calocalo_closepi0 -> Fill(tag_calo_mu0_mu1_m, dicalo_mass_close_pi0);
+
+
+
 
 
 
       // Fill Histograms in strict calo mu mu bins.
-      //if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m )){
-      if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m ) && (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0)){
+      if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m )){
+      //if ((500 < tag_calo_mu0_mu1_m ) && (600 > tag_calo_mu0_mu1_m ) && (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0)){
+
+        for(unsigned di_i = 0; di_i < dicalo_masses.size(); di_i++){
+          fM_mumu_calocalo_m_eta -> Fill(tag_mu0_mu1_m, dicalo_masses.at(di_i));
+        }
+
+
         fM_require_calo_at_m_eta->Fill(tag_dtf_m->at(mum));
-        if ( (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0) ){fM_require_calo_at_m_eta_no_brem->Fill(tag_dtf_m->at(mum));}
+        //if ( (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0) ){fM_require_calo_at_m_eta_no_brem->Fill(tag_dtf_m->at(mum));}
 
         scatter_ecal_calo_dist_m_eta.push_back(ecal_calo_dist_min);
         scatter_ecal_calo_pull_m_eta.push_back(ecal_calo_pull_min);
@@ -742,6 +988,13 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
           }
      	  }
 
+        fDphiDeta_calo_mu0_m_eta->Fill(Lp_calo.DeltaPhi(Lp_mu0), Lp_calo.Eta() - Lp_mu0.Eta());
+
+        fDphiDeta_calo_m_eta->Fill(calo_phi->at(calo), calo_eta->at(calo));
+        fET_calo_m_eta->Fill(TMath::Sqrt(pow(calo_m->at(calo),2.) + pow(calo_pt->at(calo), 2.)));
+
+        fphi_calo_m_eta->Fill(calo_phi->at(calo));
+        feta_calo_m_eta->Fill(calo_eta->at(calo));
 
         fangle_calo_mu0_m_eta->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
         fangle_calo_mu1_m_eta->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
@@ -751,6 +1004,9 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 
         fDeta_calo_mu0_m_eta->Fill(Lp_calo.Eta() - Lp_mu0.Eta() );
         fDeta_calo_mu1_m_eta->Fill(Lp_calo.Eta() - Lp_mu1.Eta() );
+
+        //if ( TMath::Sqrt(pow(Lp_calo.Eta() - Lp_mu0.Eta(), 2.0) + pow(TVector2::Phi_mpi_pi(Lp_calo.DeltaPhi(Lp_mu0)), 2.)) != Lp_calo.DeltaR(Lp_mu0) )  {  std::cout << "Problems calculating delta R" << std::endl;}
+        if ( TMath::Sqrt(pow(Lp_calo.Eta() - Lp_mu0.Eta(), 2.0) + pow(Lp_calo.DeltaPhi(Lp_mu0), 2.)) != Lp_calo.DeltaR(Lp_mu0) )  {  std::cout << "Problems calculating delta R" << std::endl;}
 
         fDR_calo_mu0_m_eta->Fill(Lp_calo.DeltaR(Lp_mu0));
         fDR_calo_mu1_m_eta->Fill(Lp_calo.DeltaR(Lp_mu1));
@@ -762,6 +1018,15 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 
         fecal_calo_pull_m_eta->Fill(ecal_calo_pull_min);
         fecal_calo_dist_m_eta->Fill(ecal_calo_dist_min);
+
+        fbrem_test_AP_m_eta->Fill(brem_test_AP);
+        fbrem_test_PC_m_eta->Fill(brem_test_PC);
+        fbrem_test_AC_m_eta->Fill(brem_test_AC);
+        fbrem_test_BC_m_eta->Fill(brem_test_BC);
+        fbrem_test_BP_m_eta->Fill(brem_test_BP);
+        fbrem_test_AB_m_eta->Fill(brem_test_AB);
+        fbrem_test_2D_m_eta->Fill(brem_test_2D_x, brem_test_2D_y);
+
       } else{
 
         scatter_ecal_calo_dist_not_m_eta.push_back(ecal_calo_dist_min);
@@ -770,6 +1035,14 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         dalitz_mu0_mu1_not_m_eta.push_back(tag_mu0_mu1_m);
         dalitz_calo_mu0_not_m_eta.push_back(tag_calo_mu0_m);
         dalitz_calo_mu1_not_m_eta.push_back(tag_calo_mu1_m);
+
+        fDphiDeta_calo_mu0_not_m_eta->Fill(Lp_calo.DeltaPhi(Lp_mu0), Lp_calo.Eta() - Lp_mu0.Eta());
+
+        fDphiDeta_calo_not_m_eta->Fill(calo_phi->at(calo), calo_eta->at(calo));
+        fET_calo_not_m_eta->Fill(TMath::Sqrt(pow(calo_m->at(calo),2.) + pow(calo_pt->at(calo), 2.)));
+
+        fphi_calo_not_m_eta->Fill(calo_phi->at(calo));
+        feta_calo_not_m_eta->Fill(calo_eta->at(calo));
 
         fangle_calo_mu0_not_m_eta->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
         fangle_calo_mu1_not_m_eta->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
@@ -791,6 +1064,15 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         fecal_calo_pull_not_m_eta->Fill(ecal_calo_pull_min);
         fecal_calo_dist_not_m_eta->Fill(ecal_calo_dist_min);
 
+        fbrem_test_AP_not_m_eta->Fill(brem_test_AP);
+        fbrem_test_PC_not_m_eta->Fill(brem_test_PC);
+        fbrem_test_AC_not_m_eta->Fill(brem_test_AC);
+        fbrem_test_BC_not_m_eta->Fill(brem_test_BC);
+        fbrem_test_BP_not_m_eta->Fill(brem_test_BP);
+        fbrem_test_AB_not_m_eta->Fill(brem_test_AB);
+        fbrem_test_2D_not_m_eta->Fill(brem_test_2D_x, brem_test_2D_y);
+
+
       }
 
 
@@ -800,6 +1082,14 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
       // Fill the sidebands for the background substraction
       // For Prompt
       if ((450 < tag_calo_mu0_mu1_m ) && (500 > tag_calo_mu0_mu1_m )){
+
+        fDphiDeta_calo_mu0_m_450_500->Fill(Lp_calo.DeltaPhi(Lp_mu0), Lp_calo.Eta() - Lp_mu0.Eta());
+
+        fDphiDeta_calo_m_450_500->Fill(calo_phi->at(calo), calo_eta->at(calo));
+        fET_calo_m_450_500->Fill(TMath::Sqrt(pow(calo_m->at(calo),2.) + pow(calo_pt->at(calo), 2.)));
+
+        fphi_calo_m_450_500->Fill(calo_phi->at(calo));
+        feta_calo_m_450_500->Fill(calo_eta->at(calo));
 
         fangle_calo_mu0_m_450_500->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
         fangle_calo_mu1_m_450_500->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
@@ -820,7 +1110,25 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
 
         fecal_calo_pull_m_450_500->Fill(ecal_calo_pull_min);
         fecal_calo_dist_m_450_500->Fill(ecal_calo_dist_min);
+
+        fbrem_test_AP_m_450_500->Fill(brem_test_AP);
+        fbrem_test_PC_m_450_500->Fill(brem_test_PC);
+        fbrem_test_AC_m_450_500->Fill(brem_test_AC);
+        fbrem_test_BC_m_450_500->Fill(brem_test_BC);
+        fbrem_test_BP_m_450_500->Fill(brem_test_BP);
+        fbrem_test_AB_m_450_500->Fill(brem_test_AB);
+        fbrem_test_2D_m_450_500->Fill(brem_test_2D_x, brem_test_2D_y);
+
       } else if ((600 < tag_calo_mu0_mu1_m ) && (650 > tag_calo_mu0_mu1_m )){
+
+        fDphiDeta_calo_mu0_m_600_650->Fill(Lp_calo.DeltaPhi(Lp_mu0), Lp_calo.Eta() - Lp_mu0.Eta());
+
+        fDphiDeta_calo_m_600_650->Fill(calo_phi->at(calo), calo_eta->at(calo));
+        fET_calo_m_600_650->Fill(TMath::Sqrt(pow(calo_m->at(calo),2.) + pow(calo_pt->at(calo), 2.)));
+
+        fphi_calo_m_600_650->Fill(calo_phi->at(calo));
+        feta_calo_m_600_650->Fill(calo_eta->at(calo));
+
         fangle_calo_mu0_m_600_650->Fill(Lp_calo.Angle(Lp_mu0.Vect()));
         fangle_calo_mu1_m_600_650->Fill(Lp_calo.Angle(Lp_mu1.Vect()));
 
@@ -841,9 +1149,32 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
         fecal_calo_pull_m_600_650->Fill(ecal_calo_pull_min);
         fecal_calo_dist_m_600_650->Fill(ecal_calo_dist_min);
 
+        fbrem_test_AP_m_600_650->Fill(brem_test_AP);
+        fbrem_test_PC_m_600_650->Fill(brem_test_PC);
+        fbrem_test_AC_m_600_650->Fill(brem_test_AC);
+        fbrem_test_BC_m_600_650->Fill(brem_test_BC);
+        fbrem_test_BP_m_600_650->Fill(brem_test_BP);
+        fbrem_test_AB_m_600_650->Fill(brem_test_AB);
+        fbrem_test_2D_m_600_650->Fill(brem_test_2D_x, brem_test_2D_y);
+
       }
 
       // Do the background substraction
+      fDphiDeta_calo_mu0_sideband->Add(fDphiDeta_calo_mu0_m_450_500, fDphiDeta_calo_mu0_m_600_650, 1., 1.);
+      fDphiDeta_calo_mu1_sideband->Add(fDphiDeta_calo_mu1_m_450_500, fDphiDeta_calo_mu1_m_600_650, 1., 1.);
+      fDphiDeta_calo_mu0_m_eta_backgr_subtr->Add(fDphiDeta_calo_mu0_m_eta, fDphiDeta_calo_mu0_sideband, 1., -1.);
+      fDphiDeta_calo_mu1_m_eta_backgr_subtr->Add(fDphiDeta_calo_mu1_m_eta, fDphiDeta_calo_mu1_sideband, 1., -1.);
+
+      fDphiDeta_calo_sideband->Add(fDphiDeta_calo_m_450_500, fDphiDeta_calo_m_600_650, 1., 1.);
+      fET_calo_sideband->Add(fET_calo_m_450_500, fET_calo_m_600_650, 1., 1.);
+      fDphiDeta_calo_m_eta_backgr_subtr->Add(fDphiDeta_calo_m_eta, fDphiDeta_calo_sideband, 1., -1.);
+      fET_calo_m_eta_backgr_subtr->Add(fET_calo_m_eta, fET_calo_sideband, 1., -1.);
+
+      fphi_calo_sideband->Add(fphi_calo_m_450_500, fphi_calo_m_600_650, 1., 1.);
+      feta_calo_sideband->Add(feta_calo_m_450_500, feta_calo_m_600_650, 1., 1.);
+      fphi_calo_m_eta_backgr_subtr->Add(fphi_calo_m_eta, fphi_calo_sideband, 1., -1.);
+      feta_calo_m_eta_backgr_subtr->Add(feta_calo_m_eta, feta_calo_sideband, 1., -1.);
+
       fangle_calo_mu0_sideband->Add(fangle_calo_mu0_m_450_500, fangle_calo_mu0_m_600_650, 1., 1.);
       fangle_calo_mu1_sideband->Add(fangle_calo_mu1_m_450_500, fangle_calo_mu1_m_600_650, 1., 1.);
       fangle_calo_mu0_m_eta_backgr_subtr->Add(fangle_calo_mu0_m_eta, fangle_calo_mu0_sideband, 1., -1.);
@@ -876,6 +1207,24 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum)
       fecal_calo_dist_sideband->Add(fecal_calo_dist_m_450_500, fecal_calo_dist_m_600_650, 1., 1.);
       fecal_calo_pull_m_eta_backgr_subtr->Add(fecal_calo_pull_m_eta, fecal_calo_pull_sideband, 1., -1.);
       fecal_calo_dist_m_eta_backgr_subtr->Add(fecal_calo_dist_m_eta, fecal_calo_dist_sideband, 1., -1.);
+
+      fbrem_test_AP_sideband->Add(fbrem_test_AP_m_450_500, fbrem_test_AP_m_600_650, 1., 1.);
+      fbrem_test_PC_sideband->Add(fbrem_test_PC_m_450_500, fbrem_test_PC_m_600_650, 1., 1.);
+      fbrem_test_AC_sideband->Add(fbrem_test_AC_m_450_500, fbrem_test_AC_m_600_650, 1., 1.);
+      fbrem_test_BC_sideband->Add(fbrem_test_BC_m_450_500, fbrem_test_BC_m_600_650, 1., 1.);
+      fbrem_test_BP_sideband->Add(fbrem_test_BP_m_450_500, fbrem_test_BP_m_600_650, 1., 1.);
+      fbrem_test_AB_sideband->Add(fbrem_test_AB_m_450_500, fbrem_test_AB_m_600_650, 1., 1.);
+      fbrem_test_2D_sideband->Add(fbrem_test_2D_m_450_500, fbrem_test_2D_m_600_650, 1., 1.);
+
+      fbrem_test_AP_m_eta_backgr_subtr->Add(fbrem_test_AP_m_eta, fbrem_test_AP_sideband, 1., -1.);
+      fbrem_test_PC_m_eta_backgr_subtr->Add(fbrem_test_PC_m_eta, fbrem_test_PC_sideband, 1., -1.);
+      fbrem_test_AC_m_eta_backgr_subtr->Add(fbrem_test_AC_m_eta, fbrem_test_AC_sideband, 1., -1.);
+      fbrem_test_BC_m_eta_backgr_subtr->Add(fbrem_test_BC_m_eta, fbrem_test_BC_sideband, 1., -1.);
+      fbrem_test_BP_m_eta_backgr_subtr->Add(fbrem_test_BP_m_eta, fbrem_test_BP_sideband, 1., -1.);
+      fbrem_test_AB_m_eta_backgr_subtr->Add(fbrem_test_AB_m_eta, fbrem_test_AB_sideband, 1., -1.);
+      fbrem_test_2D_m_eta_backgr_subtr->Add(fbrem_test_2D_m_eta, fbrem_test_2D_sideband, 1., -1.);
+
+
 
 
       // Fill for any mass range

@@ -6,20 +6,26 @@ from array import array
 import datetime
 
 SLEEP = False
+BACKUP = False
 
 PRECISE_TIME = False
 date_today = datetime.date.today().isoformat()
 if PRECISE_TIME:
     date_today = datetime.datetime.today().isoformat()[:-7]
 
+if BACKUP: backup_extension = "_backup"
+else: backup_extension = ""
+
 if sys.argv[1]== 'prmpt_and_displ':
-    name_extension = "Prmpt_and_Displ_X2ApGm"
-    file_name1 = 'NTuple_X2ApGm_all_files_plots_displ.root'
-    file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt.root'
+    name_extension = "Prmpt_and_Displ"
+    file_name1 = 'NTuple_X2ApGm_all_files_plots_displ{}.root'.format(backup_extension)
+    file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt{}.root'.format(backup_extension)
     if len(sys.argv) > 2:
-        file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_{}.root'.format(sys.arv[2])
+        file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_{}{}.root'.format(sys.argv[2], backup_extension)
+        name_extension += "_"+sys.argv[2]
         if len(sys.argv) > 3:
-            file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_{}.root'.format(sys.arv[3])
+            file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_{}{}.root'.format(sys.argv[3], backup_extension)
+            name_extension += "_"+sys.argv[3]
 
     print "\n\nRunning over ", file_name2, "\t", file_name1, "\n"
 
@@ -28,16 +34,18 @@ if sys.argv[1]== 'prmpt_and_displ':
 
 else:
     if sys.argv[1]== 'prmpt':
-        name_extension = "Prmpt_X2ApGm"
-        file_name = 'NTuple_X2ApGm_all_files_plots_prmpt.root'
+        name_extension = "Prmpt"
+        file_name = 'NTuple_X2ApGm_all_files_plots_prmpt{}.root'.format(backup_extension)
         if len(sys.argv) > 2:
             file_name = 'NTuple_X2ApGm_all_files_plots_prmpt_{}.root'.format(sys.argv[2])
+            name_extension += "_"+sys.argv[2]
 
     if sys.argv[1]== 'displ':
-        name_extension = "Displ_X2ApGm"
-        file_name = 'NTuple_X2ApGm_all_files_plots_displ.root'
+        name_extension = "Displ"
+        file_name = 'NTuple_X2ApGm_all_files_plots_displ{}.root'.format(backup_extension)
         if len(sys.argv) > 2:
             file_name = 'NTuple_X2ApGm_all_files_plots_displ_{}.root'.format(sys.argv[2])
+            name_extension += "_"+sys.argv[2]
 
     elif sys.argv[1]== 'Test':
         name_extension = "Test_X2ApGm"
@@ -53,16 +61,33 @@ else:
 #ROOT.gROOT.ProcessLine('.L lhcbStyle.C')
 #ROOT.gROOT.ProcessLine('lhcbStyle()')
 
-M1D_list, Angle_list, Angle_prmpt_displ_list, dalitz_name_type_list, simple_plot_list, scatter_name_type_list = [], [], [], [], [], []
+M1D_list, M2D_list, Angle_list, Angle2D_list, Angle_prmpt_displ_list, dalitz_name_type_list, simple_plot_list, scatter_name_type_list = [], [], [], [], [], [], [], []
+l_Angle, l_Angle2D = [], []
 
 if sys.argv[1]== 'prmpt_and_displ':
-    Angle_list += ['angle_calo_mu0', 'angle_calo_mu1', 'Dphi_calo_mu0', 'Dphi_calo_mu1', 'Deta_calo_mu0', 'Deta_calo_mu1', 'DR_calo_mu0', 'DR_calo_mu1', 'calo_cl']
-    Angle_list += ['ecal_calo_pull', 'ecal_calo_dist']
+    #Angle_list += ['angle_calo_mu0', 'angle_calo_mu1', 'Dphi_calo_mu0', 'Dphi_calo_mu1', 'Deta_calo_mu0', 'Deta_calo_mu1', 'DR_calo_mu0', 'DR_calo_mu1', 'calo_cl']
+    #Angle_list += ['ecal_calo_pull', 'ecal_calo_dist']
+    Angle_list += ["brem_test_AP", "brem_test_PC", "brem_test_AC", "brem_test_BC", "brem_test_BP", "brem_test_AB"]
+    Angle_list += ['calo_cl', 'ET_calo', 'phi_calo', 'eta_calo']
     #Angle_prmpt_displ_list += ['angle_calo_mu0', 'angle_calo_mu1'] # TOM
 elif sys.argv[1]== 'prmpt':
+    #l_Angle += ['angle_calo_mu0', 'Dphi_calo_mu0', 'Deta_calo_mu0', 'DR_calo_mu0']
+    for a in ['_m_eta', '_sideband', '_m_eta_backgr_subtr']: Angle_list += [b+a for b in l_Angle ]
+
+
+    #l_Angle2D += ['DphiDeta_calo_mu0']
+    #l_Angle2D += ['brem_test_2D', 'DphiDeta_calo']
+    for a in ['_m_eta', '_sideband', '_m_eta_backgr_subtr']: Angle2D_list += [b+a for b in l_Angle2D ]
+
+
     pass
 
 elif sys.argv[1]== 'displ':
+    #l = ['angle_calo_mu0', 'Dphi_calo_mu0', 'Deta_calo_mu0', 'DR_calo_mu0']
+    #for a in ['_m_eta', '_sideband', '_m_eta_backgr_subtr']: Angle_list += [b+a for b in l ]
+
+    #Angle2D_list += ['DphiDeta_calo_mu0_m_eta']
+    #Angle2D_list += ['brem_test_2D_m_eta', 'DphiDeta_calo_m_eta']
     pass
 elif sys.argv[1]== 'Test':
     pass
@@ -71,22 +96,31 @@ elif sys.argv[1]== 'Test':
 
 if (sys.argv[1]== 'displ') or (sys.argv[1]== 'prmpt'):
 
+    #Angle_list += ['n_calos', 'M_dicalo']
+
+    M2D_list += ['M_calomumu_calocalo', 'M_calomumu_calocalo_closepi0', 'M_mumu_calocalo_m_eta']
+
+    #M1D_list += ['M_dicalo']
+
+    M1D_list += ['M']
     #M1D_list += ['M', 'M_l0_p', 'M_hlt1_p', 'M_hlt2_p', 'M_strip_p', 'M_kin_p', 'M_data_consistency_p', 'M_patho_p', 'M_material_p' ]
     #M1D_list += ['M_require_calo_at_m_eta_no_brem']
-    M1D_list += ['M_require_calo', 'M_require_calo_at_m_eta', 'M_tag_calo', 'M_calo_mu0', 'M_calo_mu1']
+    ##M1D_list += ['M_require_calo', 'M_require_calo_at_m_eta', 'M_tag_calo', 'M_calo_mu0', 'M_calo_mu1']
     #M1D_list += ['M_require_calo_at_m_eta_no_brem']
 
 
     #Angle_list += ['angle_calo_mu0_m_eta', 'angle_calo_mu1_m_eta', 'Dphi_calo_mu0_m_eta', 'Dphi_calo_mu1_m_eta', 'Deta_calo_mu0_m_eta', 'Deta_calo_mu1_m_eta', 'DR_calo_mu0_m_eta', 'DR_calo_mu1_m_eta']
     #Angle_list += ['angle_calo_mu0_not_m_eta', 'angle_calo_mu1_not_m_eta', 'Dphi_calo_mu0_not_m_eta', 'Dphi_calo_mu1_not_m_eta', 'Deta_calo_mu0_not_m_eta', 'Deta_calo_mu1_not_m_eta', 'DR_calo_mu0_not_m_eta', 'DR_calo_mu1_not_m_eta']
 
-    dalitz_name_type_list += ['', '_m_eta']
+    ##dalitz_name_type_list += ['', '_m_eta']
+
     #dalitz_name_type_list += ['_not_m_eta']
     #dalitz_name_type_list += ['_m_eta_m_mu0_mu1_0_200', '_m_eta_m_mu0_mu1_200_300', '_m_eta_m_mu0_mu1_300_400', '_m_eta_m_mu0_mu1_400_500', '_m_eta_m_mu0_mu1_500_600']
 
-    #simple_plot_list += ['calo_cl']
+    simple_plot_list += ['calo_cl']
 
     #scatter_name_type_list += ['_ecal_calo_dist', '_ecal_calo_dist_m_eta']
+    pass
 
 
 
@@ -143,6 +177,7 @@ def M1D_plot_lin(cv, plots_key):
     M = tfile.Get(plots_key)
     M.SetStats(False)
     M.GetXaxis().SetRangeUser(200,2000);
+    M.GetXaxis().SetRangeUser(50,2000);
     #M.GetXaxis().SetRangeUser(770,785);
     #cv.SetLogx()
     cv.SetLogy()
@@ -151,16 +186,51 @@ def M1D_plot_lin(cv, plots_key):
     cv.Clear()
     if SLEEP: time.sleep(2.8)
 
+def M2D_plot_lin(cv, plots_key):
+    name = '{}_{}_{}.png'.format(name_extension, plots_key, date_today)
+    print "Plotting ", name
+    M = tfile.Get(plots_key)
+    #M.Rebin2D(5,5)
+    M.SetStats(False)
+    M.SetTitle(M.GetTitle()+" "+name_extension)
+    M.GetXaxis().SetRangeUser(50,1200);
+    M.GetYaxis().SetRangeUser(50,2000);
+    cv.SetLogx(0)
+    cv.SetLogy(0)
+    cv.SetLogz()
+    M.Draw('colz')
+    cv.SaveAs('plots/'+name)
+    cv.Clear()
+    if SLEEP: time.sleep(2.8)
+
+
+
 def Angle_plot(cv, plots_key):
     name = '{}_{}_{}.png'.format(name_extension, plots_key, date_today)
     print "Plotting ", name
     M = tfile.Get(plots_key)
     print M
     M.SetStats(False)
+    M.SetTitle(M.GetTitle()+" "+name_extension)
     #M.GetXaxis().SetRangeUser(0,3.2);
     #cv.SetLogx()
     #cv.SetLogy()
     M.Draw('hist')
+    cv.SaveAs('plots/'+name)
+    cv.Clear()
+    if SLEEP: time.sleep(2.8)
+
+def Angle2D_plot(cv, plots_key):
+    name = '{}_{}_{}.png'.format(name_extension, plots_key, date_today)
+    print "Plotting ", name
+    M = tfile.Get(plots_key)
+    print M
+    M.SetStats(False)
+    M.SetTitle(M.GetTitle()+" "+name_extension)
+    #M.GetXaxis().SetRangeUser(0,3.2);
+    cv.SetLogx(0)
+    cv.SetLogy(0)
+    M.Draw('colz')
     cv.SaveAs('plots/'+name)
     cv.Clear()
     if SLEEP: time.sleep(2.8)
@@ -440,9 +510,18 @@ c1 = ROOT.TCanvas('c1','c1',650,450)
 for plots_key in M1D_list:
     M1D_plot_lin(c1,plots_key)
 
+for plots_key in M2D_list:
+    M2D_plot_lin(c1,plots_key)
+
 for plots_key in Angle_list:
     if sys.argv[1]== 'prmpt_and_displ': Angle_prmpt_and_displ_plot(c1, plots_key)
     else: Angle_plot(c1, plots_key)
+
+for plots_key in Angle2D_list:
+    #if sys.argv[1]== 'prmpt_and_displ': Angle2D_plot(c1, plots_key)
+    #else:
+    Angle2D_plot(c1, plots_key)
+
 
 for plots_key in Angle_prmpt_displ_list:
     Angle_prmpt_and_displ_plot_Tom(c1, plots_key)
