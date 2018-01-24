@@ -145,6 +145,7 @@ public :
    vector<double>  *tag_l0_tos2;
    vector<double>  *tag_l0_tos3;
    vector<double>  *tag_l0_tis;
+   vector<double>  *tag_hlt1_tos3;
    vector<double>  *tag_hlt1_tos4;
    vector<double>  *tag_hlt1_tos5;
    vector<double>  *tag_hlt1_tis;
@@ -382,6 +383,7 @@ public :
    TBranch        *b_tag_l0_tos2;   //!
    TBranch        *b_tag_l0_tos3;   //!
    TBranch        *b_tag_l0_tis;   //!
+   TBranch        *b_tag_hlt1_tos3;   //!
    TBranch        *b_tag_hlt1_tos4;   //!
    TBranch        *b_tag_hlt1_tos5;   //!
    TBranch        *b_tag_hlt1_tis;   //!
@@ -519,10 +521,10 @@ public :
    TH1I *fn_calos;
    TH1F *fM_dicalo;
 
-   TH1F *fM, *fM_l0_p, *fM_l0_f, *fM_hlt1_p, *fM_hlt1_f, *fM_hlt2_p, *fM_hlt2_f, *fM_kin_p, *fM_kin_f, *fM_data_consistency_p, *fM_data_consistency_f, *fM_patho_p, *fM_patho_f, *fM_hf_p, *fM_hf_f, *fM_fd_r_p, *fM_fd_r_f, *fM_material_p, *fM_material_f, *fM_pid_p, *fM_pid_f, *fM_strip_p, *fM_strip_f;
-   TH1F *fM_require_calo, *fM_require_calo_at_m_eta, *fM_require_calo_at_m_eta_no_brem, *fM_tag_calo;
+   TH1F *fM, *fM_prmptfidu, *fM_l0_p, *fM_l0_f, *fM_hlt1_p, *fM_hlt1_f, *fM_hlt2_p, *fM_hlt2_f, *fM_kin_p, *fM_kin_f, *fM_data_consistency_p, *fM_data_consistency_f, *fM_patho_p, *fM_patho_f, *fM_hf_p, *fM_hf_f, *fM_fd_r_p, *fM_fd_r_f, *fM_material_p, *fM_material_f, *fM_pid_p, *fM_pid_f, *fM_strip_p, *fM_strip_f;
+   TH1F *fM_require_calo, *fM_require_calo_at_m_eta, *fM_require_calo_at_m_eta_tau_bigger_2ps, *fM_require_calo_at_m_eta_tau_smaller_2ps, *fM_require_calo_at_m_eta_r_bigger_5mm, *fM_require_calo_at_m_eta_r_smaller_5mm, *fM_require_calo_at_m_eta_no_brem, *fM_tag_calo;
    TH1F *fM_calo_mu0, *fM_calo_mu1, *fangle_calo_mu0, *fangle_calo_mu1, *fDphi_calo_mu0, *fDphi_calo_mu1, *fDeta_calo_mu0, *fDeta_calo_mu1, *fDR_calo_mu0, *fDR_calo_mu1, *fcalo_cl, *fecal_calo_pull, *fecal_calo_dist, *fbrem_test_AP, *fbrem_test_PC, *fbrem_test_AP_scaled, *fbrem_test_PC_scaled;
-   TH1F *fM_calo_mu0_m_eta, *fM_calo_mu1_m_eta, *fangle_calo_mu0_m_eta, *fangle_calo_mu1_m_eta, *fDphi_calo_mu0_m_eta, *fDphi_calo_mu1_m_eta, *fDeta_calo_mu0_m_eta, *fDeta_calo_mu1_m_eta, *fDR_calo_mu0_m_eta, *fDR_calo_mu1_m_eta, *fcalo_cl_m_eta, *fecal_calo_pull_m_eta, *fecal_calo_dist_m_eta, *fET_calo_m_eta, *fphi_calo_m_eta, *feta_calo_m_eta;
+   TH1F *fM_calo_mu0_m_eta, *fM_calo_mu1_m_eta, *fangle_calo_mu0_m_eta, *fangle_calo_mu1_m_eta, *fDphi_calo_mu0_m_eta, *fDphi_calo_mu1_m_eta, *fDeta_calo_mu0_m_eta, *fDeta_calo_mu1_m_eta, *fDR_calo_mu0_m_eta, *fDR_calo_mu1_m_eta, *fcalo_cl_m_eta, *fcalo_cl_m_eta_prmptfidu, *fecal_calo_pull_m_eta, *fecal_calo_dist_m_eta, *fET_calo_m_eta, *fET_calo_m_eta_prmptfidu, *fphi_calo_m_eta , *fphi_calo_m_eta_prmptfidu, *feta_calo_m_eta, *feta_calo_m_eta_prmptfidu;
    TH1F *fM_calo_mu0_not_m_eta, *fM_calo_mu1_not_m_eta, *fangle_calo_mu0_not_m_eta, *fangle_calo_mu1_not_m_eta, *fDphi_calo_mu0_not_m_eta, *fDphi_calo_mu1_not_m_eta, *fDeta_calo_mu0_not_m_eta, *fDeta_calo_mu1_not_m_eta, *fDR_calo_mu0_not_m_eta, *fDR_calo_mu1_not_m_eta, *fcalo_cl_not_m_eta, *fecal_calo_pull_not_m_eta, *fecal_calo_dist_not_m_eta, *fET_calo_not_m_eta, *fphi_calo_not_m_eta, *feta_calo_not_m_eta;
    TH1F *fM_calo_mu0_m_eta_backgr_subtr, *fM_calo_mu1_m_eta_backgr_subtr, *fangle_calo_mu0_m_eta_backgr_subtr, *fangle_calo_mu1_m_eta_backgr_subtr, *fDphi_calo_mu0_m_eta_backgr_subtr, *fDphi_calo_mu1_m_eta_backgr_subtr, *fDeta_calo_mu0_m_eta_backgr_subtr, *fDeta_calo_mu1_m_eta_backgr_subtr, *fDR_calo_mu0_m_eta_backgr_subtr, *fDR_calo_mu1_m_eta_backgr_subtr, *fcalo_cl_m_eta_backgr_subtr, *fecal_calo_pull_m_eta_backgr_subtr, *fecal_calo_dist_m_eta_backgr_subtr, *fET_calo_m_eta_backgr_subtr, *fphi_calo_m_eta_backgr_subtr, *feta_calo_m_eta_backgr_subtr;
 
@@ -530,21 +532,24 @@ public :
    TH1F *fM_calo_mu0_m_600_650, *fM_calo_mu1_m_600_650, *fangle_calo_mu0_m_600_650, *fangle_calo_mu1_m_600_650, *fDphi_calo_mu0_m_600_650, *fDphi_calo_mu1_m_600_650, *fDeta_calo_mu0_m_600_650, *fDeta_calo_mu1_m_600_650, *fDR_calo_mu0_m_600_650, *fDR_calo_mu1_m_600_650, *fcalo_cl_m_600_650, *fecal_calo_pull_m_600_650, *fecal_calo_dist_m_600_650, *fET_calo_m_600_650, *fphi_calo_m_600_650, *feta_calo_m_600_650;
    TH1F *fM_calo_mu0_sideband, *fM_calo_mu1_sideband, *fangle_calo_mu0_sideband, *fangle_calo_mu1_sideband, *fDphi_calo_mu0_sideband, *fDphi_calo_mu1_sideband, *fDeta_calo_mu0_sideband, *fDeta_calo_mu1_sideband, *fDR_calo_mu0_sideband, *fDR_calo_mu1_sideband, *fcalo_cl_sideband , *fecal_calo_pull_sideband, *fecal_calo_dist_sideband, *fET_calo_sideband, *fphi_calo_sideband, *feta_calo_sideband;
 
+   TH1F *fQ_require_calo_at_m_eta_r_bigger_5mm, *fQ_require_calo_at_m_eta_r_smaller_5mm;
+
    TH1F *fbrem_test_AP_m_eta, *fbrem_test_PC_m_eta, *fbrem_test_AC_m_eta, *fbrem_test_BC_m_eta, *fbrem_test_BP_m_eta, *fbrem_test_AB_m_eta;
+   TH1F *fbrem_test_AP_m_eta_prmptfidu, *fbrem_test_PC_m_eta_prmptfidu, *fbrem_test_AC_m_eta_prmptfidu, *fbrem_test_BC_m_eta_prmptfidu, *fbrem_test_BP_m_eta_prmptfidu, *fbrem_test_AB_m_eta_prmptfidu;
    TH1F *fbrem_test_AP_not_m_eta, *fbrem_test_PC_not_m_eta, *fbrem_test_AC_not_m_eta, *fbrem_test_BC_not_m_eta, *fbrem_test_BP_not_m_eta, *fbrem_test_AB_not_m_eta;
    TH1F *fbrem_test_AP_m_eta_backgr_subtr, *fbrem_test_PC_m_eta_backgr_subtr, *fbrem_test_AC_m_eta_backgr_subtr, *fbrem_test_BC_m_eta_backgr_subtr, *fbrem_test_BP_m_eta_backgr_subtr, *fbrem_test_AB_m_eta_backgr_subtr;
    TH1F *fbrem_test_AP_m_450_500, *fbrem_test_PC_m_450_500, *fbrem_test_AC_m_450_500, *fbrem_test_BC_m_450_500, *fbrem_test_BP_m_450_500, *fbrem_test_AB_m_450_500;
    TH1F *fbrem_test_AP_m_600_650, *fbrem_test_PC_m_600_650, *fbrem_test_AC_m_600_650, *fbrem_test_BC_m_600_650, *fbrem_test_BP_m_600_650, *fbrem_test_AB_m_600_650;
    TH1F *fbrem_test_AP_sideband, *fbrem_test_PC_sideband, *fbrem_test_AC_sideband, *fbrem_test_BC_sideband, *fbrem_test_BP_sideband, *fbrem_test_AB_sideband;
 
-   TH2F *fbrem_test_2D_m_eta, *fbrem_test_2D_not_m_eta, *fbrem_test_2D_m_eta_backgr_subtr, *fbrem_test_2D_m_450_500, *fbrem_test_2D_m_600_650, *fbrem_test_2D_sideband;
+   TH2F *fbrem_test_2D_m_eta, *fbrem_test_2D_m_eta_prmptfidu, *fbrem_test_2D_not_m_eta, *fbrem_test_2D_m_eta_backgr_subtr, *fbrem_test_2D_m_450_500, *fbrem_test_2D_m_600_650, *fbrem_test_2D_sideband;
 
-   TH2F *fDphiDeta_calo_mu0, *fDphiDeta_calo_mu0_m_eta, *fDphiDeta_calo_mu0_not_m_eta, *fDphiDeta_calo_mu0_m_eta_backgr_subtr, *fDphiDeta_calo_mu0_m_450_500, *fDphiDeta_calo_mu0_m_600_650, *fDphiDeta_calo_mu0_sideband;
+   TH2F *fDphiDeta_calo_mu0, *fDphiDeta_calo_mu0_m_eta, *fDphiDeta_calo_mu0_m_eta_prmptfidu, *fDphiDeta_calo_mu0_not_m_eta, *fDphiDeta_calo_mu0_m_eta_backgr_subtr, *fDphiDeta_calo_mu0_m_450_500, *fDphiDeta_calo_mu0_m_600_650, *fDphiDeta_calo_mu0_sideband;
    TH2F *fDphiDeta_calo_mu1, *fDphiDeta_calo_mu1_m_eta, *fDphiDeta_calo_mu1_not_m_eta, *fDphiDeta_calo_mu1_m_eta_backgr_subtr, *fDphiDeta_calo_mu1_m_450_500, *fDphiDeta_calo_mu1_m_600_650, *fDphiDeta_calo_mu1_sideband;
 
-   TH2F *fDphiDeta_calo_m_eta, *fDphiDeta_calo_not_m_eta, *fDphiDeta_calo_m_eta_backgr_subtr, *fDphiDeta_calo_m_450_500, *fDphiDeta_calo_m_600_650, *fDphiDeta_calo_sideband;
+   TH2F *fDphiDeta_calo_m_eta, *fDphiDeta_calo_m_eta_prmptfidu, *fDphiDeta_calo_not_m_eta, *fDphiDeta_calo_m_eta_backgr_subtr, *fDphiDeta_calo_m_450_500, *fDphiDeta_calo_m_600_650, *fDphiDeta_calo_sideband;
 
-   TH2F *fM_calomumu_calocalo, *fM_calomumu_calocalo_d, *fM_calomumu_calocalo_closepi0, *fM_mumu_calocalo_m_eta;
+   TH2F *fM_calomumu_calocalo, *fM_calomumu_calocalo_d, *fM_calomumu_calocalo_closepi0, *fM_mumu_calocalo_m_eta, *fM_mumu_calocalo_m_eta_prmptfidu;
 
    std::map<std::string, double> first_variables, second_variables;
 
@@ -558,7 +563,7 @@ public :
    vector<vector<Double_t>> dalitz_mu0_mu1_m_eta_m_mu0_mu1_separated, dalitz_calo_mu0_m_eta_m_mu0_mu1_separated, dalitz_calo_mu1_m_eta_m_mu0_mu1_separated;
 
 
-   double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps;
+   double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps, tag_Q;
    double mu_p, mu_pt, mu_eta, h_p, h_pt, h_eta;
    double tag_tau_ps_1, tag_tau_ps_2, tag_d2_1, tag_d2_2, tag_m_1, tag_m_2, tag_dtf_chi2_1, tag_dtf_chi2_2;
 
@@ -719,6 +724,7 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    tag_l0_tos2 = 0;
    tag_l0_tos3 = 0;
    tag_l0_tis = 0;
+   tag_hlt1_tos3 = 0;
    tag_hlt1_tos4 = 0;
    tag_hlt1_tos5 = 0;
    tag_hlt1_tis = 0;
@@ -962,6 +968,7 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("tag_l0_tos2", &tag_l0_tos2, &b_tag_l0_tos2);
    fChain->SetBranchAddress("tag_l0_tos3", &tag_l0_tos3, &b_tag_l0_tos3);
    fChain->SetBranchAddress("tag_l0_tis", &tag_l0_tis, &b_tag_l0_tis);
+   fChain->SetBranchAddress("tag_hlt1_tos3", &tag_hlt1_tos3, &b_tag_hlt1_tos3);
    fChain->SetBranchAddress("tag_hlt1_tos4", &tag_hlt1_tos4, &b_tag_hlt1_tos4);
    fChain->SetBranchAddress("tag_hlt1_tos5", &tag_hlt1_tos5, &b_tag_hlt1_tos5);
    fChain->SetBranchAddress("tag_hlt1_tis", &tag_hlt1_tis, &b_tag_hlt1_tis);

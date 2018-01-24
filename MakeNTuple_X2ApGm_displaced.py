@@ -12,6 +12,7 @@ run_ganga = True
 if not run_ganga:
     from GaudiConf import IOHelper
     IOHelper('ROOT').inputFiles(['00059560_00000002_1.ew.dst'],clear=True)
+    #IOHelper('ROOT').inputFiles(['00053752_00007502_1.leptons.mdst'],clear=True) #Prompt case
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/MITParticleMakers')
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/TTreeTools')
 

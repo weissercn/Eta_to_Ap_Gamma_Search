@@ -12,7 +12,7 @@ MAGDOWN  = True
 TEST      = False
 
 jname       = 'Data.2016.6500.X2ApGm'
-tag         = 'calo_pos_added'
+tag         = 'pheonix'
 
 if DISPLACED:
     jname  += '_displ'

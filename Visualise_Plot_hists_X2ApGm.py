@@ -86,8 +86,14 @@ elif sys.argv[1]== 'displ':
     #l = ['angle_calo_mu0', 'Dphi_calo_mu0', 'Deta_calo_mu0', 'DR_calo_mu0']
     #for a in ['_m_eta', '_sideband', '_m_eta_backgr_subtr']: Angle_list += [b+a for b in l ]
 
-    #Angle2D_list += ['DphiDeta_calo_mu0_m_eta']
-    #Angle2D_list += ['brem_test_2D_m_eta', 'DphiDeta_calo_m_eta']
+    #Angle2D_list += ['DphiDeta_calo_mu0_m_eta', 'DphiDeta_calo_mu0_m_eta_prmptfidu']
+    #Angle2D_list += ['brem_test_2D_m_eta']
+    #Angle2D_list += ['DphiDeta_calo_m_eta', 'DphiDeta_calo_m_eta_prmptfidu']
+    #M2D_list += ['M_mumu_calocalo_m_eta_prmptfidu']
+
+    M1D_list += ['M', 'M_prmptfidu', 'M_require_calo', 'M_require_calo_at_m_eta', 'M_require_calo_at_m_eta_r_bigger_5mm', 'M_require_calo_at_m_eta_r_smaller_5mm']
+    M1D_list += ['Q_require_calo_at_m_eta_r_bigger_5mm', 'Q_require_calo_at_m_eta_r_smaller_5mm']
+    M1D_list += ['M_tag_calo']
     pass
 elif sys.argv[1]== 'Test':
     pass
@@ -117,7 +123,7 @@ if (sys.argv[1]== 'displ') or (sys.argv[1]== 'prmpt'):
     #dalitz_name_type_list += ['_not_m_eta']
     #dalitz_name_type_list += ['_m_eta_m_mu0_mu1_0_200', '_m_eta_m_mu0_mu1_200_300', '_m_eta_m_mu0_mu1_300_400', '_m_eta_m_mu0_mu1_400_500', '_m_eta_m_mu0_mu1_500_600']
 
-    simple_plot_list += ['calo_cl']
+    #simple_plot_list += ['calo_cl']
 
     #scatter_name_type_list += ['_ecal_calo_dist', '_ecal_calo_dist_m_eta']
     pass
@@ -176,8 +182,9 @@ def M1D_plot_lin(cv, plots_key):
     print "Plotting ", name
     M = tfile.Get(plots_key)
     M.SetStats(False)
-    M.GetXaxis().SetRangeUser(200,2000);
-    M.GetXaxis().SetRangeUser(50,2000);
+    #M.GetXaxis().SetRangeUser(200,2000);
+    #M.GetXaxis().SetRangeUser(50,2000);
+    M.GetXaxis().SetRangeUser(0,600);
     #M.GetXaxis().SetRangeUser(770,785);
     #cv.SetLogx()
     cv.SetLogy()
@@ -239,25 +246,29 @@ def Angle_prmpt_and_displ_plot(cv, plots_key):
     name = '{}_{}_{}.png'.format(name_extension, plots_key, date_today)
     print "Plotting ", name
     M1 = tfile1.Get(plots_key+'_m_eta') #displ
-    M2 = tfile2.Get(plots_key+'_m_eta_backgr_subtr') #prompt
-    M3 = tfile2.Get(plots_key+'_sideband') #prompt
-    M4 = tfile2.Get(plots_key+'_m_eta') #prompt
+    M2 = tfile1.Get(plots_key+'_m_eta_prmptfidu') #displ
+    M3 = tfile2.Get(plots_key+'_m_eta') #prompt
+    M4 = tfile2.Get(plots_key+'_sideband') #prompt
+    M5 = tfile2.Get(plots_key+'_m_eta_backgr_subtr') #prompt
+
     print M1
     M1.SetStats(False)
     M1.Scale(1./M1.Integral());
     M2.Scale(1./M2.Integral());
     M3.Scale(1./M3.Integral());
     M4.Scale(1./M4.Integral());
+    M5.Scale(1./M5.Integral());
     M1.SetLineColor(ROOT.kRed)
-    M2.SetLineColor(ROOT.kCyan)
+    M2.SetLineColor(ROOT.kOrange)
     M3.SetLineColor(ROOT.kBlack)
     M4.SetLineColor(ROOT.kBlue)
+    M5.SetLineColor(ROOT.kCyan)
     M1.GetYaxis().SetTitle("Fraction / bin width");
 
     #M.GetXaxis().SetRangeUser(0,3.2);
     #cv.SetLogx()
     #cv.SetLogy()
-    maximum = 1.1*max(M1.GetMaximum(), M2.GetMaximum(), M3.GetMaximum(), M4.GetMaximum())
+    maximum = 1.1*max(M1.GetMaximum(), M2.GetMaximum(), M3.GetMaximum(), M4.GetMaximum(), M5.GetMaximum())
     print 'maximum : ', maximum
     M1.SetMaximum(maximum)
 
@@ -265,13 +276,16 @@ def Angle_prmpt_and_displ_plot(cv, plots_key):
     M2.Draw('histsame')
     M3.Draw('histsame')
     M4.Draw('histsame')
+    M5.Draw('histsame')
 
     if plots_key == "calo_cl":  leg = ROOT.TLegend(0.1,0.55,0.3,0.9);
     else:    leg = ROOT.TLegend(0.7,0.55,0.9,0.9);
     leg.AddEntry(M1,"displ eta mass", "l");
-    leg.AddEntry(M4,"prmpt eta mass","l");
-    leg.AddEntry(M2,"#splitline{prmpt eta mass}{bckgnd sbtrctd}","l");
-    leg.AddEntry(M3,"prmpt sideband","l");
+    leg.AddEntry(M2,"displ eta mass prmptfidu", "l");
+    leg.AddEntry(M3,"prmpt eta mass","l");
+    leg.AddEntry(M4,"prmpt sideband","l");
+    leg.AddEntry(M5,"#splitline{prmpt eta mass}{bckgnd sbtrctd}","l");
+
     leg.Draw("same");
     cv.SaveAs('plots/'+name)
     cv.Clear()

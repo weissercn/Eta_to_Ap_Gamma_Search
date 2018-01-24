@@ -7,6 +7,8 @@ void Plot_hists_X2ApGm_deploy(TString temp_option ){
   TObjArray *t_temp_option = temp_option.Tokenize(" ");
   TString option = ((TObjString *)(t_temp_option->At(0)))->String();
   TString option2 = ((TObjString *)(t_temp_option->At(1)))->String();
+  int nentries = 0;
+  if(t_temp_option->GetEntries()>2){nentries = (((TObjString *)(t_temp_option->At(2)))->String()).Atoi(); std::cout << nentries << " events " << std::endl;}
 
   cout << "Options : " << option << ",\t" << option2 <<endl;
 
@@ -25,9 +27,13 @@ void Plot_hists_X2ApGm_deploy(TString temp_option ){
 
   TTree * t = (TTree *) _file0->Get("data");
 
+
+
+
   if (option == "Di" || option == "Test"){ t->Process("Plot_hists_X2ApGm.C",option);}
   //if (option == "prmpt" || option == "displ"){ t->Process("Plot_hists_X2ApGm.C++",option);} // force compilation
-  if (option == "prmpt" || option == "displ"){ t->Process("Plot_hists_X2ApGm.C+",option);} // compile if new
+  if(t_temp_option->GetEntries()>2){if (option == "prmpt" || option == "displ"){t->Process("Plot_hists_X2ApGm.C+",option, nentries);} }// compile if new
+  else{if (option == "prmpt" || option == "displ"){ t->Process("Plot_hists_X2ApGm.C+",option);}}// compile if new
   //t->Process("Plot_hists_RHNu.C",option);
   //t->Process("Plot_hists_RHNu.C+",option);
   //t->Process("Plot_hists_RHNu.C");
