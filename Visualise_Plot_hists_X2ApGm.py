@@ -93,6 +93,7 @@ elif sys.argv[1]== 'displ':
 
     M1D_list += ['M', 'M_prmptfidu', 'M_require_calo', 'M_require_calo_at_m_eta', 'M_require_calo_at_m_eta_r_bigger_5mm', 'M_require_calo_at_m_eta_r_smaller_5mm']
     M1D_list += ['Q_require_calo_at_m_eta_r_bigger_5mm', 'Q_require_calo_at_m_eta_r_smaller_5mm']
+    M1D_list += ['Q_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV', 'Q_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV']
     M1D_list += ['M_tag_calo']
     pass
 elif sys.argv[1]== 'Test':

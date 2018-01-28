@@ -100,13 +100,15 @@ JobInfo = {
                             'Type' : '2016',
                             'NFiles' : 30},
 
-    'Data.2016.6500.X2ApGm_displ.MagDown' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagDown/Real Data/Reco16/Stripping28/90000000/EW.DST',
+    'Data.2016.6500.X2ApGm_displ.MagDown' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagDown/Real Data/Reco16/Stripping28r1/90000000/DIMUON.DST',
+                            #'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagDown/Real Data/Reco16/Stripping28/90000000/EW.DST',
                             'CondDBTag' : 'cond-20161004',
                             'DDDBTag' : 'dddb-20150724',
                             'Type' : '2016',
                             'NFiles' : 30},
 
-    'Data.2016.6500.X2ApGm_displ.MagUp' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagUp/Real Data/Reco16/Stripping28/90000000/EW.DST',
+    'Data.2016.6500.X2ApGm_displ.MagUp' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagUp/Real Data/Reco16/Stripping28r1/90000000/DIMUON.DST',
+                            #'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagUp/Real Data/Reco16/Stripping28/90000000/EW.DST',
                             'CondDBTag' : 'cond-20161004',
                             'DDDBTag' : 'dddb-20150724',
                             'Type' : '2016',
@@ -122,6 +124,62 @@ JobInfo = {
                             'CondDBTag' : 'cond-20161004',
                             'DDDBTag' : 'dddb-20150724',
                             'Type' : '2016',
+                            'NFiles' : 30},
+
+    ##############################################################################################
+
+    ##############################################################################################
+
+
+
+    'Data.X2ApGm.Displ.2016.MagDown' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagDown/Real Data/Reco16/Stripping28r1/90000000/DIMUON.DST',
+                            #'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagDown/Real Data/Reco16/Stripping28/90000000/EW.DST',
+                            'CondDBTag' : 'cond-20161004',
+                            'DDDBTag' : 'dddb-20150724',
+                            'Type' : '2016',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Displ.2016.MagUp' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagUp/Real Data/Reco16/Stripping28r1/90000000/DIMUON.DST',
+                            #'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagUp/Real Data/Reco16/Stripping28/90000000/EW.DST',
+                            'CondDBTag' : 'cond-20161004',
+                            'DDDBTag' : 'dddb-20150724',
+                            'Type' : '2016',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Prmpt.2016.MagDown' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagDown/Real Data/Turbo03/94000000/LEPTONS.MDST',
+                            'CondDBTag' : 'cond-20161004',
+                            'DDDBTag' : 'dddb-20150724',
+                            'Type' : '2016',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Prmpt.2016.MagUp' : { 'Input' : '/LHCb/Collision16/Beam6500GeV-VeloClosed-MagUp/Real Data/Turbo03/94000000/LEPTONS.MDST',
+                            'CondDBTag' : 'cond-20161004',
+                            'DDDBTag' : 'dddb-20150724',
+                            'Type' : '2016',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Displ.2017.MagDown' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagDown/Real Data/Reco17/Stripping29r1/90000000/DIMUON.DST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Displ.2017.MagUp' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagUp/Real Data/Reco17/Stripping29r1/90000000/DIMUON.DST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Prmpt.2017.MagDown' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagDown/Real Data/Turbo04/94000000/LEPTONS.MDST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.Prmpt.2017.MagUp' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagUp/Real Data/Turbo04/94000000/LEPTONS.MDST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
                             'NFiles' : 30}
 
     }

@@ -532,7 +532,7 @@ public :
    TH1F *fM_calo_mu0_m_600_650, *fM_calo_mu1_m_600_650, *fangle_calo_mu0_m_600_650, *fangle_calo_mu1_m_600_650, *fDphi_calo_mu0_m_600_650, *fDphi_calo_mu1_m_600_650, *fDeta_calo_mu0_m_600_650, *fDeta_calo_mu1_m_600_650, *fDR_calo_mu0_m_600_650, *fDR_calo_mu1_m_600_650, *fcalo_cl_m_600_650, *fecal_calo_pull_m_600_650, *fecal_calo_dist_m_600_650, *fET_calo_m_600_650, *fphi_calo_m_600_650, *feta_calo_m_600_650;
    TH1F *fM_calo_mu0_sideband, *fM_calo_mu1_sideband, *fangle_calo_mu0_sideband, *fangle_calo_mu1_sideband, *fDphi_calo_mu0_sideband, *fDphi_calo_mu1_sideband, *fDeta_calo_mu0_sideband, *fDeta_calo_mu1_sideband, *fDR_calo_mu0_sideband, *fDR_calo_mu1_sideband, *fcalo_cl_sideband , *fecal_calo_pull_sideband, *fecal_calo_dist_sideband, *fET_calo_sideband, *fphi_calo_sideband, *feta_calo_sideband;
 
-   TH1F *fQ_require_calo_at_m_eta_r_bigger_5mm, *fQ_require_calo_at_m_eta_r_smaller_5mm;
+   TH1F *fQ_require_calo_at_m_eta_r_bigger_5mm, *fQ_require_calo_at_m_eta_r_smaller_5mm, *fQ_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV, *fQ_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV;
 
    TH1F *fbrem_test_AP_m_eta, *fbrem_test_PC_m_eta, *fbrem_test_AC_m_eta, *fbrem_test_BC_m_eta, *fbrem_test_BP_m_eta, *fbrem_test_AB_m_eta;
    TH1F *fbrem_test_AP_m_eta_prmptfidu, *fbrem_test_PC_m_eta_prmptfidu, *fbrem_test_AC_m_eta_prmptfidu, *fbrem_test_BC_m_eta_prmptfidu, *fbrem_test_BP_m_eta_prmptfidu, *fbrem_test_AB_m_eta_prmptfidu;

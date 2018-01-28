@@ -163,6 +163,9 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    fQ_require_calo_at_m_eta_r_bigger_5mm = new TH1F("Q_require_calo_at_m_eta_r_bigger_5mm", "Q_require_calo_at_m_eta_r_bigger_5mm ; mu mu Q [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV;TEvts", 60, 0, 600);
    fQ_require_calo_at_m_eta_r_smaller_5mm = new TH1F("Q_require_calo_at_m_eta_r_smaller_5mm", "Q_require_calo_at_m_eta_r_smaller_5mm ;mu mu Q [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV;TEvts", 60, 0, 600);
 
+   fQ_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV = new TH1F("Q_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV", "Q_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV ; mu mu Q [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV;TEvts", 60, 0, 600);
+   fQ_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV = new TH1F("Q_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV", "Q_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV ;mu mu Q [MeV] when calo photon required and 500 < m(mu mu calo) < 600 MeV;TEvts", 60, 0, 600);
+
 
    fM_tag_calo = new TH1F("M_tag_calo", "M_tag_calo ;mu mu calo M [MeV];TEvts", nmbins2, mbins2);
 
@@ -846,137 +849,128 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
 
 void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum, vector<double> dicalo_masses)
 {
-
-
-  TLorentzVector Lp_mu0 = TLorentzVector(prt_px->at(tag_idx_prt0->at(mum)), prt_py->at(tag_idx_prt0->at(mum)), prt_pz->at(tag_idx_prt0->at(mum)), prt_e->at(tag_idx_prt0->at(mum)));
-  TLorentzVector Lp_mu1 = TLorentzVector(prt_px->at(tag_idx_prt1->at(mum)), prt_py->at(tag_idx_prt1->at(mum)), prt_pz->at(tag_idx_prt1->at(mum)), prt_e->at(tag_idx_prt1->at(mum)));
-  TLorentzVector Lp_calo = TLorentzVector(calo_px->at(calo), calo_py->at(calo), calo_pz->at(calo),  calo_e->at(calo));
-  TLorentzVector Lp_mu0_mu1 = Lp_mu0 + Lp_mu1;
-  TLorentzVector Lp_calo_mu0 = Lp_calo + Lp_mu0;
-  TLorentzVector Lp_calo_mu1 = Lp_calo + Lp_mu1;
-  TLorentzVector Lp_calo_mu0_mu1 = Lp_calo + Lp_mu0 + Lp_mu1;
-
-
-  //TLorentzVector Lx_mu0 = TLorentzVector(prt_x->at(tag_idx_prt0->at(mum)), prt_y->at(tag_idx_prt0->at(mum)), prt_z->at(tag_idx_prt0->at(mum)));
-  //TLorentzVector Lx_mu1 = TLorentzVector(prt_x->at(tag_idx_prt1->at(mum)), prt_y->at(tag_idx_prt1->at(mum)), prt_z->at(tag_idx_prt1->at(mum)));
-  //TLorentzVector Lx_calo = TLorentzVector(calo_x->at(calo), calo_y->at(calo), calo_z->at(calo));
-
-
   double tag_calo_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) + calo_pz->at(calo) , 2.0));
-  double tag_calo_mu0_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + calo_pz->at(calo) , 2.0));
-  double tag_calo_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt1->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt1->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt1->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt1->at(mum)) + calo_pz->at(calo) , 2.0));
-  //this should be very similar to tag_m->at(mum)
-  double tag_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) , 2.0));
-
-
-  //assert(1.1==1.2);
-  //assert(tag_calo_mu0_mu1_m == Lp_calo_mu0_mu1.M());
-  //assert(tag_calo_mu0_m == Lp_calo_mu0.M());
-  //assert(tag_calo_mu1_m == Lp_calo_mu1.M());
-  //assert(tag_mu0_mu1_m == Lp_mu0_mu1.M());
-
-  if(1.1==1.2){std::cout << "Assertions not working\n\n";}
-
-  if (((tag_calo_mu0_mu1_m - Lp_calo_mu0_mu1.M())/ (tag_calo_mu0_mu1_m + Lp_calo_mu0_mu1.M())) > 0.001 ){std::cout << "calo mu0 mu1 assertion error! \n\n" << std::endl;}
-  if (((tag_calo_mu0_m - Lp_calo_mu0.M())/ (tag_calo_mu0_m + Lp_calo_mu0.M())) >0.001){std::cout << "calo mu0 assertion error! \n\n" << std::endl;}
-  if (((tag_calo_mu1_m - Lp_calo_mu1.M())/ (tag_calo_mu1_m + Lp_calo_mu1.M())) >0.001){std::cout << "calo mu1 assertion error! \n\n" << std::endl;}
-  if (((tag_mu0_mu1_m - Lp_mu0_mu1.M())/ (tag_mu0_mu1_m + Lp_mu0_mu1.M())) > 0.001){std::cout << "mu0 mu1 assertion error! \n\n" << std::endl;}
-
-  // Distance between calo and muons
-  double ux_prt0 = prt_ecal_face_x->at(tag_idx_prt0->at(mum)) - calo_x->at(calo);
-  double uy_prt0 = prt_ecal_face_y->at(tag_idx_prt0->at(mum)) - calo_y->at(calo);
-  double ux_prt1 = prt_ecal_face_x->at(tag_idx_prt1->at(mum)) - calo_x->at(calo);
-  double uy_prt1 = prt_ecal_face_y->at(tag_idx_prt1->at(mum)) - calo_y->at(calo);
-
-  double ecal_calo_dist_prt0 = sqrt( pow( ux_prt0 , 2.0) +  pow( uy_prt0 , 2.0) );
-  double ecal_calo_dist_prt1 = sqrt( pow( ux_prt1 , 2.0) +  pow( uy_prt1 , 2.0) );
-
-  double ecal_calo_dist_min = min(ecal_calo_dist_prt0, ecal_calo_dist_prt1);
-
-  //Now uncertainty weighted distance
-  // pull = u^T u / sqrt (u^T Sigma u )
-  double ulen2_prt0 = pow(ux_prt0, 2.0) + pow(uy_prt0, 2.0);
-  double ulen2_prt1 = pow(ux_prt1, 2.0) + pow(uy_prt1, 2.0);
-  double uSu_prt0 = ux_prt0 * ux_prt0 * calo_spread_0->at(calo) +  ux_prt0 * uy_prt0 * calo_spread_1->at(calo) + ux_prt0 * uy_prt0 * calo_spread_2->at(calo) + uy_prt0 * uy_prt0 * calo_spread_3->at(calo);
-  double uSu_prt1 = ux_prt1 * ux_prt1 * calo_spread_0->at(calo) +  ux_prt1 * uy_prt1 * calo_spread_1->at(calo) + ux_prt1 * uy_prt1 * calo_spread_2->at(calo) + uy_prt1 * uy_prt1 * calo_spread_3->at(calo);
-
-  double ecal_calo_pull_prt0 = ulen2_prt0 / sqrt (uSu_prt0);
-  double ecal_calo_pull_prt1 = ulen2_prt1 / sqrt (uSu_prt1);
-
-  double ecal_calo_pull_min = min(ecal_calo_pull_prt0, ecal_calo_pull_prt1);
-
-  // To determine whether the additional photons were brems photons we have to check the following:
-  // 1. The brem photon could have been emitted upstream of the magnet. This can be checked by looking at fDphiDeta_calo_mu0 for example.
-  //    The prt_bool_brem       = (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0); cut should veto brem from here.
-  // 2. The photon could have been emitted downstream of the magnet and should then hit the Ecal very
-  //    close to the corresponding muon. In this case ecal_calo_pull_min and ecal_calo_dist_min would be small.
-  // 3. The photon could have been emitted during the magnet. Then, the calo cluster should lie on the line between prt_ecal_face_x and prt_ecal_face_x_orig_dir.
-  //    Let us calculate the projection onto this line and the distance from it
-
-  idx_mu  = tag_idx_prt0->at(mum); //This is really muon 1
-  idx_h   = tag_idx_prt1->at(mum); //This is really muon 2
-  idx_pvr = tag_idx_pvr->at(mum);
-
-  double z_ecal = 12655.;
-
-  double prt_ecal_face_x_orig_dir0= prt_x->at(idx_mu) + prt_px->at(idx_mu) / prt_pz->at(idx_mu) * (z_ecal - prt_z->at(idx_mu));
-  double prt_ecal_face_y_orig_dir0= prt_y->at(idx_mu) + prt_py->at(idx_mu) / prt_pz->at(idx_mu) * (z_ecal - prt_z->at(idx_mu));
-
-  double prt_ecal_face_x_orig_dir1= prt_x->at(idx_h) + prt_px->at(idx_h) / prt_pz->at(idx_h) * (z_ecal - prt_z->at(idx_h));
-  double prt_ecal_face_y_orig_dir1= prt_y->at(idx_h) + prt_py->at(idx_h) / prt_pz->at(idx_h) * (z_ecal - prt_z->at(idx_h));
-
-
-  // A line in linear algebra is described by x = h + t * n,  where t is a scalar and n a unit vector.
-  // h = a; n = (b - a) normalised;
-  // Let us calculate the projection of a point p onto this line and the distance from it
-  TVector2 c = TVector2(calo_x->at(calo), calo_y->at(calo));
-
-  TVector2 a0 = TVector2(prt_ecal_face_x_orig_dir0, prt_ecal_face_y_orig_dir0); //
-  TVector2 b0 = TVector2(prt_ecal_face_x->at(idx_mu), prt_ecal_face_y->at(idx_mu));
-  TVector2 ab0 = b0 - a0;
-  double ab_mag0 = ab0.Mod();
-  TVector2 ab_unit0 = ab0.Unit();
-  TVector2 ab_anti_unit0 = TVector2(-ab_unit0.Y(), ab_unit0.X());
-  TVector2 p0 = a0 + (ab_unit0*(c-a0))*ab_unit0;
-
-
-  TVector2 a1 = TVector2(prt_ecal_face_x_orig_dir1, prt_ecal_face_y_orig_dir1); //
-  TVector2 b1 = TVector2(prt_ecal_face_x->at(idx_h), prt_ecal_face_y->at(idx_h));
-  TVector2 ab1 = b1 - a1;
-  double ab_mag1 = ab1.Mod();
-  TVector2 ab_unit1 = ab1.Unit();
-  TVector2 ab_anti_unit1 = TVector2(-ab_unit1.Y(), ab_unit1.X());
-  TVector2 p1 = a1 + (ab_unit1*(c-a1))*ab_unit1;
-
-
-  TVector2 p, a, b, ab_unit, ab_anti_unit;
-  double ab_mag;
-
-  if ( (c - p0).Mod() < (c - p1).Mod() ){ // Right now selecting the worse one
-    p=p0; a=a0; b=b0; ab_unit=ab_unit0; ab_anti_unit=ab_anti_unit0; ab_mag=ab_mag0;
-  }else{
-    p=p1; a=a1; b=b1; ab_unit=ab_unit1; ab_anti_unit=ab_anti_unit1; ab_mag=ab_mag1;
-  }
-
-  //assert false;
-  //assert ((c == p0 +  ab_anti_unit0* (c - p0).Mod() ) && (c == p0 -  ab_anti_unit0* (c - p0).Mod() ));
-  // Following the vector formulation on https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-
-  double brem_test_AP = (p - a).Mod();
-  double brem_test_PC = (c - p).Mod();
-  double brem_test_AC = (c - a).Mod();
-  double brem_test_BC = (c - b).Mod();
-  double brem_test_BP = (p - b).Mod();
-  double brem_test_AB = (b - a).Mod();
-  double brem_test_2D_x = ((p - a)*ab_unit) / ab_mag;
-  double brem_test_2D_y = ((c - p)*ab_anti_unit) / ab_mag;
-
-
-
 
 
   //std::cout << "tag_calo_mu1_mu2_m : " << tag_calo_mu1_mu2_m << std::endl;
   if ((tag_calo_mu0_mu1_m < 1100.0) && (calo_eta->at(calo) > 2.) && (calo_eta->at(calo) <4.5) ){ // Only if the calo A' pair has mass less than 1.1 GeV fill hists.
+
+    TLorentzVector Lp_mu0 = TLorentzVector(prt_px->at(tag_idx_prt0->at(mum)), prt_py->at(tag_idx_prt0->at(mum)), prt_pz->at(tag_idx_prt0->at(mum)), prt_e->at(tag_idx_prt0->at(mum)));
+    TLorentzVector Lp_mu1 = TLorentzVector(prt_px->at(tag_idx_prt1->at(mum)), prt_py->at(tag_idx_prt1->at(mum)), prt_pz->at(tag_idx_prt1->at(mum)), prt_e->at(tag_idx_prt1->at(mum)));
+    TLorentzVector Lp_calo = TLorentzVector(calo_px->at(calo), calo_py->at(calo), calo_pz->at(calo),  calo_e->at(calo));
+    TLorentzVector Lp_mu0_mu1 = Lp_mu0 + Lp_mu1;
+    TLorentzVector Lp_calo_mu0 = Lp_calo + Lp_mu0;
+    TLorentzVector Lp_calo_mu1 = Lp_calo + Lp_mu1;
+    TLorentzVector Lp_calo_mu0_mu1 = Lp_calo + Lp_mu0 + Lp_mu1;
+
+
+    //TLorentzVector Lx_mu0 = TLorentzVector(prt_x->at(tag_idx_prt0->at(mum)), prt_y->at(tag_idx_prt0->at(mum)), prt_z->at(tag_idx_prt0->at(mum)));
+    //TLorentzVector Lx_mu1 = TLorentzVector(prt_x->at(tag_idx_prt1->at(mum)), prt_y->at(tag_idx_prt1->at(mum)), prt_z->at(tag_idx_prt1->at(mum)));
+    //TLorentzVector Lx_calo = TLorentzVector(calo_x->at(calo), calo_y->at(calo), calo_z->at(calo));
+
+
+    double tag_calo_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) + calo_pz->at(calo) , 2.0));
+    double tag_calo_mu0_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + calo_pz->at(calo) , 2.0));
+    double tag_calo_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt1->at(mum)) + calo_e->at(calo) , 2.0) - pow(prt_px->at(tag_idx_prt1->at(mum)) + calo_px->at(calo) , 2.0) - pow(prt_py->at(tag_idx_prt1->at(mum)) + calo_py->at(calo) , 2.0) - pow(prt_pz->at(tag_idx_prt1->at(mum)) + calo_pz->at(calo) , 2.0));
+    //this should be very similar to tag_m->at(mum)
+    double tag_mu0_mu1_m = sqrt(pow(prt_e->at(tag_idx_prt0->at(mum)) + prt_e->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_px->at(tag_idx_prt0->at(mum)) + prt_px->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_py->at(tag_idx_prt0->at(mum)) + prt_py->at(tag_idx_prt1->at(mum)) , 2.0) - pow(prt_pz->at(tag_idx_prt0->at(mum)) + prt_pz->at(tag_idx_prt1->at(mum)) , 2.0));
+
+    if (((tag_calo_mu0_mu1_m - Lp_calo_mu0_mu1.M())/ (tag_calo_mu0_mu1_m + Lp_calo_mu0_mu1.M())) > 0.001 ){std::cout << "calo mu0 mu1 assertion error! \n\n" << std::endl;}
+    if (((tag_calo_mu0_m - Lp_calo_mu0.M())/ (tag_calo_mu0_m + Lp_calo_mu0.M())) >0.001){std::cout << "calo mu0 assertion error! \n\n" << std::endl;}
+    if (((tag_calo_mu1_m - Lp_calo_mu1.M())/ (tag_calo_mu1_m + Lp_calo_mu1.M())) >0.001){std::cout << "calo mu1 assertion error! \n\n" << std::endl;}
+    if (((tag_mu0_mu1_m - Lp_mu0_mu1.M())/ (tag_mu0_mu1_m + Lp_mu0_mu1.M())) > 0.001){std::cout << "mu0 mu1 assertion error! \n\n" << std::endl;}
+
+    // Distance between calo and muons
+    double ux_prt0 = prt_ecal_face_x->at(tag_idx_prt0->at(mum)) - calo_x->at(calo);
+    double uy_prt0 = prt_ecal_face_y->at(tag_idx_prt0->at(mum)) - calo_y->at(calo);
+    double ux_prt1 = prt_ecal_face_x->at(tag_idx_prt1->at(mum)) - calo_x->at(calo);
+    double uy_prt1 = prt_ecal_face_y->at(tag_idx_prt1->at(mum)) - calo_y->at(calo);
+
+    double ecal_calo_dist_prt0 = sqrt( pow( ux_prt0 , 2.0) +  pow( uy_prt0 , 2.0) );
+    double ecal_calo_dist_prt1 = sqrt( pow( ux_prt1 , 2.0) +  pow( uy_prt1 , 2.0) );
+
+    double ecal_calo_dist_min = min(ecal_calo_dist_prt0, ecal_calo_dist_prt1);
+
+    //Now uncertainty weighted distance
+    // pull = u^T u / sqrt (u^T Sigma u )
+    double ulen2_prt0 = pow(ux_prt0, 2.0) + pow(uy_prt0, 2.0);
+    double ulen2_prt1 = pow(ux_prt1, 2.0) + pow(uy_prt1, 2.0);
+    double uSu_prt0 = ux_prt0 * ux_prt0 * calo_spread_0->at(calo) +  ux_prt0 * uy_prt0 * calo_spread_1->at(calo) + ux_prt0 * uy_prt0 * calo_spread_2->at(calo) + uy_prt0 * uy_prt0 * calo_spread_3->at(calo);
+    double uSu_prt1 = ux_prt1 * ux_prt1 * calo_spread_0->at(calo) +  ux_prt1 * uy_prt1 * calo_spread_1->at(calo) + ux_prt1 * uy_prt1 * calo_spread_2->at(calo) + uy_prt1 * uy_prt1 * calo_spread_3->at(calo);
+
+    double ecal_calo_pull_prt0 = ulen2_prt0 / sqrt (uSu_prt0);
+    double ecal_calo_pull_prt1 = ulen2_prt1 / sqrt (uSu_prt1);
+
+    double ecal_calo_pull_min = min(ecal_calo_pull_prt0, ecal_calo_pull_prt1);
+
+    // To determine whether the additional photons were brems photons we have to check the following:
+    // 1. The brem photon could have been emitted upstream of the magnet. This can be checked by looking at fDphiDeta_calo_mu0 for example.
+    //    The prt_bool_brem       = (tag_nu_brem_0->at(mum) == 0) &&  (tag_nu_brem_1->at(mum) == 0); cut should veto brem from here.
+    // 2. The photon could have been emitted downstream of the magnet and should then hit the Ecal very
+    //    close to the corresponding muon. In this case ecal_calo_pull_min and ecal_calo_dist_min would be small.
+    // 3. The photon could have been emitted during the magnet. Then, the calo cluster should lie on the line between prt_ecal_face_x and prt_ecal_face_x_orig_dir.
+    //    Let us calculate the projection onto this line and the distance from it
+
+    idx_mu  = tag_idx_prt0->at(mum); //This is really muon 1
+    idx_h   = tag_idx_prt1->at(mum); //This is really muon 2
+    idx_pvr = tag_idx_pvr->at(mum);
+
+    double z_ecal = 12655.;
+
+    double prt_ecal_face_x_orig_dir0= prt_x->at(idx_mu) + prt_px->at(idx_mu) / prt_pz->at(idx_mu) * (z_ecal - prt_z->at(idx_mu));
+    double prt_ecal_face_y_orig_dir0= prt_y->at(idx_mu) + prt_py->at(idx_mu) / prt_pz->at(idx_mu) * (z_ecal - prt_z->at(idx_mu));
+
+    double prt_ecal_face_x_orig_dir1= prt_x->at(idx_h) + prt_px->at(idx_h) / prt_pz->at(idx_h) * (z_ecal - prt_z->at(idx_h));
+    double prt_ecal_face_y_orig_dir1= prt_y->at(idx_h) + prt_py->at(idx_h) / prt_pz->at(idx_h) * (z_ecal - prt_z->at(idx_h));
+
+
+    // A line in linear algebra is described by x = h + t * n,  where t is a scalar and n a unit vector.
+    // h = a; n = (b - a) normalised;
+    // Let us calculate the projection of a point p onto this line and the distance from it
+    TVector2 c = TVector2(calo_x->at(calo), calo_y->at(calo));
+
+    TVector2 a0 = TVector2(prt_ecal_face_x_orig_dir0, prt_ecal_face_y_orig_dir0); //
+    TVector2 b0 = TVector2(prt_ecal_face_x->at(idx_mu), prt_ecal_face_y->at(idx_mu));
+    TVector2 ab0 = b0 - a0;
+    double ab_mag0 = ab0.Mod();
+    TVector2 ab_unit0 = ab0.Unit();
+    TVector2 ab_anti_unit0 = TVector2(-ab_unit0.Y(), ab_unit0.X());
+    TVector2 p0 = a0 + (ab_unit0*(c-a0))*ab_unit0;
+
+
+    TVector2 a1 = TVector2(prt_ecal_face_x_orig_dir1, prt_ecal_face_y_orig_dir1); //
+    TVector2 b1 = TVector2(prt_ecal_face_x->at(idx_h), prt_ecal_face_y->at(idx_h));
+    TVector2 ab1 = b1 - a1;
+    double ab_mag1 = ab1.Mod();
+    TVector2 ab_unit1 = ab1.Unit();
+    TVector2 ab_anti_unit1 = TVector2(-ab_unit1.Y(), ab_unit1.X());
+    TVector2 p1 = a1 + (ab_unit1*(c-a1))*ab_unit1;
+
+
+    TVector2 p, a, b, ab_unit, ab_anti_unit;
+    double ab_mag;
+
+    //if ( (c - p0).Mod() < (c - p1).Mod() ){ // Right now selecting the worse one
+    if ( (c - p0).Mod() > (c - p1).Mod() ){ // Right now selecting the better one
+      p=p0; a=a0; b=b0; ab_unit=ab_unit0; ab_anti_unit=ab_anti_unit0; ab_mag=ab_mag0;
+    }else{
+      p=p1; a=a1; b=b1; ab_unit=ab_unit1; ab_anti_unit=ab_anti_unit1; ab_mag=ab_mag1;
+    }
+
+    //assert false;
+    //assert ((c == p0 +  ab_anti_unit0* (c - p0).Mod() ) && (c == p0 -  ab_anti_unit0* (c - p0).Mod() ));
+    // Following the vector formulation on https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+
+    double brem_test_AP = (p - a).Mod();
+    double brem_test_PC = (c - p).Mod();
+    double brem_test_AC = (c - a).Mod();
+    double brem_test_BC = (c - b).Mod();
+    double brem_test_BP = (p - b).Mod();
+    double brem_test_AB = (b - a).Mod();
+    double brem_test_2D_x = ((p - a)*ab_unit) / ab_mag;
+    double brem_test_2D_y = ((c - p)*ab_anti_unit) / ab_mag;
+
+
     //if (prt_bool_prmpt_displ_consistency && true) {
     if (true) {  //mu mu pt cut new
       fM_require_calo->Fill(tag_dtf_m->at(mum));
@@ -1017,10 +1011,12 @@ void Plot_hists_X2ApGm::Calo_Plots(unsigned calo, unsigned mum, vector<double> d
         if ( tag_fd_r > 5) {
           fM_require_calo_at_m_eta_r_bigger_5mm->Fill(tag_dtf_m->at(mum));
           fQ_require_calo_at_m_eta_r_bigger_5mm->Fill(tag_Q);
+          if ( calo_pt->at(calo) > 1000){ fQ_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV->Fill(tag_Q);}
           //if (tag_dtf_m->at(mum) < 220){cout << "M : " << tag_dtf_m->at(mum) << "\t" << tag_Q <<endl;}
         }else {
           fM_require_calo_at_m_eta_r_smaller_5mm->Fill(tag_dtf_m->at(mum));
           fQ_require_calo_at_m_eta_r_smaller_5mm->Fill(tag_Q);
+          if ( calo_pt->at(calo) > 1000){fQ_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV->Fill(tag_Q); }
         }
 
 
