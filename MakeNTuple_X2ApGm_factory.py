@@ -6,7 +6,8 @@ from Configurables import DaVinci
 from PhysSelPython.Wrappers import Selection, SelectionSequence
 from Configurables import ToolSvc, TriggerTisTos
 
-DISPLACED = {0}
+
+TYPE      = '{0}'
 YEAR      = {1}
 GRID      = {2}
 EvtMax    = {3}
@@ -21,11 +22,11 @@ if not GRID:
     sys.path.append('/mnt/shared/LbVMWeisser_shared/MIT_shared/AnalysisTools/python/TTreeTools')
 
     if YEAR == 2016:
-        if DISPLACED:  IOHelper('ROOT').inputFiles(['00059560_00000002_1.ew.dst'],clear=True)
-        else:          IOHelper('ROOT').inputFiles(['00053752_00007502_1.leptons.mdst'],clear=True) #Prompt case
+        if TYPE == "Displ":    IOHelper('ROOT').inputFiles(['00059560_00000002_1.ew.dst'],clear=True)
+        else:  IOHelper('ROOT').inputFiles(['00053752_00007502_1.leptons.mdst'],clear=True) #Prompt case
     elif YEAR ==2017:
-        if DISPLACED:  IOHelper('ROOT').inputFiles(['00066597_00000771_1.dimuon.dst'],clear=True)
-        else:          IOHelper('ROOT').inputFiles(['00066595_00001036_1.leptons.mdst'],clear=True) #Prompt case
+        if TYPE == "Displ":   IOHelper('ROOT').inputFiles(['00066597_00000771_1.dimuon.dst'],clear=True)
+        else: IOHelper('ROOT').inputFiles(['00066595_00001036_1.leptons.mdst'],clear=True) #Prompt case
 
     else: assert False, "Year not 2016 or 2017"
 
@@ -33,12 +34,18 @@ if not GRID:
 #===============================
 # Setup the particle algorithms
 #from MITParticleMakers import AllMuMuGms
-if DISPLACED:
+if TYPE == "Displ":
     if YEAR==2016: import AllMuMuGms_displaced as AllMuMuGms
     elif YEAR==2017: import AllMuMuGms_displaced_2017 as AllMuMuGms
-else:
+elif TYPE == "Prmpt":
     if YEAR==2016: import AllMuMuGms as AllMuMuGms
     elif YEAR==2017: import AllMuMuGms_2017 as AllMuMuGms
+elif TYPE == "NoIP":
+    if YEAR==2016: assert 0, "2016 NoIP line not implemented"
+    elif YEAR==2017: import AllMuMuGms_NoIP_2017 as AllMuMuGms
+elif TYPE == "NoIPSS":
+    if YEAR==2016: assert 0, "There was no 2016 NoIPSS line"
+    elif YEAR==2017: import AllMuMuGms_NoIPSS_2017 as AllMuMuGms
 
 nameLL   = 'convLL'
 nameDD   = 'convDD'
@@ -86,7 +93,7 @@ DaVinci().UserAlgorithms = [
 
 #================
 # Setup Turbo
-if DISPLACED:
+if TYPE == "Displ":
     from PhysConf.Filters import LoKi_Filters
     hltFilter = LoKi_Filters(HLT2_Code = "HLT_PASS_RE('.*ExoticaDisplDiMuonDecision.*')")
     DaVinci().EventPreFilters = hltFilter.filters('TriggerFilters')
@@ -184,7 +191,7 @@ if False:
 
 
 # TisTos configuration.
-if ((YEAR ==2017) and not DISPLACED):
+if ((YEAR ==2017) and not TYPE == "Displ"):
     ToolSvc().addTool(TriggerTisTos, "Hlt1TriggerTisTos")
     ToolSvc().Hlt1TriggerTisTos.HltDecReportsLocation = '/Event/Leptons/Turbo/Hlt1/DecReports'
     ToolSvc().Hlt1TriggerTisTos.HltSelReportsLocation = '/Event/Leptons/Turbo/Hlt1/SelReports'
@@ -192,7 +199,7 @@ if ((YEAR ==2017) and not DISPLACED):
     ToolSvc().Hlt2TriggerTisTos.HltDecReportsLocation = '/Event/Leptons/Turbo/Hlt2/DecReports'
     ToolSvc().Hlt2TriggerTisTos.HltSelReportsLocation = '/Event/Leptons/Turbo/Hlt2/SelReports'
 else:
-    if DISPLACED: stages = ('Hlt1', 'Hlt2', 'Strip/Phys')
+    if TYPE == "Displ": stages = ('Hlt1', 'Hlt2', 'Strip/Phys')
     else:         stages = ('Hlt1', 'Hlt2')
 
     for stage in stages:
@@ -227,7 +234,7 @@ l0Tool = gaudi.toolsvc().create(
     'L0TriggerTisTos',
     interface = 'ITriggerTisTos')
 
-if YEAR==2017 and not DISPLACED :
+if YEAR==2017 and not TYPE == "Displ" :
     hlt1Tool = gaudi.toolsvc().create(
         'Hlt1TriggerTisTos',
         interface = 'ITriggerTisTos')
@@ -243,7 +250,7 @@ else:
         'TriggerTisTos/Hlt2TriggerTisTos',
         interface = 'ITriggerTisTos')
 
-if DISPLACED:
+if TYPE == "Displ":
     physTool = gaudi.toolsvc().create(
         'TriggerTisTos/Strip/PhysTriggerTisTos',
         interface = 'ITriggerTisTos')

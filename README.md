@@ -24,17 +24,23 @@ ganga getOutputManual.py 21
 ganga getOutputManual.py 62
 lb-run DaVinci/Latest python merge.py prmpt 21 22   // right now we only look at 21
 lb-run DaVinci/Latest python merge.py displ 61 62   // right now we only look at 61
+lb-run DaVinci/Latest python merge.py noip 44   
 
 
 
-lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"prmpt 31\")"    # This creates a root file containing histograms for file with all X2ApGm. Prompt
-lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ 29\")"    # This creates a root file containing histograms for file with all X2ApGm. Displ
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"prmpt 2016 31\")"    # This creates a root file containing histograms for file with all X2ApGm. Prompt 2016
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"prmpt 2017 ?\")"    # This creates a root file containing histograms for file with all X2ApGm. Prompt 2017
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ 2016 29\")"    # This creates a root file containing histograms for file with all X2ApGm. Displ 2016
+lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"displ 2017 40\")"    # This creates a root file containing histograms for file with all X2ApGm. Displ 2017
 lb-run ROOT root -l -q "Plot_hists_X2ApGm_deploy.cxx(\"Test\")"    # This creates a root file containing histograms for file with all X2ApGm, but only a fraction of events.
 
 
-lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt_and_displ
-lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt      # Take ROOT file with histograms and plot them
-lb-run ROOT python Visualise_Plot_hists_X2ApGm.py displ      # Take ROOT file with histograms and plot them
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt_and_displ_2016
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt_and_displ_2017
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt_2016      # Take ROOT file with histograms and plot them
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py prmpt_2017      # Take ROOT file with histograms and plot them
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py displ_2016      # Take ROOT file with histograms and plot them
+lb-run ROOT python Visualise_Plot_hists_X2ApGm.py displ_2017      # Take ROOT file with histograms and plot them
 lb-run ROOT python Visualise_Plot_hists_X2ApGm.py Test      # Take ROOT file with histograms and plot them
 
 
@@ -80,6 +86,12 @@ lb-run ROOT python Visualise_Plot_hists_X2ApGm.py Test      # Take ROOT file wit
 // job 31 prompt run calo_pos_added with autoresubmit turned off
 // job 32 prompt isolation exception no longer stops code, but exception condition handled wrongly
 // job 33 prompt isolation exception no longer stops code
+
+// job 40 2017 displ 20% of magdown
+// job 41, 42  crashed
+// job 43 2017 displ 100% of magdown
+// job 44 2017 NoIP  100% of MagDown
+// job 46 2017 NoIPSS  100% of MagDown
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

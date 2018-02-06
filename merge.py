@@ -31,4 +31,4 @@ else:
     #print "urls : ", urls
     merge(urls, 'NTuple_X2ApGm_all_files_{}_{}.root'.format(mode, njob))
 
-assert(-1==1), "Executed right, but now using the file NTuple_X2ApGm_all_files_{0}_{1}.root rather than NTuple_X2ApGm_all_files_{0}.root ".format(mode,njob)
+print  "Finished! \n Using the file NTuple_X2ApGm_all_files_{0}_{1}.root".format(mode,njob)

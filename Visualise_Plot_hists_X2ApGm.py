@@ -16,15 +16,31 @@ if PRECISE_TIME:
 if BACKUP: backup_extension = "_backup"
 else: backup_extension = ""
 
-if sys.argv[1]== 'prmpt_and_displ':
-    name_extension = "Prmpt_and_Displ"
-    file_name1 = 'NTuple_X2ApGm_all_files_plots_displ{}.root'.format(backup_extension)
-    file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt{}.root'.format(backup_extension)
+if sys.argv[1]== 'prmpt_and_displ_2016':
+    name_extension = "Prmpt_and_Displ_2016"
+    file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_2016{}.root'.format(backup_extension)
+    file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_2016{}.root'.format(backup_extension)
     if len(sys.argv) > 2:
-        file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_{}{}.root'.format(sys.argv[2], backup_extension)
+        file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_2016_{}{}.root'.format(sys.argv[2], backup_extension)
         name_extension += "_"+sys.argv[2]
         if len(sys.argv) > 3:
-            file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_{}{}.root'.format(sys.argv[3], backup_extension)
+            file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_2016_{}{}.root'.format(sys.argv[3], backup_extension)
+            name_extension += "_"+sys.argv[3]
+
+    print "\n\nRunning over ", file_name2, "\t", file_name1, "\n"
+
+    tfile1 = ROOT.TFile(file_name1)
+    tfile2 = ROOT.TFile(file_name2)
+
+elif sys.argv[1]== 'prmpt_and_displ_2017':
+    name_extension = "Prmpt_and_Displ_2017"
+    file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_2017{}.root'.format(backup_extension)
+    file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_2017{}.root'.format(backup_extension)
+    if len(sys.argv) > 2:
+        file_name2 = 'NTuple_X2ApGm_all_files_plots_prmpt_2017_{}{}.root'.format(sys.argv[2], backup_extension)
+        name_extension += "_"+sys.argv[2]
+        if len(sys.argv) > 3:
+            file_name1 = 'NTuple_X2ApGm_all_files_plots_displ_2017_{}{}.root'.format(sys.argv[3], backup_extension)
             name_extension += "_"+sys.argv[3]
 
     print "\n\nRunning over ", file_name2, "\t", file_name1, "\n"
@@ -33,18 +49,32 @@ if sys.argv[1]== 'prmpt_and_displ':
     tfile2 = ROOT.TFile(file_name2)
 
 else:
-    if sys.argv[1]== 'prmpt':
-        name_extension = "Prmpt"
-        file_name = 'NTuple_X2ApGm_all_files_plots_prmpt{}.root'.format(backup_extension)
+    if sys.argv[1]== 'prmpt_2016':
+        name_extension = "Prmpt_2016"
+        file_name = 'NTuple_X2ApGm_all_files_plots_prmpt_2016{}.root'.format(backup_extension)
         if len(sys.argv) > 2:
-            file_name = 'NTuple_X2ApGm_all_files_plots_prmpt_{}.root'.format(sys.argv[2])
+            file_name = 'NTuple_X2ApGm_all_files_plots_prmpt_2016_{}{}.root'.format(sys.argv[2],backup_extension)
             name_extension += "_"+sys.argv[2]
 
-    if sys.argv[1]== 'displ':
-        name_extension = "Displ"
-        file_name = 'NTuple_X2ApGm_all_files_plots_displ{}.root'.format(backup_extension)
+    if sys.argv[1]== 'prmpt_2017':
+        name_extension = "Prmpt_2017"
+        file_name = 'NTuple_X2ApGm_all_files_plots_prmpt_2017{}.root'.format(backup_extension)
         if len(sys.argv) > 2:
-            file_name = 'NTuple_X2ApGm_all_files_plots_displ_{}.root'.format(sys.argv[2])
+            file_name = 'NTuple_X2ApGm_all_files_plots_prmpt_2017_{}{}.root'.format(sys.argv[2],backup_extension)
+            name_extension += "_"+sys.argv[2]
+
+    if sys.argv[1]== 'displ_2016':
+        name_extension = "Displ_2016"
+        file_name = 'NTuple_X2ApGm_all_files_plots_displ_2016{}.root'.format(backup_extension)
+        if len(sys.argv) > 2:
+            file_name = 'NTuple_X2ApGm_all_files_plots_displ_2016_{}{}.root'.format(sys.argv[2], backup_extension)
+            name_extension += "_"+sys.argv[2]
+
+    if sys.argv[1]== 'displ_2017':
+        name_extension = "Displ_2017"
+        file_name = 'NTuple_X2ApGm_all_files_plots_displ_2017{}.root'.format(backup_extension)
+        if len(sys.argv) > 2:
+            file_name = 'NTuple_X2ApGm_all_files_plots_displ_2017_{}{}.root'.format(sys.argv[2], backup_extension)
             name_extension += "_"+sys.argv[2]
 
     elif sys.argv[1]== 'Test':
@@ -64,13 +94,13 @@ else:
 M1D_list, M2D_list, Angle_list, Angle2D_list, Angle_prmpt_displ_list, dalitz_name_type_list, simple_plot_list, scatter_name_type_list = [], [], [], [], [], [], [], []
 l_Angle, l_Angle2D = [], []
 
-if sys.argv[1]== 'prmpt_and_displ':
+if 'prmpt_and_displ' in sys.argv[1]:
     #Angle_list += ['angle_calo_mu0', 'angle_calo_mu1', 'Dphi_calo_mu0', 'Dphi_calo_mu1', 'Deta_calo_mu0', 'Deta_calo_mu1', 'DR_calo_mu0', 'DR_calo_mu1', 'calo_cl']
     #Angle_list += ['ecal_calo_pull', 'ecal_calo_dist']
     Angle_list += ["brem_test_AP", "brem_test_PC", "brem_test_AC", "brem_test_BC", "brem_test_BP", "brem_test_AB"]
     Angle_list += ['calo_cl', 'ET_calo', 'phi_calo', 'eta_calo']
     #Angle_prmpt_displ_list += ['angle_calo_mu0', 'angle_calo_mu1'] # TOM
-elif sys.argv[1]== 'prmpt':
+elif ((sys.argv[1]== 'prmpt_2016') or (sys.argv[1]== 'prmpt_2017')):
     #l_Angle += ['angle_calo_mu0', 'Dphi_calo_mu0', 'Deta_calo_mu0', 'DR_calo_mu0']
     for a in ['_m_eta', '_sideband', '_m_eta_backgr_subtr']: Angle_list += [b+a for b in l_Angle ]
 
@@ -82,7 +112,7 @@ elif sys.argv[1]== 'prmpt':
 
     pass
 
-elif sys.argv[1]== 'displ':
+elif ((sys.argv[1]== 'displ_2016') or (sys.argv[1]== 'displ_2017')):
     #l = ['angle_calo_mu0', 'Dphi_calo_mu0', 'Deta_calo_mu0', 'DR_calo_mu0']
     #for a in ['_m_eta', '_sideband', '_m_eta_backgr_subtr']: Angle_list += [b+a for b in l ]
 
@@ -94,22 +124,22 @@ elif sys.argv[1]== 'displ':
     M1D_list += ['M', 'M_prmptfidu', 'M_require_calo', 'M_require_calo_at_m_eta', 'M_require_calo_at_m_eta_r_bigger_5mm', 'M_require_calo_at_m_eta_r_smaller_5mm']
     M1D_list += ['Q_require_calo_at_m_eta_r_bigger_5mm', 'Q_require_calo_at_m_eta_r_smaller_5mm']
     M1D_list += ['Q_require_calo_at_m_eta_r_bigger_5mm_calopt_bigger_1_GeV', 'Q_require_calo_at_m_eta_r_smaller_5mm_calopt_bigger_1_GeV']
-    M1D_list += ['M_tag_calo']
+    #M1D_list += ['M_tag_calo']
     pass
 elif sys.argv[1]== 'Test':
     pass
 
 
 
-if (sys.argv[1]== 'displ') or (sys.argv[1]== 'prmpt'):
+if ((sys.argv[1]== 'prmpt_2016') or (sys.argv[1]== 'prmpt_2017') or (sys.argv[1]== 'displ_2016') or (sys.argv[1]== 'displ_2017')):
 
     #Angle_list += ['n_calos', 'M_dicalo']
 
-    M2D_list += ['M_calomumu_calocalo', 'M_calomumu_calocalo_closepi0', 'M_mumu_calocalo_m_eta']
+    #M2D_list += ['M_calomumu_calocalo', 'M_calomumu_calocalo_closepi0', 'M_mumu_calocalo_m_eta']
 
     #M1D_list += ['M_dicalo']
 
-    M1D_list += ['M']
+    #M1D_list += ['M']
     #M1D_list += ['M', 'M_l0_p', 'M_hlt1_p', 'M_hlt2_p', 'M_strip_p', 'M_kin_p', 'M_data_consistency_p', 'M_patho_p', 'M_material_p' ]
     #M1D_list += ['M_require_calo_at_m_eta_no_brem']
     ##M1D_list += ['M_require_calo', 'M_require_calo_at_m_eta', 'M_tag_calo', 'M_calo_mu0', 'M_calo_mu1']

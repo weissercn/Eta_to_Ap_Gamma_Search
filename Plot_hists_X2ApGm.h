@@ -73,7 +73,7 @@ public :
    vector<double>  *tag_px;
    vector<double>  *tag_py;
    vector<double>  *tag_pz;
-   vector<double>  *tag_pt;
+   //vector<double>  *tag_pt;
    vector<double>  *tag_e;
    vector<double>  *tag_eta;
    vector<double>  *tag_phi;
@@ -311,7 +311,7 @@ public :
    TBranch        *b_tag_px;   //!
    TBranch        *b_tag_py;   //!
    TBranch        *b_tag_pz;   //!
-   TBranch        *b_tag_pt;   //!
+   //TBranch        *b_tag_pt;   //!
    TBranch        *b_tag_e;   //!
    TBranch        *b_tag_eta;   //!
    TBranch        *b_tag_phi;   //!
@@ -516,7 +516,7 @@ public :
    TBranch        *b_e_ip_chi2;   //!
 
    TFile *f;
-   TString option, option2;
+   TString options, option, option2;
 
    TH1I *fn_calos;
    TH1F *fM_dicalo;
@@ -563,7 +563,7 @@ public :
    vector<vector<Double_t>> dalitz_mu0_mu1_m_eta_m_mu0_mu1_separated, dalitz_calo_mu0_m_eta_m_mu0_mu1_separated, dalitz_calo_mu1_m_eta_m_mu0_mu1_separated;
 
 
-   double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps, tag_Q;
+   double prt_trk_dist_mu_h, tag_d2, tag_fd_r, tag_fd, tag_p, tag_pt, tag_beta, tag_gamma, tag_flighttime, tag_tau_ps, tag_Q;
    double mu_p, mu_pt, mu_eta, h_p, h_pt, h_eta;
    double tag_tau_ps_1, tag_tau_ps_2, tag_d2_1, tag_d2_2, tag_m_1, tag_m_2, tag_dtf_chi2_1, tag_dtf_chi2_2;
 
@@ -652,7 +652,7 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    tag_px = 0;
    tag_py = 0;
    tag_pz = 0;
-   tag_pt = 0;
+   //tag_pt = 0;
    tag_e = 0;
    tag_eta = 0;
    tag_phi = 0;
@@ -893,7 +893,7 @@ void Plot_hists_X2ApGm::Init(TTree *tree)
    fChain->SetBranchAddress("tag_px", &tag_px, &b_tag_px);
    fChain->SetBranchAddress("tag_py", &tag_py, &b_tag_py);
    fChain->SetBranchAddress("tag_pz", &tag_pz, &b_tag_pz);
-   fChain->SetBranchAddress("tag_pt", &tag_pt, &b_tag_pt);
+   //fChain->SetBranchAddress("tag_pt", &tag_pt, &b_tag_pt);
    fChain->SetBranchAddress("tag_e", &tag_e, &b_tag_e);
    fChain->SetBranchAddress("tag_eta", &tag_eta, &b_tag_eta);
    fChain->SetBranchAddress("tag_phi", &tag_phi, &b_tag_phi);

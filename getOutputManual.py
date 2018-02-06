@@ -1,17 +1,19 @@
 from __future__ import print_function
+from subprocess import check_output
 
 # Get an access url for a given LFN at a specified SE
 def getAccessURL(lfn, SEs=['CERN-USER']):
-    from subprocess import check_output
+    #from subprocess import check_output
 
     opts = '--SEs='+','.join(SEs)
     cmd = 'dirac-dms-lfn-accessURL'
-    version = 'v8r6p2'
+    version = 'v9r1p4'
     app = 'LHCbDirac/'+version
     pro = '--Protocol=xroot,root'
     urls = check_output(['lb-run',app,cmd,lfn,opts,pro])
     url = urls.split(' : ')[-1].strip()
     return url
+
 
 # Create a text file with access urls for job output
 def getJobURLs(njob, fname, SE='CERN-USER'):
@@ -75,4 +77,5 @@ import sys
 njob = sys.argv[1]
 #outfile = 'outfile.root'
 outfile = 'NTuple_X2ApGm_all_files_with_materials_test.root'
+
 getJobURLs(njob,outfile)

@@ -180,6 +180,30 @@ JobInfo = {
                             'CondDBTag' : '',
                             'DDDBTag' : '',
                             'Type' : '2017',
-                            'NFiles' : 30}
+                            'NFiles' : 30},
+
+    'Data.X2ApGm.NoIP.2017.MagDown' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagDown/Real Data/Turbo04/94000000/LEPTONS.MDST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 50},
+
+    'Data.X2ApGm.NoIP.2017.MagUp' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagUp/Real Data/Turbo04/94000000/LEPTONS.MDST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 50},
+
+    'Data.X2ApGm.NoIPSS.2017.MagDown' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagDown/Real Data/Turbo04/94000000/LEPTONS.MDST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 50},
+
+    'Data.X2ApGm.NoIPSS.2017.MagUp' : { 'Input' : '/LHCb/Collision17/Beam6500GeV-VeloClosed-MagUp/Real Data/Turbo04/94000000/LEPTONS.MDST',
+                            'CondDBTag' : '',
+                            'DDDBTag' : '',
+                            'Type' : '2017',
+                            'NFiles' : 50}
 
     }

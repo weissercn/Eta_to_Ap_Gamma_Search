@@ -34,7 +34,7 @@ void Plot_hists_X2ApGm::Begin(TTree * /*tree*/)
    // When running with PROOF Begin() is only called on the client.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   option = GetOption();
+   options = GetOption();
 
 }
 
@@ -44,14 +44,22 @@ void Plot_hists_X2ApGm::SlaveBegin(TTree * /*tree*/)
    // When running with PROOF SlaveBegin() is called on each slave server.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   option = GetOption();
+   options = GetOption();
 
-   std::cout << "Plot_hists_RHNu The option is : " << option << std::endl;
+   TObjArray *tx = options.Tokenize("_");
+
+   option = ((TObjString *)(tx->At(0)))->String();
+   option2 = ((TObjString *)(tx->At(1)))->String();
+
+
+   std::cout << "Plot_hists_RHNu The options are : " << option << ", " << option2 << std::endl;
 
    f = 0;
    TString file_name;
-   if (option == "displ"){file_name = "NTuple_X2ApGm_all_files_plots_displ.root";}
-   else if (option == "prmpt"){file_name = "NTuple_X2ApGm_all_files_plots_prmpt.root";}
+   if (option == "displ" && option2 =="2016"){file_name = "NTuple_X2ApGm_all_files_plots_displ_2016.root";}
+   else if (option == "displ" && option2 =="2017"){file_name = "NTuple_X2ApGm_all_files_plots_displ_2017.root";}
+   else if (option == "prmpt" && option2 =="2016"){file_name = "NTuple_X2ApGm_all_files_plots_prmpt_2016.root";}
+   else if (option == "prmpt" && option2 =="2017"){file_name = "NTuple_X2ApGm_all_files_plots_prmpt_2017.root";}
    else if (option == "Test"){file_name = "NTuple_X2ApGm_all_files_plots_test.root";}
    else{ std::cout << std::endl << std::endl << "NO VALID OPTION" << std::endl << std::endl;}
 
@@ -534,7 +542,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   // ->at(idx_pvr)
 
   tag_p   = sqrt(pow(tag_px->at(mum), 2.0)+pow(tag_py->at(mum), 2.0)+pow(tag_pz->at(mum), 2.0));
-  //tag_pt  = sqrt(pow(tag_px->at(mum), 2.0)+pow(tag_py->at(mum), 2.0));
+  tag_pt  = sqrt(pow(tag_px->at(mum), 2.0)+pow(tag_py->at(mum), 2.0));
   tag_beta = 1./sqrt(1.+pow(tag_m->at(mum),2.0)/pow(tag_p,2.0));
   tag_gamma = 1./sqrt(1.-pow(tag_beta,2.0));
   //tag_eta = atanh(tag_pz->at(mum)/tag_p);
@@ -580,7 +588,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   //prt_bool_strip      = bool(tag_strip_dec0->at(mum)); //StrippingHltQEEExoticaDisplDiMuonLineDecision
   prt_bool_strip      = true;
   //prt_bool_strip       = bool(tag_fd_r > 2) && ( bool(tag_m->at(mum) < 425 )  || bool(tag_m->at(mum) > 525 ) ) && (prt_pnn_mu->at(idx_mu) > 0.95); //stripping is a passthrough
-  prt_bool_kin        = (tag_eta->at(mum) > 2) && (tag_eta->at(mum) < 4.5) && (tag_pt->at(mum) > 1000); // kinematics
+  prt_bool_kin        = (tag_eta->at(mum) > 2) && (tag_eta->at(mum) < 4.5) && (tag_pt > 1000); // kinematics
   prt_bool_kin        = prt_bool_kin && (mu_eta > 2) && (mu_eta < 4.5) && (h_eta > 2) && (h_eta < 4.5);
 
   prt_bool_data_consistency = true;
@@ -637,6 +645,7 @@ std::map<std::string, double>  Plot_hists_X2ApGm::Simple_Variables_Calculation(i
   //////////////////////   Heavy Flavor Veto   ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
 
+  //Prmpt doesn't seem to have tag_il and tag_iv. No isolation variables, because
   hf_veto             = bool(tag_hlt1_tis->at(mum)) || (tag_il->at(mum) > 0.2) || (tag_iv->at(mum) > 0.3) || ((tag_fd_r < 5) && ((tag_il->at(mum) > 0.07) || (tag_iv->at(mum) > 0.23)));
   prt_bool_hf        = !hf_veto;
 
@@ -805,40 +814,40 @@ void Plot_hists_X2ApGm::Ap_Plots(unsigned mum)
 
 
 
-  //if (prt_bool){if (prt_bool_l0){fM_l0_p->Fill(tag_dtf_m->at(mum));} }
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_l0;}
+  if (prt_bool){if (prt_bool_l0){fM_l0_p->Fill(tag_dtf_m->at(mum));} }
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_l0;}
 
-  //if (prt_bool){if (prt_bool_hlt1){fM_hlt1_p->Fill(tag_dtf_m->at(mum));} }
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_hlt1;}
+  if (prt_bool){if (prt_bool_hlt1){fM_hlt1_p->Fill(tag_dtf_m->at(mum));} }
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_hlt1;}
 
-  //if (prt_bool){if (prt_bool_hlt2){fM_hlt2_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_hlt2;}
+  if (prt_bool){if (prt_bool_hlt2){fM_hlt2_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_hlt2;}
 
-  //if (prt_bool){if (prt_bool_strip){fM_strip_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_strip;}
+  if (prt_bool){if (prt_bool_strip){fM_strip_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_strip;}
 
-  //if (prt_bool){if (prt_bool_kin){fM_kin_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_kin;}
+  if (prt_bool){if (prt_bool_kin){fM_kin_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_kin;}
 
-  //if (prt_bool){if (prt_bool_data_consistency){fM_data_consistency_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_data_consistency;}
+  if (prt_bool){if (prt_bool_data_consistency){fM_data_consistency_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_data_consistency;}
 
-  //if (prt_bool){if (prt_bool_patho){fM_patho_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_patho;}
+  if (prt_bool){if (prt_bool_patho){fM_patho_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_patho;}
 
-  //if (prt_bool){if (prt_bool_material){fM_material_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_material;}
+  if (prt_bool){if (prt_bool_material){fM_material_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_material;}
 
-  //if (not pass_separately) {assert (prt_bool==prt_bool_necessary_cuts);}
+  if (not pass_separately) {assert (prt_bool==prt_bool_necessary_cuts);}
 
-  //if (prt_bool){if (prt_bool_pid){fM_pid_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_pid;}
+  if (prt_bool){if (prt_bool_pid){fM_pid_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_pid;}
 
-  //if (prt_bool){if (prt_bool_hf){fM_hf_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_hf;}
+  if (prt_bool){if (prt_bool_hf){fM_hf_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_hf;}
 
-  //if (prt_bool){if (prt_bool_fd_r){fM_fd_r_p->Fill(tag_dtf_m->at(mum));}}
-  //if (not pass_separately) {prt_bool = prt_bool && prt_bool_fd_r;}
+  if (prt_bool){if (prt_bool_fd_r){fM_fd_r_p->Fill(tag_dtf_m->at(mum));}}
+  if (not pass_separately) {prt_bool = prt_bool && prt_bool_fd_r;}
 
   //if (not pass_separately) {assert (prt_bool==prt_bool_full);}
 
